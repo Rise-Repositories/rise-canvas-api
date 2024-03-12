@@ -13,69 +13,69 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import school.sptech.crudrisecanvas.Entity.Designer;
+import school.sptech.crudrisecanvas.Entity.User;
 
 @RestController
-@RequestMapping("/designer")
-public class DesignerController {
+@RequestMapping("/user")
+public class UserController {
 
-    List<Designer> designers = new ArrayList<Designer>();
+    List<User> users = new ArrayList<User>();
 
     @GetMapping
-    public ResponseEntity<List<Designer>> getUsers() {
-        return ResponseEntity.status(200).body(designers);
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.status(200).body(users);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Designer> getUser(@PathVariable int id) {
+    public ResponseEntity<User> getUser(@PathVariable int id) {
         if(!idIsValid(id)) {
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.status(200).body(designers.get(id));
+        return ResponseEntity.status(200).body(users.get(id));
     }
 
     @PostMapping
-    public ResponseEntity<Designer> createUser(@RequestBody Designer designer) {
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         if(
-            designer.getName() == null || 
-            designer.getEmail() == null ||
-            designer.getPassword() == null ||
-            designer.getCpf() == null ||
-            designer.getPhone() == null
+            user.getName() == null || 
+            user.getEmail() == null ||
+            user.getPassword() == null ||
+            user.getCpf() == null ||
+            user.getPhone() == null
         ) {
             return ResponseEntity.status(400).build();
         }
-        designers.add(designer);
-        return ResponseEntity.status(201).body(designer);
+        users.add(user);
+        return ResponseEntity.status(201).body(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Designer> updateUser(@PathVariable int id,@RequestBody Designer designer) {
+    public ResponseEntity<User> updateUser(@PathVariable int id,@RequestBody User user) {
         if(
-            designer.getName() == null || 
-            designer.getEmail() == null ||
-            designer.getPassword() == null ||
-            designer.getCpf() == null ||
-            designer.getPhone() == null ||
+            user.getName() == null || 
+            user.getEmail() == null ||
+            user.getPassword() == null ||
+            user.getCpf() == null ||
+            user.getPhone() == null ||
             !idIsValid(id)
         ) {
             return ResponseEntity.status(400).build();
         }
-        designers.set(id, designer);
+        users.set(id, user);
         return ResponseEntity.status(200).build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Designer> deleteUser(@PathVariable int id) {
+    public ResponseEntity<User> deleteUser(@PathVariable int id) {
         if(!idIsValid(id)) {
             return ResponseEntity.status(404).build();
         }
-        designers.remove(id);
+        users.remove(id);
         return ResponseEntity.status(200).build();
     }
 
     public boolean idIsValid(int id) {
-        return id >= 0 && id < designers.size();
+        return id >= 0 && id < users.size();
     }
 
 }

@@ -1,11 +1,12 @@
 package school.sptech.crudrisecanvas.Entity;
 
-public class Designer {
+public class User {
     private String name;
     private String email;
     private String password;
     private String cpf;
     private String phone;
+    private char type;
 
     public String getName() {
         return name;
@@ -45,5 +46,9 @@ public class Designer {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public char getType() {
+        return type;
     }
 }

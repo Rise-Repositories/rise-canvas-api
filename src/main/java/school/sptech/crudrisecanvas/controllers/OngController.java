@@ -13,74 +13,74 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import school.sptech.crudrisecanvas.Entity.User;
+import school.sptech.crudrisecanvas.Entity.Ong;
 
 @RestController
-@RequestMapping("/user")
-public class UserController {
-
-    List<User> users = new ArrayList<User>();
+@RequestMapping("/ong")
+public class OngController {
+    List<Ong> ongs = new ArrayList<Ong>();
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        if(users.isEmpty()) {
+    public ResponseEntity<List<Ong>> getOngs() {
+        if(ongs.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
-        return ResponseEntity.status(200).body(users);
+        return ResponseEntity.status(200).body(ongs);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable int id) {
+    public ResponseEntity<Ong> getOng(@PathVariable int id) {
         if(!idIsValid(id)) {
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.status(200).body(users.get(id));
+        return ResponseEntity.status(200).body(ongs.get(id));
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<Ong> createOng(@RequestBody Ong ong) {
         if(
-            user.getName() == null || 
-            user.getEmail() == null ||
-            user.getPassword() == null ||
-            user.getCpf() == null ||
-            user.getPhone() == null
+            ong.getName() == null || 
+            ong.getEmail() == null ||
+            ong.getPassword() == null ||
+            ong.getCnpj() == null
         ) {
             return ResponseEntity.status(400).build();
         }
-        users.add(user);
-        return ResponseEntity.status(201).body(user);
+        ongs.add(ong);
+        return ResponseEntity.status(201).body(ong);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable int id,@RequestBody User user) {
+    public ResponseEntity<Ong> updateOng(@PathVariable int id,@RequestBody Ong ong) {
         if(!idIsValid(id)) {
             return ResponseEntity.status(404).build();
         }
         if(
-            user.getName() == null || 
-            user.getEmail() == null ||
-            user.getPassword() == null ||
-            user.getCpf() == null ||
-            user.getPhone() == null
+            ong.getName() == null || 
+            ong.getEmail() == null ||
+            ong.getPassword() == null ||
+            ong.getCnpj() == null
         ) {
             return ResponseEntity.status(400).build();
         }
-        users.set(id, user);
-        return ResponseEntity.status(200).build();
+        ongs.set(id, ong);
+        return ResponseEntity.status(200).body(ong);
     }
-
+    
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable int id) {
+    public ResponseEntity<Ong> deleteOng(@PathVariable int id) {
         if(!idIsValid(id)) {
             return ResponseEntity.status(404).build();
         }
-        users.remove(id);
+        ongs.remove(id);
         return ResponseEntity.status(200).build();
     }
 
-    public boolean idIsValid(int id) {
-        return id >= 0 && id < users.size();
+    private boolean idIsValid(int id) {
+        return id >= 0 && id < ongs.size();
     }
+
+
+
 
 }

@@ -1,11 +1,11 @@
 package school.sptech.crudrisecanvas.Entity;
 
-public class User {
+public class Ong {
     private String name;
     private String email;
     private String password;
-    private String cpf;
-    private String phone;
+    private String cnpj;
+
 
     public String getName() {
         return name;
@@ -31,19 +31,11 @@ public class User {
         this.password = password;
     }
 
-    public String getCpf() {
-        return cpf;
+    public String getCnpj() {
+        return cnpj;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
     }
 }

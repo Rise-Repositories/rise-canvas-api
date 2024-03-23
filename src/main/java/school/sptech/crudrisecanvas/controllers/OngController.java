@@ -19,6 +19,7 @@ import school.sptech.crudrisecanvas.Entity.Ong;
 @RequestMapping("/ong")
 public class OngController {
     List<Ong> ongs = new ArrayList<Ong>();
+    int nextId;
 
     @GetMapping
     public ResponseEntity<List<Ong>> getOngs() {
@@ -33,7 +34,7 @@ public class OngController {
         if(!idIsValid(id)) {
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.status(200).body(ongs.get(id));
+        return ResponseEntity.status(200).body(getOngById(id));
     }
 
     @PostMapping
@@ -46,13 +47,14 @@ public class OngController {
         ) {
             return ResponseEntity.status(400).build();
         }
+        ong.setId(++nextId);
         ongs.add(ong);
         return ResponseEntity.status(201).body(ong);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Ong> updateOng(@PathVariable int id,@RequestBody Ong ong) {
-        if(!idIsValid(id)) {
+        if(!idIsValid(id) || getOngById(id) == null) {
             return ResponseEntity.status(404).build();
         }
         if(
@@ -63,24 +65,32 @@ public class OngController {
         ) {
             return ResponseEntity.status(400).build();
         }
-        ongs.set(id, ong);
+        ong.setId(getOngById(id).getId());
+        ongs.set(ongs.indexOf(getOngById(id)), ong);
         return ResponseEntity.status(200).body(ong);
     }
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Ong> deleteOng(@PathVariable int id) {
-        if(!idIsValid(id)) {
+        if(!idIsValid(id) || getOngById(id) == null) {
             return ResponseEntity.status(404).build();
         }
-        ongs.remove(id);
+        ongs.remove(getOngById(id));
         return ResponseEntity.status(200).build();
     }
 
     private boolean idIsValid(int id) {
-        return id >= 0 && id < ongs.size();
+        return id >= 0 && id <= ongs.size();
     }
 
-
+    private Ong getOngById(int id) {
+        for ( Ong ong : ongs ) {
+            if(ong.getId() == id) {
+                return ong;
+            }
+        }
+        return null;
+    }
 
 
 }

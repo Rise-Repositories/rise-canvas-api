@@ -20,6 +20,7 @@ import school.sptech.crudrisecanvas.Entity.User;
 public class UserController {
 
     List<User> users = new ArrayList<User>();
+    int nextId;
 
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
@@ -31,10 +32,10 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable int id) {
-        if(!idIsValid(id)) {
+        if(!idIsValid(id) || getUserById(id) == null) {
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.status(200).body(users.get(id));
+        return ResponseEntity.status(200).body(getUserById(id));
     }
 
     @PostMapping
@@ -48,13 +49,14 @@ public class UserController {
         ) {
             return ResponseEntity.status(400).build();
         }
+        user.setId(++nextId);
         users.add(user);
         return ResponseEntity.status(201).body(user);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id,@RequestBody User user) {
-        if(!idIsValid(id)) {
+        if(!idIsValid(id) || getUserById(id) == null) {
             return ResponseEntity.status(404).build();
         }
         if(
@@ -66,21 +68,31 @@ public class UserController {
         ) {
             return ResponseEntity.status(400).build();
         }
-        users.set(id, user);
+        user.setId(getUserById(id).getId());
+        users.set(users.indexOf(getUserById(id)), user);
         return ResponseEntity.status(200).build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable int id) {
-        if(!idIsValid(id)) {
+        if(!idIsValid(id) || getUserById(id) == null) {
             return ResponseEntity.status(404).build();
         }
-        users.remove(id);
+        users.remove(getUserById(id));
         return ResponseEntity.status(200).build();
     }
 
     public boolean idIsValid(int id) {
-        return id >= 0 && id < users.size();
+        return id >= 0 && id <= users.size();
+    }
+
+    public User getUserById(int id) {
+        for (User user : users) {
+            if(user.getId() == id) {
+                return user;
+            }
+        }
+        return null;
     }
 
 }

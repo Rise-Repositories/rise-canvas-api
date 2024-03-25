@@ -2,6 +2,7 @@ package school.sptech.crudrisecanvas.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,10 +34,13 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable int id) {
-        if(getUserById(id) == null) {
+        Optional<User> user = getUserById(id);
+
+        if(user.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.status(200).body(getUserById(id));
+
+        return ResponseEntity.status(200).body(user.get());
     }
 
     @PostMapping
@@ -52,31 +56,35 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id,@RequestBody @Valid User user) {
-        if(getUserById(id) == null) {
+        Optional<User> userOptional = getUserById(id);
+
+        if(userOptional.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
+        if(emailExists(user.getEmail(), id) || cpfExists(user.getCpf(), id)){
+            return ResponseEntity.status(409).build();
+        }
+        
+        int index = users.indexOf(userOptional.get());
 
-        user.setId(getUserById(id).getId());
-        users.set(users.indexOf(getUserById(id)), user);
+        user.setId(index);
+        users.set(index, user);
+
         return ResponseEntity.status(200).build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable int id) {
-        if(getUserById(id) == null) {
+        Optional<User> user = getUserById(id);
+        if(user.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-        users.remove(getUserById(id));
-        return ResponseEntity.status(200).build();
+        users.remove(user.get());
+        return ResponseEntity.status(204).build();
     }
 
-    public User getUserById(int id) {
-        for (User user : users) {
-            if(user.getId() == id) {
-                return user;
-            }
-        }
-        return null;
+    public Optional<User> getUserById(int id) {
+        return users.stream().filter(user -> user.getId() == id).findFirst();
     }
 
     public boolean emailExists(String email) {

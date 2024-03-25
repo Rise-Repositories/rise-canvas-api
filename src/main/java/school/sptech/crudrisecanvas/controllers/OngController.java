@@ -75,7 +75,7 @@ public class OngController {
             return ResponseEntity.status(404).build();
         }
         ongs.remove(ong.get());
-        return ResponseEntity.status(200).build();
+        return ResponseEntity.status(204).build();
     }
 
     private Optional<Ong> getOngById(int id) {

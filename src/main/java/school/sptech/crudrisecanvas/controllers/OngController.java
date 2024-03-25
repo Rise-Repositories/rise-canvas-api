@@ -2,6 +2,7 @@ package school.sptech.crudrisecanvas.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,10 +33,11 @@ public class OngController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Ong> getOng(@PathVariable int id) {
-        if(getOngById(id) == null) {
+        Optional<Ong> ong = getOngById(id);
+        if(ong.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.status(200).body(getOngById(id));
+        return ResponseEntity.status(200).body(ong.get());
     }
 
     @PostMapping
@@ -50,7 +52,8 @@ public class OngController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Ong> updateOng(@PathVariable int id,@RequestBody @Valid Ong ong) {
-        if(getOngById(id) == null) {
+        Optional<Ong> ongOptional = getOngById(id);
+        if(ongOptional.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
 
@@ -58,27 +61,30 @@ public class OngController {
             return ResponseEntity.status(409).build();
         }
 
-        ong.setId(getOngById(id).getId());
-        ongs.set(ongs.indexOf(getOngById(id)), ong);
+        int index = ongs.indexOf(ongOptional.get());
+
+        ong.setId(index);
+        ongs.set(index, ong);
         return ResponseEntity.status(200).body(ong);
     }
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Ong> deleteOng(@PathVariable int id) {
-        if(getOngById(id) == null) {
+        Optional<Ong> ong = getOngById(id);
+        if(ong.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-        ongs.remove(getOngById(id));
+        ongs.remove(ong.get());
         return ResponseEntity.status(200).build();
     }
 
-    private Ong getOngById(int id) {
-        for ( Ong ong : ongs ) {
-            if(ong.getId() == id) {
-                return ong;
-            }
-        }
-        return null;
+    private Optional<Ong> getOngById(int id) {
+        return 
+            ongs.stream()
+                .filter(
+                    user -> user.getId() == id
+                )
+                .findFirst();
     }
 
     public boolean emailExists(String email) {

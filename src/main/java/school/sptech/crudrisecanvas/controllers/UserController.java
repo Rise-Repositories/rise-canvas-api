@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import school.sptech.crudrisecanvas.Entity.User;
 
 @RestController
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
         if(
             user.getName() == null || 
             user.getEmail() == null ||
@@ -55,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable int id,@RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable int id,@RequestBody @Valid User user) {
         if(!idIsValid(id) || getUserById(id) == null) {
             return ResponseEntity.status(404).build();
         }

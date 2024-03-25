@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import school.sptech.crudrisecanvas.Entity.Ong;
 
 @RestController
@@ -38,7 +39,7 @@ public class OngController {
     }
 
     @PostMapping
-    public ResponseEntity<Ong> createOng(@RequestBody Ong ong) {
+    public ResponseEntity<Ong> createOng(@RequestBody @Valid Ong ong) {
         if(
             ong.getName() == null || 
             ong.getEmail() == null ||
@@ -53,7 +54,7 @@ public class OngController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Ong> updateOng(@PathVariable int id,@RequestBody Ong ong) {
+    public ResponseEntity<Ong> updateOng(@PathVariable int id,@RequestBody @Valid Ong ong) {
         if(!idIsValid(id) || getOngById(id) == null) {
             return ResponseEntity.status(404).build();
         }

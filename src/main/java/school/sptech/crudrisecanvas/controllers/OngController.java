@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import school.sptech.crudrisecanvas.Entity.Ong;
 
 @RestController
@@ -31,21 +32,16 @@ public class OngController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Ong> getOng(@PathVariable int id) {
-        if(!idIsValid(id)) {
+        if(getOngById(id) == null) {
             return ResponseEntity.status(404).build();
         }
         return ResponseEntity.status(200).body(getOngById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Ong> createOng(@RequestBody Ong ong) {
-        if(
-            ong.getName() == null || 
-            ong.getEmail() == null ||
-            ong.getPassword() == null ||
-            ong.getCnpj() == null
-        ) {
-            return ResponseEntity.status(400).build();
+    public ResponseEntity<Ong> createOng(@RequestBody @Valid Ong ong) {
+        if(emailExists(ong.getEmail()) || cnpjExists(ong.getCnpj())){
+            return ResponseEntity.status(409).build();
         }
         ong.setId(++nextId);
         ongs.add(ong);
@@ -53,18 +49,15 @@ public class OngController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Ong> updateOng(@PathVariable int id,@RequestBody Ong ong) {
-        if(!idIsValid(id) || getOngById(id) == null) {
+    public ResponseEntity<Ong> updateOng(@PathVariable int id,@RequestBody @Valid Ong ong) {
+        if(getOngById(id) == null) {
             return ResponseEntity.status(404).build();
         }
-        if(
-            ong.getName() == null || 
-            ong.getEmail() == null ||
-            ong.getPassword() == null ||
-            ong.getCnpj() == null
-        ) {
-            return ResponseEntity.status(400).build();
+
+        if(emailExists(ong.getEmail(), id) || cnpjExists(ong.getCnpj(), id)){
+            return ResponseEntity.status(409).build();
         }
+
         ong.setId(getOngById(id).getId());
         ongs.set(ongs.indexOf(getOngById(id)), ong);
         return ResponseEntity.status(200).body(ong);
@@ -72,15 +65,11 @@ public class OngController {
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Ong> deleteOng(@PathVariable int id) {
-        if(!idIsValid(id) || getOngById(id) == null) {
+        if(getOngById(id) == null) {
             return ResponseEntity.status(404).build();
         }
         ongs.remove(getOngById(id));
         return ResponseEntity.status(200).build();
-    }
-
-    private boolean idIsValid(int id) {
-        return id >= 0 && id <= ongs.size();
     }
 
     private Ong getOngById(int id) {
@@ -92,5 +81,36 @@ public class OngController {
         return null;
     }
 
+    public boolean emailExists(String email) {
+        return 
+            ongs.stream()
+                .anyMatch(
+                    user -> user.getEmail().equals(email)
+                );
+    }
+
+    public boolean emailExists(String email, int id) {
+        return 
+            ongs.stream()
+                .anyMatch(
+                    user -> user.getEmail().equals(email) && user.getId() != id
+                );
+    }
+
+    public boolean cnpjExists(String cpf) {
+        return 
+            ongs.stream()
+                .anyMatch(
+                    user -> user.getCnpj().equals(cpf)
+                );
+    }
+
+    public boolean cnpjExists(String cpf, int id) {
+        return 
+            ongs.stream()
+                .anyMatch(
+                    user -> user.getCnpj().equals(cpf) && user.getId() != id
+                );
+    }
 
 }

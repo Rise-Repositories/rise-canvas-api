@@ -63,7 +63,7 @@ public class OngController {
 
         int index = ongs.indexOf(ongOptional.get());
 
-        ong.setId(index);
+        ong.setId(ongOptional.get().getId());
         ongs.set(index, ong);
         return ResponseEntity.status(200).body(ong);
     }

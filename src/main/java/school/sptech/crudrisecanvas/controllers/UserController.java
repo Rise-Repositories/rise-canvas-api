@@ -67,7 +67,7 @@ public class UserController {
         
         int index = users.indexOf(userOptional.get());
 
-        user.setId(index);
+        user.setId(userOptional.get().getId());
         users.set(index, user);
 
         return ResponseEntity.status(200).build();

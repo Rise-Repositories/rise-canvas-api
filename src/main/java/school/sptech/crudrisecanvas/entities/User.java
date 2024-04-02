@@ -1,12 +1,19 @@
-package school.sptech.crudrisecanvas.Entity;
+package school.sptech.crudrisecanvas.entities;
 
-import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class Ong {
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @NotBlank
@@ -16,14 +23,17 @@ public class Ong {
     @Email
     private String email;
 
-
     @NotBlank
     @Size(min = 6, max = 20)
     private String password;
 
     @NotBlank
-    @CNPJ
-    private String cnpj;
+    @CPF
+    private String cpf;
+
+    @NotBlank
+    @Size(min = 8, max = 15)
+    private String ip;
 
     public Integer getId() {
         return id;
@@ -57,11 +67,19 @@ public class Ong {
         this.password = password;
     }
 
-    public String getCnpj() {
-        return cnpj;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 }

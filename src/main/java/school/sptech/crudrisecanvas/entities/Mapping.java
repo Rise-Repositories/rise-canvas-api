@@ -1,21 +1,30 @@
 package school.sptech.crudrisecanvas.entities;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 import school.sptech.crudrisecanvas.Utils.Converters.MappingStatusConvert;
 import school.sptech.crudrisecanvas.Utils.Enums.MappingStatus;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Mapping {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String description;
@@ -33,7 +42,11 @@ public class Mapping {
     @PastOrPresent
     private LocalDate date;
 
-    //getter and setter
+    @ManyToOne
+    private User user;
+
+    @OneToMany(mappedBy = "mapping")
+    private List<MappingAction> mappingActions;
 
     public Integer getId() {
         return id;

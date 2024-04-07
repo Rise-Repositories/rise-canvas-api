@@ -7,10 +7,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import lombok.Data;
 
 @Entity
+@Data
 public class Voluntary {
-
     @Id
     @ManyToOne
     private User user;
@@ -23,28 +24,4 @@ public class Voluntary {
 
     @ManyToMany
     private List<Action> actions;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Ong getOng() {
-        return ong;
-    }
-
-    public void setOng(Ong ong) {
-        this.ong = ong;
-    }   
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }

@@ -16,8 +16,10 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
 @Entity
+@Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Action {
     @Id
@@ -46,69 +48,4 @@ public class Action {
 
     @OneToMany(mappedBy = "action")
     private List<MappingAction> mappingActions;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDateTime getDatetimeStart() {
-        return datetimeStart;
-    }
-
-    public void setDatetimeStart(LocalDateTime datetimeStart) {
-        this.datetimeStart = datetimeStart;
-    }
-
-    public LocalDateTime getDatetimeEnd() {
-        return datetimeEnd;
-    }
-
-    public void setDatetimeEnd(LocalDateTime datetimeEnd) {
-        this.datetimeEnd = datetimeEnd;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Ong getOng() {
-        return ong;
-    }
-
-    public void setOng(Ong ong) {
-        this.ong = ong;
-    }
 }

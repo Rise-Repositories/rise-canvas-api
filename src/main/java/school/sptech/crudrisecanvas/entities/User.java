@@ -24,24 +24,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @NotBlank
     private String name;
-
-    @NotBlank
-    @Email
     private String email;
-
-    @NotBlank
-    @Size(min = 6, max = 20)
     private String password;
-
-    @NotBlank
-    @CPF
     private String cpf;
-
-    @NotBlank
-    @Size(min = 8, max = 15)
     private String ip;
 
     @OneToMany(mappedBy = "user")

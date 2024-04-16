@@ -3,7 +3,7 @@ package school.sptech.crudrisecanvas.dtos;
 import school.sptech.crudrisecanvas.entities.User;
 
 public class UserRequestMapper {
-    public static User mapToUser(UserRequestDto userRequestDto) {
+    public static User toEntity(UserRequestDto userRequestDto) {
         User user = new User();
         user.setName(userRequestDto.getName());
         user.setEmail(userRequestDto.getEmail());
@@ -13,7 +13,7 @@ public class UserRequestMapper {
         return user;
     }
 
-    public static UserRequestDto mapToUserRequestDto(User user) {
+    public static UserRequestDto toDto (User user) {
         UserRequestDto userRequestDto = new UserRequestDto();
         userRequestDto.setName(user.getName());
         userRequestDto.setEmail(user.getEmail());

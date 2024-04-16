@@ -2,8 +2,6 @@ package school.sptech.crudrisecanvas.entities;
 
 import java.util.Set;
 
-import org.hibernate.validator.constraints.br.CNPJ;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -15,9 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import school.sptech.crudrisecanvas.Utils.Converters.OngStatusConvert;
 import school.sptech.crudrisecanvas.Utils.Enums.OngStatus;
@@ -30,29 +25,12 @@ public class Ong {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
     private String name;
-
-    @NotBlank
-    @Email
     private String email;
-
-
-    @NotBlank
-    @Size(min = 6, max = 20)
     private String password;
-
-    @NotBlank
-    @CNPJ
     private String cnpj;
-
     private String description;
-
-    @NotBlank
-    @Size(min = 8, max = 8)
     private String cep;
-    
-    @NotBlank
     private String address;
 
     @Convert(converter = OngStatusConvert.class)

@@ -1,9 +1,9 @@
 package school.sptech.crudrisecanvas.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,108 +15,83 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import school.sptech.crudrisecanvas.Entity.User;
+import school.sptech.crudrisecanvas.dtos.UserRequestDto;
+import school.sptech.crudrisecanvas.dtos.UserRequestMapper;
+import school.sptech.crudrisecanvas.dtos.UserResponseDto;
+import school.sptech.crudrisecanvas.dtos.UserResponseMapper;
+import school.sptech.crudrisecanvas.entities.User;
+import school.sptech.crudrisecanvas.repositories.UserRepositary;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    List<User> users = new ArrayList<User>();
-    int nextId;
+    @Autowired
+    UserRepositary userRepositary;
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<UserResponseDto>> getUsers() {
+        List<User> users = userRepositary.findAll();
         if(users.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
-        return ResponseEntity.status(200).body(users);
+        List<UserResponseDto> usersDto = UserResponseMapper.toDto(users);
+        return ResponseEntity.status(200).body(usersDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable int id) {
-        Optional<User> user = getUserById(id);
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable int id) {
+        Optional<User> user = userRepositary.findById(id);
 
         if(user.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
 
-        return ResponseEntity.status(200).body(user.get());
+        UserResponseDto userDto = UserResponseMapper.toDto(user.get());
+
+        return ResponseEntity.status(200).body(userDto);
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
-        if(emailExists(user.getEmail()) || cpfExists(user.getCpf())){
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userDto) {
+        if(userRepositary.countWithEmailOrCpf(userDto.getEmail(), userDto.getCpf()) > 0) {
             return ResponseEntity.status(409).build();
         }
+        
+        User user = UserRequestMapper.toEntity(userDto);
 
-        user.setId(++nextId);
-        users.add(user);
-        return ResponseEntity.status(201).body(user);
+        UserResponseDto result = UserResponseMapper.toDto(userRepositary.save(user));
+
+        return ResponseEntity.status(201).body(result);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable int id,@RequestBody @Valid User user) {
-        Optional<User> userOptional = getUserById(id);
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable int id,@RequestBody @Valid UserRequestDto user) {
+        Optional<User> userOptional = userRepositary.findById(id);
 
         if(userOptional.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-        if(emailExists(user.getEmail(), id) || cpfExists(user.getCpf(), id)){
+
+        if(userRepositary.countWithEmailOrCpfAndDiferentId(user.getEmail(), user.getCpf(), id) > 0) {
             return ResponseEntity.status(409).build();
         }
-        
-        int index = users.indexOf(userOptional.get());
 
-        user.setId(userOptional.get().getId());
-        users.set(index, user);
+        User userEntity = UserRequestMapper.toEntity(user);
 
-        return ResponseEntity.status(200).build();
+        userEntity.setId(id);
+
+        UserResponseDto result = UserResponseMapper.toDto(userRepositary.save(userEntity));
+
+        return ResponseEntity.status(200).body(result);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable int id) {
-        Optional<User> user = getUserById(id);
-        if(user.isEmpty()) {
+    public ResponseEntity<Void> deleteUser(@PathVariable int id) {
+        if(userRepositary.countWithId(id) == 0) {
             return ResponseEntity.status(404).build();
         }
-        users.remove(user.get());
+        userRepositary.deleteById(id);
         return ResponseEntity.status(204).build();
     }
-
-    public Optional<User> getUserById(int id) {
-        return users.stream().filter(user -> user.getId() == id).findFirst();
-    }
-
-    public boolean emailExists(String email) {
-        return 
-            users.stream()
-                .anyMatch(
-                    user -> user.getEmail().equals(email)
-                );
-    }
-
-    public boolean emailExists(String email, int id) {
-        return 
-            users.stream()
-                .anyMatch(
-                    user -> user.getEmail().equals(email) && user.getId() != id
-                );
-    }
-
-    public boolean cpfExists(String cpf) {
-        return 
-            users.stream()
-                .anyMatch(
-                    user -> user.getCpf().equals(cpf)
-                );
-    }
-
-    public boolean cpfExists(String cpf, int id) {
-        return 
-            users.stream()
-                .anyMatch(
-                    user -> user.getCpf().equals(cpf) && user.getId() != id
-                );
-    }
-
 }

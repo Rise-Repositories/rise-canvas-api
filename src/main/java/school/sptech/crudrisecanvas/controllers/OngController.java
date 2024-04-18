@@ -83,7 +83,8 @@ public class OngController {
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOng(@PathVariable int id) {
-        if(ongRepository.countWithId(id) == 0) {
+        Optional<Ong> ong = ongRepository.findById(id);
+        if(ong.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
         ongRepository.deleteById(id);

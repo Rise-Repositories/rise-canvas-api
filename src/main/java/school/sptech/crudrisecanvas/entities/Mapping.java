@@ -3,6 +3,8 @@ package school.sptech.crudrisecanvas.entities;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -27,19 +29,15 @@ public class Mapping {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private Integer qtyPeople;
     private String description;
-
-    //TODO: add validation 
     private Double latitute;
-
-    //TODO: add validation
     private Double longitude;
 
     @Convert(converter = MappingStatusConvert.class)
     private MappingStatus status;
 
-    @NotBlank
-    @PastOrPresent
+    @CreationTimestamp
     private LocalDate date;
 
     @ManyToOne

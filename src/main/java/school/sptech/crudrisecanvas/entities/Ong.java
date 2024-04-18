@@ -1,6 +1,6 @@
 package school.sptech.crudrisecanvas.entities;
 
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -37,8 +37,12 @@ public class Ong {
     private OngStatus status;
 
     @OneToMany(mappedBy = "ong", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Action> actions;
+    private List<Action> actions;
 
     @OneToMany(mappedBy = "ong", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Voluntary> voluntaries;
+    private List<Voluntary> voluntaries;
+
+    public void addAction(Action action) {
+        this.actions.add(action);
+    }
 }

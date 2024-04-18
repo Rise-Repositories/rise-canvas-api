@@ -19,7 +19,6 @@ import school.sptech.crudrisecanvas.Utils.Enums.OngStatus;
 
 @Entity
 @Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Ong {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

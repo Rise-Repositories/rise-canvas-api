@@ -15,15 +15,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
 import school.sptech.crudrisecanvas.Utils.Converters.MappingStatusConvert;
 import school.sptech.crudrisecanvas.Utils.Enums.MappingStatus;
 
 @Entity
 @Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Mapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

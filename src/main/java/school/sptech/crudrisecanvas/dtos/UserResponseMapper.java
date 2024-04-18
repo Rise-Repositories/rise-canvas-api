@@ -12,18 +12,18 @@ public class UserResponseMapper {
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setCpf(user.getCpf());
         userResponseDto.setIp(user.getIp());
-        userResponseDto.setMapping(user.getMapping());
+        userResponseDto.setMapping(MappingResponseMapper.toNoRelationDto(user.getMapping()));
         return userResponseDto;
     }
 
-    public static User toEntity(UserResponseDto userResponseDto) {
-        User user = new User();
-        user.setName(userResponseDto.getName());
-        user.setEmail(userResponseDto.getEmail());
-        user.setCpf(userResponseDto.getCpf());
-        user.setIp(userResponseDto.getIp());
-        user.setMapping(userResponseDto.getMapping());
-        return user;
+    public static UserResponseNoRelationDto toNoRelationDto(User user) {
+        UserResponseNoRelationDto userResponseNoRelationDto = new UserResponseNoRelationDto();
+        userResponseNoRelationDto.setId(user.getId());
+        userResponseNoRelationDto.setName(user.getName());
+        userResponseNoRelationDto.setEmail(user.getEmail());
+        userResponseNoRelationDto.setCpf(user.getCpf());
+        userResponseNoRelationDto.setIp(user.getIp());
+        return userResponseNoRelationDto;
     }
 
     public static List<UserResponseDto> toDto(List<User> users) {

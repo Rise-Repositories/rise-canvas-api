@@ -1,15 +1,13 @@
 package school.sptech.crudrisecanvas.dtos;
 
-import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class UserResponseDto {
+public class UserResponseNoRelationDto {
     private Integer id;
     private String name;
     private String email;
     private String cpf;
     private String ip;
-    private List<MappingResponseNoRelationDto> mapping;
 }

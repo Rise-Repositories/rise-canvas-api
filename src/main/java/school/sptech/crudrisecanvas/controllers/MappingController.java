@@ -9,15 +9,20 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+import school.sptech.crudrisecanvas.Utils.Enums.MappingStatus;
 import school.sptech.crudrisecanvas.dtos.MappingRequestDto;
 import school.sptech.crudrisecanvas.dtos.MappingRequestMapper;
 import school.sptech.crudrisecanvas.dtos.MappingResponseDto;
 import school.sptech.crudrisecanvas.dtos.MappingResponseMapper;
 import school.sptech.crudrisecanvas.entities.Mapping;
+import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
+import school.sptech.crudrisecanvas.repositories.UserRepositary;
 
 @RestController
 @RequestMapping("/mapping")
@@ -25,6 +30,9 @@ public class MappingController {
 
     @Autowired
     MappingRepository mappingRepository;
+
+    @Autowired
+    UserRepositary userRepositary;
 
     @GetMapping
     public ResponseEntity<List<MappingResponseDto>> getMappings(){
@@ -49,8 +57,17 @@ public class MappingController {
     }
 
     @PostMapping
-    public ResponseEntity<MappingResponseDto> createMapping(MappingRequestDto mapping){
+    public ResponseEntity<MappingResponseDto> createMapping(@RequestBody @Valid MappingRequestDto mapping){
         Mapping newMapping = MappingRequestMapper.toEntity(mapping);
+
+        Optional<User> user = userRepositary.findById(1);
+        
+        if(user.isEmpty()){
+            return ResponseEntity.status(404).build();
+        }
+        
+        newMapping.setUser(user.get());
+        newMapping.setStatus(MappingStatus.ACTIVE);
 
         MappingResponseDto response = MappingResponseMapper.toDto(mappingRepository.save(newMapping));
 

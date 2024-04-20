@@ -24,6 +24,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Mapping> mapping;
 
+    @OneToMany(mappedBy = "user")
+    private List<Voluntary> voluntary;
+
     public void addMapping(Mapping mapping){
         this.mapping.add(mapping);
     }

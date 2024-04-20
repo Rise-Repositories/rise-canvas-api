@@ -14,7 +14,7 @@ public class ActionResponseMapper {
         result.setDatetimeEnd(action.getDatetimeEnd());
         result.setLatitude(action.getLatitude());
         result.setLongitude(action.getLongitude());
-        result.setOng(OngResponseMapper.toDto(action.getOng()));
+        result.setOng(OngResponseMapper.toNoRelationDto(action.getOng()));
 
         return result;
     }
@@ -22,9 +22,9 @@ public class ActionResponseMapper {
     public static List<ActionResponseDto> toDto(List<Action> actions){
         return actions.stream().map(ActionResponseMapper::toDto).toList();
     }
-    
-    public static Action toDto(ActionResponseDto action){
-        Action result = new Action();
+
+    public static ActionResponseNoRelationDto toNoRelationDto(Action action){
+        ActionResponseNoRelationDto result = new ActionResponseNoRelationDto();
         result.setId(action.getId());
         result.setName(action.getName());
         result.setDescription(action.getDescription());
@@ -32,6 +32,13 @@ public class ActionResponseMapper {
         result.setDatetimeEnd(action.getDatetimeEnd());
         result.setLatitude(action.getLatitude());
         result.setLongitude(action.getLongitude());
+
         return result;
+    }
+
+    public static List<ActionResponseNoRelationDto> toNoRelationDto(List<Action> actions){
+        return actions == null 
+            ? null 
+            : actions.stream().map(ActionResponseMapper::toNoRelationDto).toList();
     }
 }

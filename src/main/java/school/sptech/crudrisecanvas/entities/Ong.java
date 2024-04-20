@@ -2,10 +2,8 @@ package school.sptech.crudrisecanvas.entities;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,8 +20,6 @@ public class Ong {
     private Integer id;
 
     private String name;
-    private String email;
-    private String password;
     private String cnpj;
     private String description;
     private String cep;
@@ -32,10 +28,10 @@ public class Ong {
     @Convert(converter = OngStatusConvert.class)
     private OngStatus status;
 
-    @OneToMany(mappedBy = "ong", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ong")
     private List<Action> actions;
 
-    @OneToMany(mappedBy = "ong", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ong")
     private List<Voluntary> voluntaries;
 
     public void addAction(Action action) {

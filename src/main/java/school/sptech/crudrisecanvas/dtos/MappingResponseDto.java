@@ -7,7 +7,7 @@ public class MappingResponseDto {
     private Integer id;
     private Integer qtyPeople;
     private String description;
-    private Double latitute;
+    private Double latitude;
     private Double longitude;
     private String status;
     private String date;

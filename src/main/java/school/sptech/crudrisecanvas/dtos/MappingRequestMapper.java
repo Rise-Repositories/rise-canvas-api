@@ -7,7 +7,7 @@ public class MappingRequestMapper {
         Mapping mapping = new Mapping();
         mapping.setQtyPeople(mappingRequestDto.getQtyPeople());
         mapping.setDescription(mappingRequestDto.getDescription());
-        mapping.setLatitute(mappingRequestDto.getLatitute());
+        mapping.setLatitude(mappingRequestDto.getLatitude());
         mapping.setLongitude(mappingRequestDto.getLongitude());
         mapping.setStatus(mappingRequestDto.getStatus());
         return mapping;

@@ -60,6 +60,8 @@ public class MappingController {
     public ResponseEntity<MappingResponseDto> createMapping(@RequestBody @Valid MappingRequestDto mapping){
         Mapping newMapping = MappingRequestMapper.toEntity(mapping);
 
+        System.out.println(newMapping);
+
         Optional<User> user = userRepositary.findById(1);
         
         if(user.isEmpty()){

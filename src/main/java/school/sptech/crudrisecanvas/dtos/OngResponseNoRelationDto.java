@@ -1,12 +1,10 @@
 package school.sptech.crudrisecanvas.dtos;
 
-import java.util.List;
-
 import lombok.Data;
 import school.sptech.crudrisecanvas.Utils.Enums.OngStatus;
 
 @Data
-public class OngResponseDto {
+public class OngResponseNoRelationDto {
     private int id;
     private String name;
     private String cnpj;
@@ -14,5 +12,4 @@ public class OngResponseDto {
     private String cep;
     private String address;
     private OngStatus status;
-    private List<ActionResponseNoRelationDto> actions;
 }

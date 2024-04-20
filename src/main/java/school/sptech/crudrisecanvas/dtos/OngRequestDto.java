@@ -13,14 +13,6 @@ public class OngRequestDto {
     private String name;
 
     @NotBlank
-    @Email
-    private String email;
-
-    @NotBlank
-    @Size(min = 6, max = 20)
-    private String password;
-
-    @NotBlank
     @CNPJ
     private String cnpj;
 

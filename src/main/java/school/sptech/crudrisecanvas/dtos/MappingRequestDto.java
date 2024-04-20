@@ -7,7 +7,7 @@ import school.sptech.crudrisecanvas.Utils.Enums.MappingStatus;
 public class MappingRequestDto {
     private Integer qtyPeople;
     private String description;
-    private Double latitute;
+    private Double latitude;
     private Double longitude;
     private MappingStatus status;
 }

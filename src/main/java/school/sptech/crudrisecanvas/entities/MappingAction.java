@@ -1,6 +1,8 @@
 package school.sptech.crudrisecanvas.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
@@ -9,12 +11,14 @@ import lombok.Data;
 @Data
 public class MappingAction {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @ManyToOne
     private Action action;
 
-    @Id
     @ManyToOne
     private Mapping mapping;
 
-    private int qtd_served_people;
+    private int qtyServedPeople;
 }

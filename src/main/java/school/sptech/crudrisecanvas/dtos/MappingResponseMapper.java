@@ -9,8 +9,9 @@ public class MappingResponseMapper {
     public static MappingResponseDto toDto(Mapping mapping){
         MappingResponseDto mappingResponse = new MappingResponseDto();
         mappingResponse.setId(mapping.getId());
+        mappingResponse.setQtyPeople(mapping.getQtyPeople());
         mappingResponse.setDescription(mapping.getDescription());
-        mappingResponse.setLatitute(mapping.getLatitute());
+        mappingResponse.setLatitude(mapping.getLatitude());
         mappingResponse.setLongitude(mapping.getLongitude());
         mappingResponse.setStatus(mapping.getStatus().toString());
         mappingResponse.setDate(mapping.getDate().toString());
@@ -25,8 +26,9 @@ public class MappingResponseMapper {
     public static MappingResponseNoRelationDto toNoRelationDto(Mapping mapping){
         MappingResponseNoRelationDto mappingResponse = new MappingResponseNoRelationDto();
         mappingResponse.setId(mapping.getId());
+        mappingResponse.setQtyPeople(mapping.getQtyPeople());
         mappingResponse.setDescription(mapping.getDescription());
-        mappingResponse.setLatitute(mapping.getLatitute());
+        mappingResponse.setLatitude(mapping.getLatitude());
         mappingResponse.setLongitude(mapping.getLongitude());
         mappingResponse.setStatus(mapping.getStatus().toString());
         mappingResponse.setDate(mapping.getDate().toString());
@@ -34,6 +36,8 @@ public class MappingResponseMapper {
     }
 
     public static List<MappingResponseNoRelationDto> toNoRelationDto(List<Mapping> mappings){
-        return mappings.stream().map(MappingResponseMapper::toNoRelationDto).toList();
+        return mappings == null 
+            ? null 
+            : mappings.stream().map(MappingResponseMapper::toNoRelationDto).toList();
     }
 }

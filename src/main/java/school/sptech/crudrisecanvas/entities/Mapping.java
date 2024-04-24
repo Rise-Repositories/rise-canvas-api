@@ -10,11 +10,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
-import school.sptech.crudrisecanvas.Utils.Converters.MappingStatusConvert;
-import school.sptech.crudrisecanvas.Utils.Enums.MappingStatus;
+import school.sptech.crudrisecanvas.utils.Converters.MappingStatusConvert;
+import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 
 @Entity
 @Data
@@ -34,8 +34,8 @@ public class Mapping {
     @CreationTimestamp
     private LocalDate date;
 
-    @ManyToOne
-    private User user;
+    @ManyToMany
+    private List<User> users;
 
     @OneToMany(mappedBy = "mapping")
     private List<MappingAction> mappingActions;

@@ -2,7 +2,6 @@ package school.sptech.crudrisecanvas.dtos;
 
 import org.hibernate.validator.constraints.br.CNPJ;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;

@@ -9,8 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
-import school.sptech.crudrisecanvas.Utils.Converters.OngStatusConvert;
-import school.sptech.crudrisecanvas.Utils.Enums.OngStatus;
+import school.sptech.crudrisecanvas.utils.Converters.OngStatusConvert;
+import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
 
 @Entity
 @Data

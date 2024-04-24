@@ -1,5 +1,6 @@
 package school.sptech.crudrisecanvas.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import school.sptech.crudrisecanvas.Utils.Enums.MappingStatus;
+import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 import school.sptech.crudrisecanvas.dtos.MappingRequestDto;
 import school.sptech.crudrisecanvas.dtos.MappingRequestMapper;
 import school.sptech.crudrisecanvas.dtos.MappingResponseDto;
@@ -60,15 +62,16 @@ public class MappingController {
     public ResponseEntity<MappingResponseDto> createMapping(@RequestBody @Valid MappingRequestDto mapping){
         Mapping newMapping = MappingRequestMapper.toEntity(mapping);
 
-        System.out.println(newMapping);
-
         Optional<User> user = userRepositary.findById(1);
         
         if(user.isEmpty()){
             return ResponseEntity.status(404).build();
         }
         
-        newMapping.setUser(user.get());
+        List<User> users = newMapping.getUsers() == null ? new ArrayList<>() : newMapping.getUsers();
+        users.add(user.get());
+
+        newMapping.setUsers(users);
         newMapping.setStatus(MappingStatus.ACTIVE);
 
         MappingResponseDto response = MappingResponseMapper.toDto(mappingRepository.save(newMapping));
@@ -101,5 +104,24 @@ public class MappingController {
         mappingRepository.delete(mapping.get());
 
         return ResponseEntity.status(204).build();
+    }
+
+    @PostMapping("/{id}/add-user/{userId}")
+    public ResponseEntity<MappingResponseDto> addUser(@PathVariable("id") Integer id,@PathVariable("userId") Integer userId){
+        Optional<Mapping> mapping = mappingRepository.findById(id);
+        Optional<User> user = userRepositary.findById(userId);
+
+        if(mapping.isEmpty() || user.isEmpty()){
+            return ResponseEntity.status(404).build();
+        }
+
+        List<User> users = mapping.get().getUsers() == null ? new ArrayList<>() : mapping.get().getUsers();
+        users.add(user.get());
+
+        mapping.get().setUsers(users);
+
+        MappingResponseDto response = MappingResponseMapper.toDto(mappingRepository.save(mapping.get()));
+
+        return ResponseEntity.status(200).body(response);
     }
 }

@@ -30,6 +30,7 @@ import school.sptech.crudrisecanvas.repositories.ActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
 import school.sptech.crudrisecanvas.repositories.OngRepository;
+import school.sptech.crudrisecanvas.utils.EmailConfig;
 
 @RestController
 @RequestMapping("/actions")
@@ -60,7 +61,7 @@ public class ActionController {
     @GetMapping("/{id}")
     public ResponseEntity<ActionResponseDto> getActionById(Integer id){
         Optional<Action> action = actionRepository.findById(id);
-        if(action == null){
+        if(action.isEmpty()){
             return ResponseEntity.status(404).build();
         }
         ActionResponseDto actionResponse = ActionResponseMapper.toDto(action.get());
@@ -109,20 +110,23 @@ public class ActionController {
         @PathVariable("mappingId") Integer mappingId,
         @RequestBody @Valid MappingActionRequestDto mappingActionBody
     ){
+        EmailConfig emailConfig = new EmailConfig();
         Optional<Action> action = actionRepository.findById(id);
         Optional<Mapping> mapping = mappingRepository.findById(mappingId);
         if(action.isEmpty() || mapping.isEmpty()){
             return ResponseEntity.status(404).build();
         }
 
-        MappingAction mappingAction = new MappingAction();
-
-        mappingAction.setAction(action.get());
-        mappingAction.setMapping(mapping.get());
-        mappingAction.setQtyServedPeople(mappingActionBody.getQtyServedPeople());
+        MappingAction mappingAction = new MappingAction(action.get(), mapping.get(), mappingActionBody.getQtyServedPeople());
 
         MappingActionResponseDto response = MappingActionResponseMapper.toDto(mappingActionRepository.save(mappingAction));
 
+        mapping.get().getUsers().stream().forEach(user -> {
+            emailConfig.sendEmail(
+                user.getEmail(),
+                "Rise Canvas - Seu pin foi atendido",
+                "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.get().getName() + " foi realizada e atendeu " + mappingActionBody.getQtyServedPeople() + " pessoas.");
+        });
         return ResponseEntity.status(200).body(response);
     }
 }

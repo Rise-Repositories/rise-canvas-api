@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import school.sptech.crudrisecanvas.Utils.Enums.OngStatus;
+import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
 import school.sptech.crudrisecanvas.dtos.OngRequestDto;
 import school.sptech.crudrisecanvas.dtos.OngRequestMapper;
 import school.sptech.crudrisecanvas.dtos.OngResponseDto;

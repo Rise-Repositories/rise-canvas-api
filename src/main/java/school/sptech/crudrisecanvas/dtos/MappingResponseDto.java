@@ -1,5 +1,7 @@
 package school.sptech.crudrisecanvas.dtos;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -11,5 +13,5 @@ public class MappingResponseDto {
     private Double longitude;
     private String status;
     private String date;
-    private UserResponseNoRelationDto user;
+    private List<UserResponseNoRelationDto> users;
 }

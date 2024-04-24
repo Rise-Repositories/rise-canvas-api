@@ -10,6 +10,13 @@ import lombok.Data;
 @Entity
 @Data
 public class MappingAction {
+
+    public MappingAction(Action action, Mapping mapping, int qtyServedPeople) {
+        this.action = action;
+        this.mapping = mapping;
+        this.qtyServedPeople = qtyServedPeople;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

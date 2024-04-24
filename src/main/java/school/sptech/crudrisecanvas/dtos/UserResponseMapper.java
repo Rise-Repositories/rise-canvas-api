@@ -26,6 +26,12 @@ public class UserResponseMapper {
         return userResponseNoRelationDto;
     }
 
+    public static List<UserResponseNoRelationDto> toNoRelationDto(List<User> users) {
+        return users == null 
+            ? null 
+            : users.stream().map(UserResponseMapper::toNoRelationDto).toList();
+    }
+
     public static List<UserResponseDto> toDto(List<User> users) {
         return users.stream().map(UserResponseMapper::toDto).toList();
     }

@@ -15,7 +15,7 @@ public class MappingResponseMapper {
         mappingResponse.setLongitude(mapping.getLongitude());
         mappingResponse.setStatus(mapping.getStatus().toString());
         mappingResponse.setDate(mapping.getDate().toString());
-        mappingResponse.setUser(UserResponseMapper.toNoRelationDto(mapping.getUser()));
+        mappingResponse.setUsers(UserResponseMapper.toNoRelationDto(mapping.getUsers()));
         return mappingResponse;
     }
 

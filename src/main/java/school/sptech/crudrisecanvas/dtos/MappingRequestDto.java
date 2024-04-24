@@ -1,7 +1,7 @@
 package school.sptech.crudrisecanvas.dtos;
 
 import lombok.Data;
-import school.sptech.crudrisecanvas.Utils.Enums.MappingStatus;
+import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 
 @Data
 public class MappingRequestDto {

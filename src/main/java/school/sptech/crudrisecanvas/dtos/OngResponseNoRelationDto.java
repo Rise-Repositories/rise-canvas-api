@@ -1,7 +1,7 @@
 package school.sptech.crudrisecanvas.dtos;
 
 import lombok.Data;
-import school.sptech.crudrisecanvas.Utils.Enums.OngStatus;
+import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
 
 @Data
 public class OngResponseNoRelationDto {

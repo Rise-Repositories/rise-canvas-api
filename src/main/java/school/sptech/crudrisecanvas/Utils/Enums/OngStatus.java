@@ -1,4 +1,4 @@
-package school.sptech.crudrisecanvas.Utils.Enums;
+package school.sptech.crudrisecanvas.utils.Enums;
 
 public enum OngStatus {
     ACPECTED,

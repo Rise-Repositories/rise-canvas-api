@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
 import school.sptech.crudrisecanvas.dtos.OngRequestDto;
 import school.sptech.crudrisecanvas.dtos.OngRequestMapper;
 import school.sptech.crudrisecanvas.dtos.OngResponseDto;
@@ -73,11 +74,12 @@ public class OngController {
             @ApiResponse(responseCode = "409", description = "Conflito - O email ou CNPJ já está em uso")
     })
     public ResponseEntity<OngResponseDto> createOng(@RequestBody @Valid OngRequestDto ong) {
-        if(ongRepository.countWithEmailOrCnpj(ong.getEmail(), ong.getCnpj()) > 0){
+        if(ongRepository.countWithCnpj(ong.getCnpj()) > 0){
             return ResponseEntity.status(409).build();
         }
 
         Ong ongEntity = OngRequestMapper.toEntity(ong);
+        ongEntity.setStatus(OngStatus.PENDING);
 
         OngResponseDto result = OngResponseMapper.toDto(ongRepository.save(ongEntity));
 

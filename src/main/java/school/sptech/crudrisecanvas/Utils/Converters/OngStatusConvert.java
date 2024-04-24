@@ -1,8 +1,8 @@
-package school.sptech.crudrisecanvas.Utils.Converters;
+package school.sptech.crudrisecanvas.utils.Converters;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import school.sptech.crudrisecanvas.Utils.Enums.OngStatus;
+import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
 
 @Converter
 public class OngStatusConvert implements AttributeConverter<OngStatus, String>{

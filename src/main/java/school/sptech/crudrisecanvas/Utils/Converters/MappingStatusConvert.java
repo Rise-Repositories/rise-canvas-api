@@ -1,7 +1,7 @@
-package school.sptech.crudrisecanvas.Utils.Converters;
+package school.sptech.crudrisecanvas.utils.Converters;
 
 import jakarta.persistence.AttributeConverter;
-import school.sptech.crudrisecanvas.Utils.Enums.MappingStatus;
+import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 
 public class MappingStatusConvert implements AttributeConverter<MappingStatus, String>{
     @Override

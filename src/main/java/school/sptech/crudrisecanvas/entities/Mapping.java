@@ -3,47 +3,39 @@ package school.sptech.crudrisecanvas.entities;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
-import school.sptech.crudrisecanvas.Utils.Converters.MappingStatusConvert;
-import school.sptech.crudrisecanvas.Utils.Enums.MappingStatus;
+import school.sptech.crudrisecanvas.utils.Converters.MappingStatusConvert;
+import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 
 @Entity
 @Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Mapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private Integer qtyPeople;
     private String description;
-
-    //TODO: add validation 
-    private Double latitute;
-
-    //TODO: add validation
+    private Double latitude;
     private Double longitude;
 
     @Convert(converter = MappingStatusConvert.class)
     private MappingStatus status;
 
-    @NotBlank
-    @PastOrPresent
+    @CreationTimestamp
     private LocalDate date;
 
-    @ManyToOne
-    private User user;
+    @ManyToMany
+    private List<User> users;
 
     @OneToMany(mappedBy = "mapping")
     private List<MappingAction> mappingActions;

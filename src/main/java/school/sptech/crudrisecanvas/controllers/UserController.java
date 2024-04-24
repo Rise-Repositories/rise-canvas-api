@@ -3,6 +3,9 @@ package school.sptech.crudrisecanvas.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +33,11 @@ public class UserController {
     UserRepositary userRepositary;
 
     @GetMapping
+    @Operation(summary = "Listar todos os usuários")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Retorna a lista de usuários"),
+            @ApiResponse(responseCode = "204", description = "Sem conteúdo - Não há usuários cadastrados")
+    })
     public ResponseEntity<List<UserResponseDto>> getUsers() {
         List<User> users = userRepositary.findAll();
         if(users.isEmpty()) {
@@ -40,6 +48,11 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obter detalhes de um usuário pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Retorna os detalhes do usuário"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado")
+    })
     public ResponseEntity<UserResponseDto> getUser(@PathVariable int id) {
         Optional<User> user = userRepositary.findById(id);
 
@@ -53,6 +66,11 @@ public class UserController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar um novo usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Criado - Retorna os detalhes do novo usuário"),
+            @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
+    })
     public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userDto) {
         if(userRepositary.countWithEmailOrCpf(userDto.getEmail(), userDto.getCpf()) > 0) {
             return ResponseEntity.status(409).build();
@@ -66,6 +84,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar um usuário existente pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Retorna os detalhes do usuário atualizado"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado"),
+            @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
+    })
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable int id,@RequestBody @Valid UserRequestDto user) {
         Optional<User> userOptional = userRepositary.findById(id);
 
@@ -87,6 +111,11 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir um usuário pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Sem conteúdo - Usuário excluído com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado")
+    })
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         if(userRepositary.countWithId(id) == 0) {
             return ResponseEntity.status(404).build();

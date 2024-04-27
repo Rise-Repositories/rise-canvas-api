@@ -1,5 +1,6 @@
 package school.sptech.crudrisecanvas.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import school.sptech.crudrisecanvas.dtos.UserRequestDto;
 import school.sptech.crudrisecanvas.dtos.UserRequestMapper;
+import school.sptech.crudrisecanvas.dtos.UserRequestUpdateDto;
 import school.sptech.crudrisecanvas.dtos.UserResponseDto;
 import school.sptech.crudrisecanvas.dtos.UserResponseMapper;
 import school.sptech.crudrisecanvas.entities.User;
@@ -79,6 +81,7 @@ public class UserController {
         User user = UserRequestMapper.toEntity(userDto);
 
         UserResponseDto result = UserResponseMapper.toDto(userRepositary.save(user));
+        result.setMapping(new ArrayList<>());
 
         return ResponseEntity.status(201).body(result);
     }
@@ -90,7 +93,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado"),
             @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
     })
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable int id,@RequestBody @Valid UserRequestDto user) {
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable int id,@RequestBody @Valid UserRequestUpdateDto user) {
         Optional<User> userOptional = userRepositary.findById(id);
 
         if(userOptional.isEmpty()) {
@@ -101,9 +104,12 @@ public class UserController {
             return ResponseEntity.status(409).build();
         }
 
-        User userEntity = UserRequestMapper.toEntity(user);
+        User userEntity = userOptional.get();
 
-        userEntity.setId(id);
+        userEntity.setName(user.getName());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setCpf(user.getCpf());
+        userEntity.setIp(user.getIp());
 
         UserResponseDto result = UserResponseMapper.toDto(userRepositary.save(userEntity));
 

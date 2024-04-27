@@ -23,12 +23,16 @@ import school.sptech.crudrisecanvas.dtos.MappingResponseDto;
 import school.sptech.crudrisecanvas.dtos.MappingResponseMapper;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.User;
+import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
 import school.sptech.crudrisecanvas.repositories.UserRepositary;
 
 @RestController
 @RequestMapping("/mapping")
 public class MappingController {
+
+    @Autowired
+    MappingActionRepository mappingActionRepository;
 
     @Autowired
     MappingRepository mappingRepository;
@@ -47,7 +51,7 @@ public class MappingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MappingResponseDto> getMappingById(Integer id){
+    public ResponseEntity<MappingResponseDto> getMappingById(@PathVariable Integer id){
         Optional<Mapping> mapping = mappingRepository.findById(id);
         if(mapping.isEmpty()){
             return ResponseEntity.status(404).build();
@@ -68,10 +72,7 @@ public class MappingController {
             return ResponseEntity.status(404).build();
         }
         
-        List<User> users = newMapping.getUsers() == null ? new ArrayList<>() : newMapping.getUsers();
-        users.add(user.get());
-
-        newMapping.setUsers(users);
+        newMapping.setUsers(List.of(user.get()));
         newMapping.setStatus(MappingStatus.ACTIVE);
 
         MappingResponseDto response = MappingResponseMapper.toDto(mappingRepository.save(newMapping));
@@ -80,14 +81,18 @@ public class MappingController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MappingResponseDto> updateMapping(Integer id, MappingRequestDto mapping){
+    public ResponseEntity<MappingResponseDto> updateMapping(@PathVariable Integer id, @RequestBody MappingRequestDto mapping){
         Optional<Mapping> mappingToUpdate = mappingRepository.findById(id);
         if(mappingToUpdate.isEmpty()){
             return ResponseEntity.status(404).build();
         }
 
-        Mapping mappingUpdated = MappingRequestMapper.toEntity(mapping);
-        mappingUpdated.setId(id);
+        Mapping mappingUpdated = mappingToUpdate.get();
+
+        mappingUpdated.setQtyPeople(mapping.getQtyPeople());
+        mappingUpdated.setDescription(mapping.getDescription());
+        mappingUpdated.setLatitude(mapping.getLatitude());
+        mappingUpdated.setLongitude(mapping.getLongitude());
 
         MappingResponseDto response = MappingResponseMapper.toDto(mappingRepository.save(mappingUpdated));
 
@@ -101,6 +106,8 @@ public class MappingController {
             return ResponseEntity.status(404).build();
         }
 
+        List<Integer> ids = mapping.get().getMappingActions().stream().map(e -> e.getId()).toList();
+        mappingActionRepository.deleteAllById(ids);
         mappingRepository.delete(mapping.get());
 
         return ResponseEntity.status(204).build();

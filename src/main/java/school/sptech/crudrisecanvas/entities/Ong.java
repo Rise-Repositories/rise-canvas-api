@@ -33,8 +33,4 @@ public class Ong {
 
     @OneToMany(mappedBy = "ong")
     private List<Voluntary> voluntaries;
-
-    public void addAction(Action action) {
-        this.actions.add(action);
-    }
 }

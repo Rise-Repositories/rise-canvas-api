@@ -1,5 +1,6 @@
 package school.sptech.crudrisecanvas.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,6 +83,7 @@ public class OngController {
         ongEntity.setStatus(OngStatus.PENDING);
 
         OngResponseDto result = OngResponseMapper.toDto(ongRepository.save(ongEntity));
+        result.setActions(new ArrayList<>());
 
         return ResponseEntity.status(201).body(result);
     }
@@ -98,9 +100,13 @@ public class OngController {
             return ResponseEntity.status(404).build();
         }
 
-        Ong ongEntity = OngRequestMapper.toEntity(ong);
+        Ong ongEntity = ongOptional.get();
 
-        ongEntity.setId(id);
+        ongEntity.setName(ong.getName());
+        ongEntity.setCnpj(ong.getCnpj());
+        ongEntity.setCep(ong.getCep());
+        ongEntity.setDescription(ong.getDescription());
+        ongEntity.setAddress(ong.getAddress());
 
         OngResponseDto result = OngResponseMapper.toDto(ongRepository.save(ongEntity));
 

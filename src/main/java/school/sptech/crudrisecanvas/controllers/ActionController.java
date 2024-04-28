@@ -52,7 +52,7 @@ public class ActionController {
     public ResponseEntity<List<ActionResponseDto>> getActions(){
         List<Action> actions = actionRepository.findAll();
         if(actions.isEmpty()){
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(204).build();
         }
         List<ActionResponseDto> actionsResponse = ActionResponseMapper.toDto(actions);
         return ResponseEntity.status(200).body(actionsResponse);
@@ -68,11 +68,11 @@ public class ActionController {
         return ResponseEntity.status(200).body(actionResponse);
     }   
 
-    @PostMapping
-    public ResponseEntity<ActionResponseDto> createAction(@RequestBody @Valid ActionRequestDto action){
+    @PostMapping("/{id}")
+    public ResponseEntity<ActionResponseDto> createAction(@PathVariable Integer id,@RequestBody @Valid ActionRequestDto action){
         Action newAction = ActionRequestMapper.toEntity(action);
 
-        Optional<Ong> ong = ongRepository.findById(1);
+        Optional<Ong> ong = ongRepository.findById(id);
 
         if(ong.isEmpty()){
             return ResponseEntity.status(404).build();
@@ -84,23 +84,33 @@ public class ActionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ActionResponseDto> updateAction(Integer id, ActionRequestDto action){
+    public ResponseEntity<ActionResponseDto> updateAction(@PathVariable Integer id, @RequestBody ActionRequestDto action){
         Optional<Action> actionToUpdate = actionRepository.findById(id);
         if(actionToUpdate.isEmpty()){
             return ResponseEntity.status(404).build();
         }
-        Action updatedAction = ActionRequestMapper.toEntity(action);
-        updatedAction.setId(id);
+
+        Action updatedAction = actionToUpdate.get();
+
+        updatedAction.setName(action.getName());
+        updatedAction.setDescription(action.getDescription());
+        updatedAction.setDatetimeStart(action.getDatetimeStart());
+        updatedAction.setDatetimeEnd(action.getDatetimeEnd());
+        updatedAction.setLatitude(action.getLatitude());
+        updatedAction.setLongitude(action.getLongitude());
+
         ActionResponseDto actionResponse = ActionResponseMapper.toDto(actionRepository.save(updatedAction));
         return ResponseEntity.status(200).body(actionResponse);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAction(Integer id){
+    public ResponseEntity<Void> deleteAction(@PathVariable Integer id){
         Optional<Action> actionToDelete = actionRepository.findById(id);
         if(actionToDelete.isEmpty()){
             return ResponseEntity.status(404).build();
         }
-        actionRepository.delete(actionToDelete.get());
+        List<Integer> ids = actionToDelete.get().getMappingActions().stream().map(e -> e.getId()).toList();
+        mappingActionRepository.deleteAllById(ids);
+        actionRepository.deleteById(id);
         return ResponseEntity.status(204).build();
     }
 

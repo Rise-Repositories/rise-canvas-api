@@ -13,6 +13,7 @@ public class OngResponseMapper {
         dto.setName(ong.getName());
         dto.setCnpj(ong.getCnpj());
         dto.setCep(ong.getCep());
+        dto.setDescription(ong.getDescription());
         dto.setAddress(ong.getAddress());
         dto.setStatus(ong.getStatus());
         dto.setActions(ActionResponseMapper.toNoRelationDto(ong.getActions()));

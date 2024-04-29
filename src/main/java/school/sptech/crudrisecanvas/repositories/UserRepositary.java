@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import school.sptech.crudrisecanvas.entities.User;
 
+import java.util.Optional;
+
 public interface UserRepositary extends JpaRepository<User, Integer>{
     @Query("SELECT count(*) FROM User u WHERE u.email = ?1 OR u.cpf = ?2")
     Integer countWithEmailOrCpf(String email, String cpf);
@@ -14,4 +16,6 @@ public interface UserRepositary extends JpaRepository<User, Integer>{
      
     @Query("SELECT count(*) FROM User u WHERE u.id = ?1")
     Integer countWithId(Integer id);
+
+    Optional<User> findByEmail(String email);
 }

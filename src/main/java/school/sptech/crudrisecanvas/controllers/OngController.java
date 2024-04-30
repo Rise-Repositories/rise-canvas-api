@@ -19,11 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import school.sptech.crudrisecanvas.dtos.*;
 import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
-import school.sptech.crudrisecanvas.dtos.OngRequestDto;
-import school.sptech.crudrisecanvas.dtos.OngRequestMapper;
-import school.sptech.crudrisecanvas.dtos.OngResponseDto;
-import school.sptech.crudrisecanvas.dtos.OngResponseMapper;
 import school.sptech.crudrisecanvas.entities.Ong;
 import school.sptech.crudrisecanvas.repositories.OngRepository;
 import school.sptech.crudrisecanvas.service.usuario.UsuarioService;
@@ -103,7 +100,7 @@ public class OngController {
             @ApiResponse(responseCode = "200", description = "OK - Retorna os detalhes da ONG atualizada"),
             @ApiResponse(responseCode = "404", description = "Não encontrado - ONG não encontrada")
     })
-    public ResponseEntity<OngResponseDto> updateOng(@PathVariable int id,@RequestBody @Valid OngRequestDto ong) {
+    public ResponseEntity<OngResponseDto> updateOng(@PathVariable int id,@RequestBody @Valid OngUpdateDto ong) {
         Optional<Ong> ongOptional = ongRepository.findById(id);
         if(ongOptional.isEmpty()) {
             return ResponseEntity.status(404).build();

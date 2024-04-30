@@ -20,7 +20,5 @@ public class UserRequestUpdateDto {
     @CPF
     private String cpf;
 
-    @NotBlank
-    @Size(min = 7, max = 15)
     private String ip;
 }

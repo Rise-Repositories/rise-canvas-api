@@ -26,6 +26,9 @@ import school.sptech.crudrisecanvas.dtos.OngResponseDto;
 import school.sptech.crudrisecanvas.dtos.OngResponseMapper;
 import school.sptech.crudrisecanvas.entities.Ong;
 import school.sptech.crudrisecanvas.repositories.OngRepository;
+import school.sptech.crudrisecanvas.service.usuario.UsuarioService;
+import school.sptech.crudrisecanvas.service.usuario.dto.UsuarioCriacaoDto;
+import school.sptech.crudrisecanvas.service.usuario.dto.UsuarioMapper;
 
 @RestController
 @RequestMapping("/ong")
@@ -33,6 +36,9 @@ import school.sptech.crudrisecanvas.repositories.OngRepository;
 public class OngController {
     @Autowired
     OngRepository ongRepository;
+
+    @Autowired
+    UsuarioService userService;
 
     @GetMapping
     @Operation(summary = "Listar todas as ONGs")
@@ -68,7 +74,7 @@ public class OngController {
         return ResponseEntity.status(200).body(result);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     @Operation(summary = "Criar uma nova ONG")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Criado - Retorna os detalhes da nova ONG"),
@@ -81,6 +87,9 @@ public class OngController {
 
         Ong ongEntity = OngRequestMapper.toEntity(ong);
         ongEntity.setStatus(OngStatus.PENDING);
+
+        UsuarioCriacaoDto user = UsuarioMapper.toCricao(ong);
+        userService.criar(user);
 
         OngResponseDto result = OngResponseMapper.toDto(ongRepository.save(ongEntity));
         result.setActions(new ArrayList<>());

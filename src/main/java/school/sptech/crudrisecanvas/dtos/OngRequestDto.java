@@ -1,6 +1,7 @@
 package school.sptech.crudrisecanvas.dtos;
 
 import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -23,4 +24,18 @@ public class OngRequestDto {
     
     @NotBlank
     private String address;
+
+    @NotBlank
+    private String passwordUser;
+
+    @NotBlank 
+    @CPF
+    private String cpfUser;
+
+    @NotBlank
+    private String emailUser;
+
+    @NotBlank
+    private String nameUser;
+    
 }

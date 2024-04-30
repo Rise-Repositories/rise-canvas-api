@@ -1,5 +1,6 @@
 package school.sptech.crudrisecanvas.service.usuario.dto;
 
+import school.sptech.crudrisecanvas.dtos.OngRequestDto;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.service.usuario.autenticacao.dto.UsuarioTokenDto;
 
@@ -25,5 +26,15 @@ public class UsuarioMapper {
         dto.setToken(token);
 
         return dto;
+    }
+
+    public static UsuarioCriacaoDto toCricao(OngRequestDto userOng) {
+        UsuarioCriacaoDto user = new UsuarioCriacaoDto();
+        user.setName(userOng.getName());
+        user.setEmail(userOng.getEmailUser());
+        user.setPassword(userOng.getPasswordUser());
+        user.setCpf(userOng.getCpfUser());
+
+        return user;
     }
 }

@@ -30,7 +30,7 @@ public class UsuarioMapper {
 
     public static UsuarioCriacaoDto toCricao(OngRequestDto userOng) {
         UsuarioCriacaoDto user = new UsuarioCriacaoDto();
-        user.setName(userOng.getName());
+        user.setName(userOng.getNameUser());
         user.setEmail(userOng.getEmailUser());
         user.setPassword(userOng.getPasswordUser());
         user.setCpf(userOng.getCpfUser());

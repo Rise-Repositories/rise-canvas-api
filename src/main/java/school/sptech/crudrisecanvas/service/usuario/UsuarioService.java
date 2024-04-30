@@ -56,4 +56,8 @@ public class UsuarioService {
     public List<User> listar() {
         return this.usuarioRepository.findAll();
     }
+
+    public boolean existePorCpf(String cpf) {
+        return this.usuarioRepository.existsByCpf(cpf);
+    }
 }

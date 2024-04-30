@@ -75,10 +75,13 @@ public class OngController {
     @Operation(summary = "Criar uma nova ONG")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Criado - Retorna os detalhes da nova ONG"),
-            @ApiResponse(responseCode = "409", description = "Conflito - O email ou CNPJ já está em uso")
+            @ApiResponse(responseCode = "409", description = "Conflito - O email, CNPJ ou CPF já está em uso")
     })
     public ResponseEntity<OngResponseDto> createOng(@RequestBody @Valid OngRequestDto ong) {
         if(ongRepository.countWithCnpj(ong.getCnpj()) > 0){
+            return ResponseEntity.status(409).build();
+        }
+        if(userService.existePorCpf(ong.getCpfUser())){
             return ResponseEntity.status(409).build();
         }
 

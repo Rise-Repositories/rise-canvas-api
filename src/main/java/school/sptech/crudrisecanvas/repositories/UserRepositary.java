@@ -18,4 +18,6 @@ public interface UserRepositary extends JpaRepository<User, Integer>{
     Integer countWithId(Integer id);
 
     Optional<User> findByEmail(String email);
+
+    boolean existsByCpf(String cpf);
 }

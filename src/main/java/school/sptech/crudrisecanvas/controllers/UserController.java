@@ -26,6 +26,10 @@ import school.sptech.crudrisecanvas.dtos.UserResponseDto;
 import school.sptech.crudrisecanvas.dtos.UserResponseMapper;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.repositories.UserRepositary;
+import school.sptech.crudrisecanvas.service.usuario.UsuarioService;
+import school.sptech.crudrisecanvas.service.usuario.autenticacao.dto.UsuarioLoginDto;
+import school.sptech.crudrisecanvas.service.usuario.autenticacao.dto.UsuarioTokenDto;
+import school.sptech.crudrisecanvas.service.usuario.dto.UsuarioCriacaoDto;
 
 @RestController
 @RequestMapping("/user")
@@ -33,6 +37,21 @@ public class UserController {
 
     @Autowired
     UserRepositary userRepositary;
+    @Autowired
+    UsuarioService usuarioService;
+
+    @PostMapping("/cadastrar")
+    //@SecurityRequirement(name = "Bearer")
+    public ResponseEntity<Void> criar(@RequestBody @Valid UsuarioCriacaoDto novoUsuarioDto) {
+        this.usuarioService.criar(novoUsuarioDto);
+        return ResponseEntity.status(201).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UsuarioTokenDto> login(@RequestBody UsuarioLoginDto usuarioLoginDto) {
+        UsuarioTokenDto usuarioToken = this.usuarioService.autenticar(usuarioLoginDto);
+        return ResponseEntity.status(200).body(usuarioToken);
+    }
 
     @GetMapping
     @Operation(summary = "Listar todos os usuários")

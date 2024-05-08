@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
-import school.sptech.crudrisecanvas.dtos.MappingRequestDto;
-import school.sptech.crudrisecanvas.dtos.MappingRequestMapper;
-import school.sptech.crudrisecanvas.dtos.MappingResponseDto;
-import school.sptech.crudrisecanvas.dtos.MappingResponseMapper;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestMapper;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseMapper;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;

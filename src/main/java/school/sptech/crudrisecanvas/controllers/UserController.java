@@ -19,17 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import school.sptech.crudrisecanvas.dtos.UserRequestDto;
-import school.sptech.crudrisecanvas.dtos.UserRequestMapper;
-import school.sptech.crudrisecanvas.dtos.UserRequestUpdateDto;
-import school.sptech.crudrisecanvas.dtos.UserResponseDto;
-import school.sptech.crudrisecanvas.dtos.UserResponseMapper;
+import school.sptech.crudrisecanvas.dtos.user.UserLoginDto;
+import school.sptech.crudrisecanvas.dtos.user.UserRequestDto;
+import school.sptech.crudrisecanvas.dtos.user.UserRequestMapper;
+import school.sptech.crudrisecanvas.dtos.user.UserRequestUpdateDto;
+import school.sptech.crudrisecanvas.dtos.user.UserResponseDto;
+import school.sptech.crudrisecanvas.dtos.user.UserResponseMapper;
+import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.repositories.UserRepositary;
-import school.sptech.crudrisecanvas.service.usuario.UsuarioService;
-import school.sptech.crudrisecanvas.service.usuario.autenticacao.dto.UsuarioLoginDto;
-import school.sptech.crudrisecanvas.service.usuario.autenticacao.dto.UsuarioTokenDto;
-import school.sptech.crudrisecanvas.service.usuario.dto.UsuarioCriacaoDto;
+import school.sptech.crudrisecanvas.service.UserService;
 
 @RestController
 @RequestMapping("/user")
@@ -38,18 +37,17 @@ public class UserController {
     @Autowired
     UserRepositary userRepositary;
     @Autowired
-    UsuarioService usuarioService;
+    UserService usuarioService;
 
     @PostMapping("/cadastrar")
-    //@SecurityRequirement(name = "Bearer")
-    public ResponseEntity<Void> criar(@RequestBody @Valid UsuarioCriacaoDto novoUsuarioDto) {
+    public ResponseEntity<Void> criar(@RequestBody @Valid UserRequestDto novoUsuarioDto) {
         this.usuarioService.criar(novoUsuarioDto);
         return ResponseEntity.status(201).build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UsuarioTokenDto> login(@RequestBody UsuarioLoginDto usuarioLoginDto) {
-        UsuarioTokenDto usuarioToken = this.usuarioService.autenticar(usuarioLoginDto);
+    public ResponseEntity<UserTokenDto> login(@RequestBody UserLoginDto usuarioLoginDto) {
+        UserTokenDto usuarioToken = this.usuarioService.autenticar(usuarioLoginDto);
         return ResponseEntity.status(200).body(usuarioToken);
     }
 

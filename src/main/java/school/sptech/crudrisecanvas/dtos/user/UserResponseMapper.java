@@ -45,9 +45,8 @@ public class UserResponseMapper {
         return userToken;
     }
 
-    public static UserRequestDto toCricao(OngRequestDto userOng) {
-
-        UserRequestDto user = new UserRequestDto();
+    public static User toEntity(OngRequestDto userOng) {
+        User user = new User();
         user.setName(userOng.getNameUser());
         user.setEmail(userOng.getEmailUser());
         user.setCpf(userOng.getCpfUser());

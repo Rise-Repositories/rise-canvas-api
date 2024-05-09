@@ -85,15 +85,15 @@ public class OngController {
         if(ongRepository.countWithCnpj(ong.getCnpj()) > 0){
             return ResponseEntity.status(409).build();
         }
-        if(userService.existePorCpf(ong.getCpfUser())){
-            return ResponseEntity.status(409).build();
-        }
+        // if(userService.existePorCpf(ong.getCpfUser())){
+        //     return ResponseEntity.status(409).build();
+        // }
 
         Ong ongEntity = OngRequestMapper.toEntity(ong);
         ongEntity.setStatus(OngStatus.PENDING);
 
-        UserRequestDto user = UserResponseMapper.toCricao(ong);
-        userService.criar(user);
+        // UserRequestDto user = UserResponseMapper.toCricao(ong);
+        // userService.criar(user);
 
         OngResponseDto result = OngResponseMapper.toDto(ongRepository.save(ongEntity));
         result.setActions(new ArrayList<>());

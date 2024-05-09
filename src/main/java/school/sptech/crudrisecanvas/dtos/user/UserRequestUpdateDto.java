@@ -18,6 +18,4 @@ public class UserRequestUpdateDto {
     @NotBlank
     @CPF
     private String cpf;
-
-    private String ip;
 }

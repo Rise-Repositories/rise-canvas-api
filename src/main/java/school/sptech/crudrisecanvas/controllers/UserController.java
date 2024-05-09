@@ -1,7 +1,6 @@
 package school.sptech.crudrisecanvas.controllers;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,32 +38,26 @@ public class UserController {
     @Autowired
     UserService usuarioService;
 
-    @PostMapping("/cadastrar")
-    public ResponseEntity<Void> criar(@RequestBody @Valid UserRequestDto novoUsuarioDto) {
-        this.usuarioService.criar(novoUsuarioDto);
+    @PostMapping("/auth/register")
+    public ResponseEntity<Void> register(@RequestBody @Valid UserRequestDto userDto) {
+        final User newUser = UserRequestMapper.toEntity(userDto);
+
+        this.usuarioService.register(newUser);
+
         return ResponseEntity.status(201).build();
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<UserTokenDto> login(@RequestBody UserLoginDto usuarioLoginDto) {
         UserTokenDto usuarioToken = this.usuarioService.autenticar(usuarioLoginDto);
         return ResponseEntity.status(200).body(usuarioToken);
     }
 
-    @GetMapping
-    @Operation(summary = "Listar todos os usuários")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK - Retorna a lista de usuários"),
-            @ApiResponse(responseCode = "204", description = "Sem conteúdo - Não há usuários cadastrados")
-    })
-    public ResponseEntity<List<UserResponseDto>> getUsers() {
-        List<User> users = userRepositary.findAll();
-        if(users.isEmpty()) {
-            return ResponseEntity.status(204).build();
-        }
-        List<UserResponseDto> usersDto = UserResponseMapper.toDto(users);
-        return ResponseEntity.status(200).body(usersDto);
-    }
+    /*
+        TODO:
+        criar um rota que o usuario consiga pegar os dados dele atraves do token
+        vai descriptografar o token pegar o id dentro do token e procurar no banco
+    */
 
     @GetMapping("/{id}")
     @Operation(summary = "Obter detalhes de um usuário pelo ID")
@@ -84,24 +77,28 @@ public class UserController {
         return ResponseEntity.status(200).body(userDto);
     }
 
-    @PostMapping
-    @Operation(summary = "Criar um novo usuário")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Criado - Retorna os detalhes do novo usuário"),
-            @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
-    })
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userDto) {
-        if(userRepositary.countWithEmailOrCpf(userDto.getEmail(), userDto.getCpf()) > 0) {
-            return ResponseEntity.status(409).build();
-        }
+    // @PostMapping
+    // @Operation(summary = "Criar um novo usuário")
+    // @ApiResponses(value = {
+    //         @ApiResponse(responseCode = "201", description = "Criado - Retorna os detalhes do novo usuário"),
+    //         @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
+    // })
+    // public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userDto) {
+    //     if(userRepositary.countWithEmailOrCpf(userDto.getEmail(), userDto.getCpf()) > 0) {
+    //         return ResponseEntity.status(409).build();
+    //     }
         
-        User user = UserRequestMapper.toEntity(userDto);
+    //     User user = UserRequestMapper.toEntity(userDto);
 
-        UserResponseDto result = UserResponseMapper.toDto(userRepositary.save(user));
-        result.setMapping(new ArrayList<>());
+    //     UserResponseDto result = UserResponseMapper.toDto(userRepositary.save(user));
+    //     result.setMapping(new ArrayList<>());
 
-        return ResponseEntity.status(201).body(result);
-    }
+    //     return ResponseEntity.status(201).body(result);
+    // }
+
+
+
+    // TODO: somente o proprio usuario pode alterar seus dados deve validar token
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar um usuário existente pelo ID")
@@ -110,26 +107,12 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado"),
             @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
     })
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable int id,@RequestBody @Valid UserRequestUpdateDto user) {
-        Optional<User> userOptional = userRepositary.findById(id);
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable int id,@RequestBody @Valid UserRequestUpdateDto userDto) {
+        User user = UserRequestMapper.toEntity(userDto);
 
-        if(userOptional.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
+        UserResponseDto response = UserResponseMapper.toDto(usuarioService.updateUser(id, user));
 
-        if(userRepositary.countWithEmailOrCpfAndDiferentId(user.getEmail(), user.getCpf(), id) > 0) {
-            return ResponseEntity.status(409).build();
-        }
-
-        User userEntity = userOptional.get();
-
-        userEntity.setName(user.getName());
-        userEntity.setEmail(user.getEmail());
-        userEntity.setCpf(user.getCpf());
-
-        UserResponseDto result = UserResponseMapper.toDto(userRepositary.save(userEntity));
-
-        return ResponseEntity.status(200).body(result);
+        return ResponseEntity.status(200).body(response);
     }
 
     @DeleteMapping("/{id}")
@@ -139,10 +122,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado")
     })
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
-        if(userRepositary.countWithId(id) == 0) {
-            return ResponseEntity.status(404).build();
-        }
         userRepositary.deleteById(id);
+
         return ResponseEntity.status(204).build();
     }
 }

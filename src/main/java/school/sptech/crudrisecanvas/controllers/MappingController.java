@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestDto;
-import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestMapper;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
-import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseMapper;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.service.MappingService;
 
@@ -29,7 +28,7 @@ public class MappingController {
 
     @GetMapping
     public ResponseEntity<List<MappingResponseDto>> getMappings(){
-        List<MappingResponseDto> mappings = MappingResponseMapper.toDto(mappingService.getMappings());
+        List<MappingResponseDto> mappings = MappingMapper.toDto(mappingService.getMappings());
         if(mappings.isEmpty()){
             return ResponseEntity.status(404).build();
         }
@@ -41,25 +40,25 @@ public class MappingController {
     public ResponseEntity<MappingResponseDto> getMappingById(@PathVariable Integer id){
         Mapping mapping = mappingService.getMappingById(id);
 
-        MappingResponseDto response = MappingResponseMapper.toDto(mapping);
+        MappingResponseDto response = MappingMapper.toDto(mapping);
 
         return ResponseEntity.status(200).body(response);
     }
 
     @PostMapping
     public ResponseEntity<MappingResponseDto> createMapping(@RequestBody @Valid MappingRequestDto mappingDto){
-        Mapping mapping = MappingRequestMapper.toEntity(mappingDto);
+        Mapping mapping = MappingMapper.toEntity(mappingDto);
 
-        MappingResponseDto response = MappingResponseMapper.toDto(mappingService.createMapping(mapping));
+        MappingResponseDto response = MappingMapper.toDto(mappingService.createMapping(mapping));
 
         return ResponseEntity.status(201).body(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<MappingResponseDto> updateMapping(@PathVariable Integer id, @RequestBody MappingRequestDto mappingDto){
-        Mapping mapping = MappingRequestMapper.toEntity(mappingDto);
+        Mapping mapping = MappingMapper.toEntity(mappingDto);
 
-        MappingResponseDto response = MappingResponseMapper.toDto(
+        MappingResponseDto response = MappingMapper.toDto(
             mappingService.updateMapping(id, mapping)
         );
 
@@ -74,7 +73,7 @@ public class MappingController {
 
     @PostMapping("/{id}/add-user/{userId}")
     public ResponseEntity<MappingResponseDto> addUser(@PathVariable("id") Integer id,@PathVariable("userId") Integer userId){
-        MappingResponseDto response = MappingResponseMapper.toDto(
+        MappingResponseDto response = MappingMapper.toDto(
             mappingService.addUser(id, userId)
         );
 

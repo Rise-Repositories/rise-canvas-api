@@ -2,7 +2,7 @@ package school.sptech.crudrisecanvas.dtos.user;
 
 import java.util.List;
 
-import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseMapper;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.dtos.ong.OngRequestDto;
 import school.sptech.crudrisecanvas.entities.User;
 
@@ -39,7 +39,7 @@ public class UserMapper {
         userResponseDto.setName(user.getName());
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setCpf(user.getCpf());
-        userResponseDto.setMapping(MappingResponseMapper.toNoRelationDto(user.getMapping()));
+        userResponseDto.setMapping(MappingMapper.toNoRelationDto(user.getMapping()));
         return userResponseDto;
     }
 

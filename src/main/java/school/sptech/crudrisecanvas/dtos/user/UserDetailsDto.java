@@ -15,8 +15,6 @@ public class UserDetailsDto implements UserDetails {
     private final String password;
     @Getter
     private final String cpf;
-    @Getter
-    private final String ip;
 
 
     public UserDetailsDto(User usuario) {
@@ -24,7 +22,6 @@ public class UserDetailsDto implements UserDetails {
         this.email = usuario.getEmail();
         this.password = usuario.getPassword();
         this.cpf = usuario.getCpf();
-        this.ip = usuario.getIp();
     }
 
     public String getName() {

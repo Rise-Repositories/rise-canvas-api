@@ -12,5 +12,15 @@ public class OngRequestMapper {
         ong.setAddress(ongRequestDto.getAddress());
         return ong;
     }
+
+    public static Ong toEntity(OngUpdateDto ongUpdateDto) {
+        Ong ong = new Ong();
+        ong.setName(ongUpdateDto.getName());
+        ong.setCnpj(ongUpdateDto.getCnpj());
+        ong.setDescription(ongUpdateDto.getDescription());
+        ong.setCep(ongUpdateDto.getCep());
+        ong.setAddress(ongUpdateDto.getAddress());
+        return ong;
+    }
     
 }

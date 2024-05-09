@@ -26,6 +26,7 @@ public class OngResponseMapper {
     }
 
     public static OngResponseNoRelationDto toNoRelationDto(Ong ong) {
+        if(ong == null) return null;
         OngResponseNoRelationDto dto = new OngResponseNoRelationDto();
         dto.setId(ong.getId());
         dto.setName(ong.getName());

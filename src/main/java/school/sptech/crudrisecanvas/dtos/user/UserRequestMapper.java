@@ -9,20 +9,16 @@ public class UserRequestMapper {
         user.setEmail(userRequestDto.getEmail());
         user.setPassword(userRequestDto.getPassword());
         user.setCpf(userRequestDto.getCpf());
-        user.setIp(userRequestDto.getIp());
         return user;
     }
 
-    public static UserRequestDto toDto (User user) {
-        UserRequestDto userRequestDto = new UserRequestDto();
-        userRequestDto.setName(user.getName());
-        userRequestDto.setEmail(user.getEmail());
-        userRequestDto.setPassword(user.getPassword());
-        userRequestDto.setCpf(user.getCpf());
-        userRequestDto.setIp(user.getIp());
-        return userRequestDto;
+    public static User toEntity(UserRequestUpdateDto userRequestUpdateDto) {
+        User user = new User();
+        user.setName(userRequestUpdateDto.getName());
+        user.setEmail(userRequestUpdateDto.getEmail());
+        user.setCpf(userRequestUpdateDto.getCpf());
+        return user;
     }
-
 
     
 }

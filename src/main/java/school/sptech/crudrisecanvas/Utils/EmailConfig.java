@@ -14,6 +14,12 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 
 public class EmailConfig {
+    /*
+        TODO: 
+        provavelmente passar isso para um service, que ele vai deixar disponivel os servicos de email
+        acho bom a gente discutir algumas coisas antes de implementar isso
+    */
+
     private Properties prop = new Properties();
 
     public EmailConfig() {

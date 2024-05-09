@@ -1,10 +1,7 @@
 package school.sptech.crudrisecanvas.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,33 +13,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
+import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseMapper;
 import school.sptech.crudrisecanvas.entities.Mapping;
-import school.sptech.crudrisecanvas.entities.User;
-import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
-import school.sptech.crudrisecanvas.repositories.MappingRepository;
-import school.sptech.crudrisecanvas.repositories.UserRepositary;
+import school.sptech.crudrisecanvas.service.MappingService;
 
 @RestController
 @RequestMapping("/mapping")
+@RequiredArgsConstructor
 public class MappingController {
-
-    @Autowired
-    MappingActionRepository mappingActionRepository;
-
-    @Autowired
-    MappingRepository mappingRepository;
-
-    @Autowired
-    UserRepositary userRepositary;
+    private final MappingService mappingService;
 
     @GetMapping
     public ResponseEntity<List<MappingResponseDto>> getMappings(){
-        List<MappingResponseDto> mappings = MappingResponseMapper.toDto(mappingRepository.findAll());
+        List<MappingResponseDto> mappings = MappingResponseMapper.toDto(mappingService.getMappings());
         if(mappings.isEmpty()){
             return ResponseEntity.status(404).build();
         }
@@ -52,82 +39,44 @@ public class MappingController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MappingResponseDto> getMappingById(@PathVariable Integer id){
-        Optional<Mapping> mapping = mappingRepository.findById(id);
-        if(mapping.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
+        Mapping mapping = mappingService.getMappingById(id);
 
-        MappingResponseDto newMapping = MappingResponseMapper.toDto(mapping.get());
+        MappingResponseDto response = MappingResponseMapper.toDto(mapping);
 
-        return ResponseEntity.status(200).body(newMapping);
+        return ResponseEntity.status(200).body(response);
     }
 
     @PostMapping
-    public ResponseEntity<MappingResponseDto> createMapping(@RequestBody @Valid MappingRequestDto mapping){
-        Mapping newMapping = MappingRequestMapper.toEntity(mapping);
+    public ResponseEntity<MappingResponseDto> createMapping(@RequestBody @Valid MappingRequestDto mappingDto){
+        Mapping mapping = MappingRequestMapper.toEntity(mappingDto);
 
-        Optional<User> user = userRepositary.findById(1);
-        
-        if(user.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
-        
-        newMapping.setUsers(List.of(user.get()));
-        newMapping.setStatus(MappingStatus.ACTIVE);
-
-        MappingResponseDto response = MappingResponseMapper.toDto(mappingRepository.save(newMapping));
+        MappingResponseDto response = MappingResponseMapper.toDto(mappingService.createMapping(mapping));
 
         return ResponseEntity.status(201).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MappingResponseDto> updateMapping(@PathVariable Integer id, @RequestBody MappingRequestDto mapping){
-        Optional<Mapping> mappingToUpdate = mappingRepository.findById(id);
-        if(mappingToUpdate.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
+    public ResponseEntity<MappingResponseDto> updateMapping(@PathVariable Integer id, @RequestBody MappingRequestDto mappingDto){
+        Mapping mapping = MappingRequestMapper.toEntity(mappingDto);
 
-        Mapping mappingUpdated = mappingToUpdate.get();
-
-        mappingUpdated.setQtyPeople(mapping.getQtyPeople());
-        mappingUpdated.setDescription(mapping.getDescription());
-        mappingUpdated.setLatitude(mapping.getLatitude());
-        mappingUpdated.setLongitude(mapping.getLongitude());
-
-        MappingResponseDto response = MappingResponseMapper.toDto(mappingRepository.save(mappingUpdated));
+        MappingResponseDto response = MappingResponseMapper.toDto(
+            mappingService.updateMapping(id, mapping)
+        );
 
         return ResponseEntity.status(200).body(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMapping(Integer id){
-        Optional<Mapping> mapping = mappingRepository.findById(id);
-        if(mapping.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
-
-        List<Integer> ids = mapping.get().getMappingActions().stream().map(e -> e.getId()).toList();
-        mappingActionRepository.deleteAllById(ids);
-        mappingRepository.delete(mapping.get());
-
+        mappingService.deleteMapping(id);
         return ResponseEntity.status(204).build();
     }
 
     @PostMapping("/{id}/add-user/{userId}")
     public ResponseEntity<MappingResponseDto> addUser(@PathVariable("id") Integer id,@PathVariable("userId") Integer userId){
-        Optional<Mapping> mapping = mappingRepository.findById(id);
-        Optional<User> user = userRepositary.findById(userId);
-
-        if(mapping.isEmpty() || user.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
-
-        List<User> users = mapping.get().getUsers() == null ? new ArrayList<>() : mapping.get().getUsers();
-        users.add(user.get());
-
-        mapping.get().setUsers(users);
-
-        MappingResponseDto response = MappingResponseMapper.toDto(mappingRepository.save(mapping.get()));
+        MappingResponseDto response = MappingResponseMapper.toDto(
+            mappingService.addUser(id, userId)
+        );
 
         return ResponseEntity.status(200).body(response);
     }

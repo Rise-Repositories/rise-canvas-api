@@ -63,7 +63,7 @@ public class UserService {
         User userToUpdate = this.getUserById(id);
 
         if(
-            this.userRepository.existsByCpfAndNotEqualId(userToUpdate.getCpf(), id)
+            this.userRepository.existsByCpfAndIdNot(userToUpdate.getCpf(), id)
         ){
             throw new ConflictException("Já existe um usuário com este CPF");
         }

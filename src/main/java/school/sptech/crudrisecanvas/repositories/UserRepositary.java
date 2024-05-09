@@ -13,7 +13,7 @@ public interface UserRepositary extends JpaRepository<User, Integer>{
 
     boolean existsByEmail(String email);
 
-    boolean existsByCpfAndNotEqualId(String cpf, Integer id);
+    boolean existsByCpfAndIdNot(String cpf, Integer id);
 
-    boolean existsByEmailAndNotEqualId(String email, Integer id);
+    boolean existsByEmailAndIdNot(String email, Integer id);
 }

@@ -3,7 +3,7 @@ package school.sptech.crudrisecanvas.dtos.mapping;
 
 import java.util.List;
 
-import school.sptech.crudrisecanvas.dtos.user.UserResponseMapper;
+import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.entities.Mapping;
 
 public class MappingResponseMapper {
@@ -16,12 +16,14 @@ public class MappingResponseMapper {
         mappingResponse.setLongitude(mapping.getLongitude());
         mappingResponse.setStatus(mapping.getStatus().toString());
         mappingResponse.setDate(mapping.getDate().toString());
-        mappingResponse.setUsers(UserResponseMapper.toNoRelationDto(mapping.getUsers()));
+        mappingResponse.setUsers(UserMapper.toNoRelationDto(mapping.getUsers()));
         return mappingResponse;
     }
 
     public static List<MappingResponseDto> toDto(List<Mapping> mappings){
-        return mappings.stream().map(MappingResponseMapper::toDto).toList();
+        return mappings == null
+            ? null
+            : mappings.stream().map(MappingResponseMapper::toDto).toList();
     }
     
     public static MappingResponseNoRelationDto toNoRelationDto(Mapping mapping){

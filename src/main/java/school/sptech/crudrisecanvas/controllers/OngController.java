@@ -22,7 +22,7 @@ import school.sptech.crudrisecanvas.dtos.ong.OngRequestDto;
 import school.sptech.crudrisecanvas.dtos.ong.OngMapper;
 import school.sptech.crudrisecanvas.dtos.ong.OngResponseDto;
 import school.sptech.crudrisecanvas.dtos.ong.OngRequestUpdateDto;
-import school.sptech.crudrisecanvas.dtos.user.UserResponseMapper;
+import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.entities.Ong;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.service.OngService;
@@ -81,7 +81,7 @@ public class OngController {
          * e melhor usar ong.getUser()
          * ai mata esse mapper
          */
-        User user = UserResponseMapper.toEntity(ongDto);
+        User user = UserMapper.toEntity(ongDto);
 
         OngResponseDto result = OngMapper.toResponse(
             ongService.createOng(ong, user)

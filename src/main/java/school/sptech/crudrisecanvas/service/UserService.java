@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.api.configuration.security.jwt.JwtTokenManager;
 import school.sptech.crudrisecanvas.dtos.user.UserLoginDto;
-import school.sptech.crudrisecanvas.dtos.user.UserResponseMapper;
+import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.exception.ConflictException;
@@ -46,7 +46,7 @@ public class UserService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = gerenciadorTokenJwt.generateToken(authentication);
-        return UserResponseMapper.toTokenDto(UserAutenticado, token);
+        return UserMapper.toTokenDto(UserAutenticado, token);
     }
 
     public User getUserById(Integer id) {

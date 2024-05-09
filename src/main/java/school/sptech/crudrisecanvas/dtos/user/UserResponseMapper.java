@@ -13,7 +13,6 @@ public class UserResponseMapper {
         userResponseDto.setName(user.getName());
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setCpf(user.getCpf());
-        userResponseDto.setIp(user.getIp());
         userResponseDto.setMapping(MappingResponseMapper.toNoRelationDto(user.getMapping()));
         return userResponseDto;
     }
@@ -24,7 +23,6 @@ public class UserResponseMapper {
         userResponseNoRelationDto.setName(user.getName());
         userResponseNoRelationDto.setEmail(user.getEmail());
         userResponseNoRelationDto.setCpf(user.getCpf());
-        userResponseNoRelationDto.setIp(user.getIp());
         return userResponseNoRelationDto;
     }
 

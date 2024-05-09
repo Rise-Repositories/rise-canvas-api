@@ -1,20 +1,22 @@
 package school.sptech.crudrisecanvas.controllers;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.action.ActionRequestDto;
 import school.sptech.crudrisecanvas.dtos.action.ActionRequestMapper;
 import school.sptech.crudrisecanvas.dtos.action.ActionResponseDto;
@@ -23,34 +25,20 @@ import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionRequestDto;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseDto;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseMapper;
 import school.sptech.crudrisecanvas.entities.Action;
-import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.MappingAction;
-import school.sptech.crudrisecanvas.entities.Ong;
-import school.sptech.crudrisecanvas.repositories.ActionRepository;
-import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
-import school.sptech.crudrisecanvas.repositories.MappingRepository;
-import school.sptech.crudrisecanvas.repositories.OngRepository;
-import school.sptech.crudrisecanvas.utils.EmailConfig;
+import school.sptech.crudrisecanvas.service.ActionService;
 
 @RestController
 @RequestMapping("/actions")
+@RequiredArgsConstructor
 public class ActionController {
 
-    @Autowired
-    ActionRepository actionRepository;
-
-    @Autowired
-    OngRepository ongRepository;
-
-    @Autowired
-    MappingRepository mappingRepository;
-
-    @Autowired
-    MappingActionRepository mappingActionRepository;
+    private final ActionService actionService;
 
     @GetMapping
     public ResponseEntity<List<ActionResponseDto>> getActions(){
-        List<Action> actions = actionRepository.findAll();
+        List<Action> actions = actionService.getAll();
+
         if(actions.isEmpty()){
             return ResponseEntity.status(204).build();
         }
@@ -59,84 +47,68 @@ public class ActionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ActionResponseDto> getActionById(Integer id){
-        Optional<Action> action = actionRepository.findById(id);
-        if(action.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
-        ActionResponseDto actionResponse = ActionResponseMapper.toDto(action.get());
+    public ResponseEntity<ActionResponseDto> getActionById(@PathVariable Integer id){
+        Action action = actionService.getById(id);
+
+        ActionResponseDto actionResponse = ActionResponseMapper.toDto(action);
         return ResponseEntity.status(200).body(actionResponse);
     }   
 
-    @PostMapping("/{id}")
-    public ResponseEntity<ActionResponseDto> createAction(@PathVariable Integer id,@RequestBody @Valid ActionRequestDto action){
-        Action newAction = ActionRequestMapper.toEntity(action);
+    @PostMapping
+    public ResponseEntity<ActionResponseDto> createAction(
+        @RequestBody @Valid ActionRequestDto actionDto,
+        @RequestHeader HashMap<String, String> header
+    ){
+        Action action = ActionRequestMapper.toEntity(actionDto);
 
-        Optional<Ong> ong = ongRepository.findById(id);
+        /*
+            TODO:
+            Pegar usuario do token
+            Pegar ONG do usuario
+            Setar ONG na ação
+        */
 
-        if(ong.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
-        newAction.setOng(ong.get());
+        Action createdAction = actionService.create(action);
 
-        ActionResponseDto actionResponse = ActionResponseMapper.toDto(actionRepository.save(newAction));
+        ActionResponseDto actionResponse = ActionResponseMapper.toDto(createdAction);
         return ResponseEntity.status(201).body(actionResponse);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ActionResponseDto> updateAction(@PathVariable Integer id, @RequestBody ActionRequestDto action){
-        Optional<Action> actionToUpdate = actionRepository.findById(id);
-        if(actionToUpdate.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
+    public ResponseEntity<ActionResponseDto> updateAction(@PathVariable Integer id, @RequestBody ActionRequestDto actionDto){
+        Action action = ActionRequestMapper.toEntity(actionDto);
 
-        Action updatedAction = actionToUpdate.get();
+        ActionResponseDto actionResponse = ActionResponseMapper.toDto(actionService.update(action, id));
 
-        updatedAction.setName(action.getName());
-        updatedAction.setDescription(action.getDescription());
-        updatedAction.setDatetimeStart(action.getDatetimeStart());
-        updatedAction.setDatetimeEnd(action.getDatetimeEnd());
-        updatedAction.setLatitude(action.getLatitude());
-        updatedAction.setLongitude(action.getLongitude());
-
-        ActionResponseDto actionResponse = ActionResponseMapper.toDto(actionRepository.save(updatedAction));
         return ResponseEntity.status(200).body(actionResponse);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAction(@PathVariable Integer id){
-        Optional<Action> actionToDelete = actionRepository.findById(id);
-        if(actionToDelete.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
-        List<Integer> ids = actionToDelete.get().getMappingActions().stream().map(e -> e.getId()).toList();
-        mappingActionRepository.deleteAllById(ids);
-        actionRepository.deleteById(id);
+        actionService.delete(id);
         return ResponseEntity.status(204).build();
     }
 
-    @PostMapping("/{id}/add-mapping/{mappingId}")
+    @PatchMapping("/{id}/add-mapping/{mappingId}")
     public ResponseEntity<MappingActionResponseDto> addMapping(
         @PathVariable("id") Integer id,
         @PathVariable("mappingId") Integer mappingId,
-        @RequestBody @Valid MappingActionRequestDto mappingActionBody
+        @RequestBody @Valid MappingActionRequestDto mappingActionDto
     ){
-        EmailConfig emailConfig = new EmailConfig();
-        Optional<Action> action = actionRepository.findById(id);
-        Optional<Mapping> mapping = mappingRepository.findById(mappingId);
-        if(action.isEmpty() || mapping.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
+        MappingAction mappingAction = MappingActionResponseMapper.toEntity(mappingActionDto);
 
-        MappingAction mappingAction = new MappingAction(action.get(), mapping.get(), mappingActionBody.getQtyServedPeople());
+        MappingActionResponseDto response = MappingActionResponseMapper.toDto(
+            actionService.addMapping(id, mappingId, mappingAction)
+        );
 
-        MappingActionResponseDto response = MappingActionResponseMapper.toDto(mappingActionRepository.save(mappingAction));
+        //TODO: Enviar email para usuario somente quando finalizar a ação
 
-        mapping.get().getUsers().stream().forEach(user -> {
-            emailConfig.sendEmail(
-                user.getEmail(),
-                "Rise Canvas - Seu pin foi atendido",
-                "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.get().getName() + " foi realizada e atendeu " + mappingActionBody.getQtyServedPeople() + " pessoas.");
-        });
+        // mapping.get().getUsers().stream().forEach(user -> {
+        //     emailConfig.sendEmail(
+        //         user.getEmail(),
+        //         "Rise Canvas - Seu pin foi atendido",
+        //         "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.get().getName() + " foi realizada e atendeu " + mappingActionBody.getQtyServedPeople() + " pessoas.");
+        // });
         return ResponseEntity.status(200).body(response);
     }
 }

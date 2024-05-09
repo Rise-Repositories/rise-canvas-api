@@ -5,6 +5,13 @@ import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseMapper;
 import school.sptech.crudrisecanvas.entities.MappingAction;
 
 public class MappingActionResponseMapper {
+
+    public static MappingAction toEntity(MappingActionRequestDto dto) {
+        MappingAction mappingAction = new MappingAction();
+        mappingAction.setQtyServedPeople(dto.getQtyServedPeople());
+        return mappingAction;
+    }
+
     public static MappingActionResponseDto toDto(MappingAction mappingAction) {
         MappingActionResponseDto dto = new MappingActionResponseDto();
         dto.setId(mappingAction.getId());

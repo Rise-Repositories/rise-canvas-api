@@ -126,7 +126,6 @@ public class UserController {
         userEntity.setName(user.getName());
         userEntity.setEmail(user.getEmail());
         userEntity.setCpf(user.getCpf());
-        userEntity.setIp(user.getIp());
 
         UserResponseDto result = UserResponseMapper.toDto(userRepositary.save(userEntity));
 

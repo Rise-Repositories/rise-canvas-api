@@ -20,7 +20,6 @@ public class User {
     private String email;
     private String password;
     private String cpf;
-    private String ip;
 
     @ManyToMany(mappedBy = "users")
     private List<Mapping> mapping;

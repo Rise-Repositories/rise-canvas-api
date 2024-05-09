@@ -9,7 +9,6 @@ public class UserRequestMapper {
         user.setEmail(userRequestDto.getEmail());
         user.setPassword(userRequestDto.getPassword());
         user.setCpf(userRequestDto.getCpf());
-        user.setIp(userRequestDto.getIp());
         return user;
     }
 
@@ -19,7 +18,6 @@ public class UserRequestMapper {
         userRequestDto.setEmail(user.getEmail());
         userRequestDto.setPassword(user.getPassword());
         userRequestDto.setCpf(user.getCpf());
-        userRequestDto.setIp(user.getIp());
         return userRequestDto;
     }
 

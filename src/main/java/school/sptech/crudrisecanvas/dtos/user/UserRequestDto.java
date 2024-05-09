@@ -23,8 +23,4 @@ public class UserRequestDto {
     @NotBlank
     @CPF
     private String cpf;
-
-    @NotBlank
-    @Size(min = 7, max = 15)
-    private String ip;
 }

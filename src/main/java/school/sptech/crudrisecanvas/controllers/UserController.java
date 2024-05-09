@@ -1,8 +1,5 @@
 package school.sptech.crudrisecanvas.controllers;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -66,13 +63,9 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado")
     })
     public ResponseEntity<UserResponseDto> getUser(@PathVariable int id) {
-        Optional<User> user = userRepositary.findById(id);
+        User user = usuarioService.getUserById(id);
 
-        if(user.isEmpty()) {
-            return ResponseEntity.status(404).build();
-        }
-
-        UserResponseDto userDto = UserResponseMapper.toDto(user.get());
+        UserResponseDto userDto = UserResponseMapper.toDto(user);
 
         return ResponseEntity.status(200).body(userDto);
     }

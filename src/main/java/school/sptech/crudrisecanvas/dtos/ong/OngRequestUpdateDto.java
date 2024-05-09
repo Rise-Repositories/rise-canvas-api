@@ -6,7 +6,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.br.CNPJ;
 
 @Data
-public class OngUpdateDto {
+public class OngRequestUpdateDto {
     @NotBlank
     private String name;
 

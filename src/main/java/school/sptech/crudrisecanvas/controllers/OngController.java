@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.ong.OngRequestDto;
-import school.sptech.crudrisecanvas.dtos.ong.OngRequestMapper;
+import school.sptech.crudrisecanvas.dtos.ong.OngMapper;
 import school.sptech.crudrisecanvas.dtos.ong.OngResponseDto;
-import school.sptech.crudrisecanvas.dtos.ong.OngResponseMapper;
-import school.sptech.crudrisecanvas.dtos.ong.OngUpdateDto;
+import school.sptech.crudrisecanvas.dtos.ong.OngRequestUpdateDto;
 import school.sptech.crudrisecanvas.dtos.user.UserResponseMapper;
 import school.sptech.crudrisecanvas.entities.Ong;
 import school.sptech.crudrisecanvas.entities.User;
@@ -48,7 +47,7 @@ public class OngController {
             return ResponseEntity.status(204).build();
         }
 
-        List<OngResponseDto> response = OngResponseMapper.toDto(ongs);
+        List<OngResponseDto> response = OngMapper.toResponse(ongs);
 
         return ResponseEntity.status(200).body(response);
     }
@@ -62,7 +61,7 @@ public class OngController {
     public ResponseEntity<OngResponseDto> getOng(@PathVariable int id) {
         Ong ong = ongService.getOngById(id);
 
-        OngResponseDto result = OngResponseMapper.toDto(ong);
+        OngResponseDto result = OngMapper.toResponse(ong);
 
         return ResponseEntity.status(200).body(result);
     }
@@ -74,7 +73,7 @@ public class OngController {
             @ApiResponse(responseCode = "409", description = "Conflito - O email, CNPJ ou CPF já está em uso")
     })
     public ResponseEntity<OngResponseDto> createOng(@RequestBody @Valid OngRequestDto ongDto) {
-        Ong ong = OngRequestMapper.toEntity(ongDto);
+        Ong ong = OngMapper.toEntity(ongDto);
         /*
          * TODO:
          * Precisa usar dentro da ong o UserRequestDto
@@ -84,7 +83,7 @@ public class OngController {
          */
         User user = UserResponseMapper.toEntity(ongDto);
 
-        OngResponseDto result = OngResponseMapper.toDto(
+        OngResponseDto result = OngMapper.toResponse(
             ongService.createOng(ong, user)
         );
         result.setActions(new ArrayList<>());
@@ -98,10 +97,10 @@ public class OngController {
             @ApiResponse(responseCode = "200", description = "OK - Retorna os detalhes da ONG atualizada"),
             @ApiResponse(responseCode = "404", description = "Não encontrado - ONG não encontrada")
     })
-    public ResponseEntity<OngResponseDto> updateOng(@PathVariable int id,@RequestBody @Valid OngUpdateDto ongDto) {
-        Ong ong = OngRequestMapper.toEntity(ongDto);
+    public ResponseEntity<OngResponseDto> updateOng(@PathVariable int id,@RequestBody @Valid OngRequestUpdateDto ongDto) {
+        Ong ong = OngMapper.toEntity(ongDto);
 
-        OngResponseDto result = OngResponseMapper.toDto(ongService.updateOng(id, ong));
+        OngResponseDto result = OngMapper.toResponse(ongService.updateOng(id, ong));
 
         return ResponseEntity.status(200).body(result);
     }

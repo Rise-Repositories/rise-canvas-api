@@ -2,7 +2,7 @@ package school.sptech.crudrisecanvas.dtos.action;
 
 import java.util.List;
 
-import school.sptech.crudrisecanvas.dtos.ong.OngResponseMapper;
+import school.sptech.crudrisecanvas.dtos.ong.OngMapper;
 import school.sptech.crudrisecanvas.entities.Action;
 
 public class ActionMapper {
@@ -26,7 +26,7 @@ public class ActionMapper {
         result.setDatetimeEnd(action.getDatetimeEnd());
         result.setLatitude(action.getLatitude());
         result.setLongitude(action.getLongitude());
-        result.setOng(OngResponseMapper.toNoRelationDto(action.getOng()));
+        result.setOng(OngMapper.toNoRelationDto(action.getOng()));
 
         return result;
     }

@@ -5,8 +5,19 @@ import java.util.List;
 import school.sptech.crudrisecanvas.dtos.ong.OngResponseMapper;
 import school.sptech.crudrisecanvas.entities.Action;
 
-public class ActionResponseMapper {
-    public static ActionResponseDto toDto(Action action){
+public class ActionMapper {
+    public static Action toEntity(ActionRequestDto actionRequestDto){
+        Action action = new Action();
+        action.setName(actionRequestDto.getName());
+        action.setDescription(actionRequestDto.getDescription());
+        action.setDatetimeStart(actionRequestDto.getDatetimeStart());
+        action.setDatetimeEnd(actionRequestDto.getDatetimeEnd());
+        action.setLatitude(actionRequestDto.getLatitude());
+        action.setLongitude(actionRequestDto.getLongitude());
+        return action;
+    }
+    
+    public static ActionResponseDto toResponse(Action action){
         ActionResponseDto result = new ActionResponseDto();
         result.setId(action.getId());
         result.setName(action.getName());
@@ -20,11 +31,13 @@ public class ActionResponseMapper {
         return result;
     }
 
-    public static List<ActionResponseDto> toDto(List<Action> actions){
-        return actions.stream().map(ActionResponseMapper::toDto).toList();
+    public static List<ActionResponseDto> toResponse(List<Action> actions){
+        return actions == null
+            ? null
+            : actions.stream().map(ActionMapper::toResponse).toList();
     }
 
-    public static ActionResponseNoRelationDto toNoRelationDto(Action action){
+    public static ActionResponseNoRelationDto toNoRelation(Action action){
         ActionResponseNoRelationDto result = new ActionResponseNoRelationDto();
         result.setId(action.getId());
         result.setName(action.getName());
@@ -37,9 +50,9 @@ public class ActionResponseMapper {
         return result;
     }
 
-    public static List<ActionResponseNoRelationDto> toNoRelationDto(List<Action> actions){
+    public static List<ActionResponseNoRelationDto> toNoRelation(List<Action> actions){
         return actions == null 
             ? null 
-            : actions.stream().map(ActionResponseMapper::toNoRelationDto).toList();
+            : actions.stream().map(ActionMapper::toNoRelation).toList();
     }
 }

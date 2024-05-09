@@ -81,7 +81,7 @@ public class OngController {
          * e melhor usar ong.getUser()
          * ai mata esse mapper
          */
-        User user = UserMapper.toEntity(ongDto);
+        User user = UserMapper.toEntity(ongDto.getUser());
 
         OngResponseDto result = OngMapper.toResponse(
             ongService.createOng(ong, user)

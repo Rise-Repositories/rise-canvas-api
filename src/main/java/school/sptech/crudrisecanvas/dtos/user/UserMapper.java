@@ -3,7 +3,6 @@ package school.sptech.crudrisecanvas.dtos.user;
 import java.util.List;
 
 import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
-import school.sptech.crudrisecanvas.dtos.ong.OngRequestDto;
 import school.sptech.crudrisecanvas.entities.User;
 
 public class UserMapper {
@@ -13,15 +12,6 @@ public class UserMapper {
         user.setEmail(userRequestDto.getEmail());
         user.setPassword(userRequestDto.getPassword());
         user.setCpf(userRequestDto.getCpf());
-        return user;
-    }
-
-    public static User toEntity(OngRequestDto userOng) {
-        User user = new User();
-        user.setName(userOng.getNameUser());
-        user.setEmail(userOng.getEmailUser());
-        user.setCpf(userOng.getCpfUser());
-        user.setPassword(userOng.getPasswordUser());
         return user;
     }
 

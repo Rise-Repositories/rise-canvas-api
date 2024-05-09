@@ -17,10 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import school.sptech.crudrisecanvas.dtos.user.UserLoginDto;
 import school.sptech.crudrisecanvas.dtos.user.UserRequestDto;
-import school.sptech.crudrisecanvas.dtos.user.UserRequestMapper;
+import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.dtos.user.UserRequestUpdateDto;
 import school.sptech.crudrisecanvas.dtos.user.UserResponseDto;
-import school.sptech.crudrisecanvas.dtos.user.UserResponseMapper;
 import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.repositories.UserRepositary;
@@ -37,7 +36,7 @@ public class UserController {
 
     @PostMapping("/auth/register")
     public ResponseEntity<Void> register(@RequestBody @Valid UserRequestDto userDto) {
-        final User newUser = UserRequestMapper.toEntity(userDto);
+        final User newUser = UserMapper.toEntity(userDto);
 
         this.usuarioService.register(newUser);
 
@@ -65,7 +64,7 @@ public class UserController {
     public ResponseEntity<UserResponseDto> getUser(@PathVariable int id) {
         User user = usuarioService.getUserById(id);
 
-        UserResponseDto userDto = UserResponseMapper.toDto(user);
+        UserResponseDto userDto = UserMapper.toDto(user);
 
         return ResponseEntity.status(200).body(userDto);
     }
@@ -101,9 +100,9 @@ public class UserController {
             @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
     })
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable int id,@RequestBody @Valid UserRequestUpdateDto userDto) {
-        User user = UserRequestMapper.toEntity(userDto);
+        User user = UserMapper.toEntity(userDto);
 
-        UserResponseDto response = UserResponseMapper.toDto(usuarioService.updateUser(id, user));
+        UserResponseDto response = UserMapper.toDto(usuarioService.updateUser(id, user));
 
         return ResponseEntity.status(200).body(response);
     }

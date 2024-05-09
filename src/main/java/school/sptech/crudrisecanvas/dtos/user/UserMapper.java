@@ -2,19 +2,41 @@ package school.sptech.crudrisecanvas.dtos.user;
 
 import java.util.List;
 
-import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseMapper;
-import school.sptech.crudrisecanvas.dtos.ong.OngRequestDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.entities.User;
 
-public class UserResponseMapper {
+public class UserMapper {
+    public static User toEntity(UserRequestDto userRequestDto) {
+        User user = new User();
+        user.setName(userRequestDto.getName());
+        user.setEmail(userRequestDto.getEmail());
+        user.setPassword(userRequestDto.getPassword());
+        user.setCpf(userRequestDto.getCpf());
+        return user;
+    }
+
+    public static User toEntity(UserRequestUpdateDto userRequestUpdateDto) {
+        User user = new User();
+        user.setName(userRequestUpdateDto.getName());
+        user.setEmail(userRequestUpdateDto.getEmail());
+        user.setCpf(userRequestUpdateDto.getCpf());
+        return user;
+    }
+
     public static UserResponseDto toDto(User user) {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(user.getId());
         userResponseDto.setName(user.getName());
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setCpf(user.getCpf());
-        userResponseDto.setMapping(MappingResponseMapper.toNoRelationDto(user.getMapping()));
+        userResponseDto.setMapping(MappingMapper.toNoRelationDto(user.getMapping()));
         return userResponseDto;
+    }
+
+    public static List<UserResponseDto> toDto(List<User> users) {
+        return users == null
+            ? null
+            : users.stream().map(UserMapper::toDto).toList();
     }
 
     public static UserResponseNoRelationDto toNoRelationDto(User user) {
@@ -29,12 +51,9 @@ public class UserResponseMapper {
     public static List<UserResponseNoRelationDto> toNoRelationDto(List<User> users) {
         return users == null 
             ? null 
-            : users.stream().map(UserResponseMapper::toNoRelationDto).toList();
+            : users.stream().map(UserMapper::toNoRelationDto).toList();
     }
 
-    public static List<UserResponseDto> toDto(List<User> users) {
-        return users.stream().map(UserResponseMapper::toDto).toList();
-    }
     
     public static UserTokenDto toTokenDto(User user, String token) {
         UserTokenDto userToken = new UserTokenDto();
@@ -45,12 +64,5 @@ public class UserResponseMapper {
         return userToken;
     }
 
-    public static User toEntity(OngRequestDto userOng) {
-        User user = new User();
-        user.setName(userOng.getNameUser());
-        user.setEmail(userOng.getEmailUser());
-        user.setCpf(userOng.getCpfUser());
-        user.setPassword(userOng.getPasswordUser());
-        return user;
-    }
+    
 }

@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.action.ActionRequestDto;
-import school.sptech.crudrisecanvas.dtos.action.ActionRequestMapper;
+import school.sptech.crudrisecanvas.dtos.action.ActionMapper;
 import school.sptech.crudrisecanvas.dtos.action.ActionResponseDto;
-import school.sptech.crudrisecanvas.dtos.action.ActionResponseMapper;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionRequestDto;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseDto;
-import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseMapper;
+import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionMapper;
 import school.sptech.crudrisecanvas.entities.Action;
 import school.sptech.crudrisecanvas.entities.MappingAction;
 import school.sptech.crudrisecanvas.service.ActionService;
@@ -42,7 +41,7 @@ public class ActionController {
         if(actions.isEmpty()){
             return ResponseEntity.status(204).build();
         }
-        List<ActionResponseDto> actionsResponse = ActionResponseMapper.toDto(actions);
+        List<ActionResponseDto> actionsResponse = ActionMapper.toResponse(actions);
         return ResponseEntity.status(200).body(actionsResponse);
     }
 
@@ -50,7 +49,7 @@ public class ActionController {
     public ResponseEntity<ActionResponseDto> getActionById(@PathVariable Integer id){
         Action action = actionService.getById(id);
 
-        ActionResponseDto actionResponse = ActionResponseMapper.toDto(action);
+        ActionResponseDto actionResponse = ActionMapper.toResponse(action);
         return ResponseEntity.status(200).body(actionResponse);
     }   
 
@@ -59,7 +58,7 @@ public class ActionController {
         @RequestBody @Valid ActionRequestDto actionDto,
         @RequestHeader HashMap<String, String> header
     ){
-        Action action = ActionRequestMapper.toEntity(actionDto);
+        Action action = ActionMapper.toEntity(actionDto);
 
         /*
             TODO:
@@ -70,15 +69,15 @@ public class ActionController {
 
         Action createdAction = actionService.create(action);
 
-        ActionResponseDto actionResponse = ActionResponseMapper.toDto(createdAction);
+        ActionResponseDto actionResponse = ActionMapper.toResponse(createdAction);
         return ResponseEntity.status(201).body(actionResponse);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ActionResponseDto> updateAction(@PathVariable Integer id, @RequestBody ActionRequestDto actionDto){
-        Action action = ActionRequestMapper.toEntity(actionDto);
+        Action action = ActionMapper.toEntity(actionDto);
 
-        ActionResponseDto actionResponse = ActionResponseMapper.toDto(actionService.update(action, id));
+        ActionResponseDto actionResponse = ActionMapper.toResponse(actionService.update(action, id));
 
         return ResponseEntity.status(200).body(actionResponse);
     }
@@ -95,9 +94,9 @@ public class ActionController {
         @PathVariable("mappingId") Integer mappingId,
         @RequestBody @Valid MappingActionRequestDto mappingActionDto
     ){
-        MappingAction mappingAction = MappingActionResponseMapper.toEntity(mappingActionDto);
+        MappingAction mappingAction = MappingActionMapper.toEntity(mappingActionDto);
 
-        MappingActionResponseDto response = MappingActionResponseMapper.toDto(
+        MappingActionResponseDto response = MappingActionMapper.toDto(
             actionService.addMapping(id, mappingId, mappingAction)
         );
 

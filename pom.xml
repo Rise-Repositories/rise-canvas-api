@@ -8,6 +8,15 @@
 		<version>3.2.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
+	<!--
+		TODO: Seria interessante alterar o nome do projeto
+
+		tipo: Rise-canvas-api
+
+		nao sei se esse e o nova que vai ficar mesmo pq o projeto vai ter um nomo provavelmente
+	-->
+
 	<groupId>school.sptech</groupId>
 	<artifactId>crud-rise-canvas</artifactId>
 	<version>0.0.1-SNAPSHOT</version>

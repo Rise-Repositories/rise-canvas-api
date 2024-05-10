@@ -22,10 +22,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private UserRepositary userRepository;
-    private PasswordEncoder passwordEncoder;
-    private JwtTokenManager gerenciadorTokenJwt;
-    private AuthenticationManager authenticationManager;
+    private final UserRepositary userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenManager gerenciadorTokenJwt;
+    private final AuthenticationManager authenticationManager;
 
     public void register(User newUser) {
 

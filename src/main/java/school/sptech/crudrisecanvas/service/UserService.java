@@ -59,6 +59,13 @@ public class UserService {
         return user.get();
     }
 
+    public User getAccount(String token) {
+        String username = gerenciadorTokenJwt.getUsernameFromToken(token);
+
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+    }
+
     public User updateUser(int id, User user) {
         User userToUpdate = this.getUserById(id);
 

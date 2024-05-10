@@ -74,13 +74,6 @@ public class OngController {
     })
     public ResponseEntity<OngResponseDto> createOng(@RequestBody @Valid OngRequestDto ongDto) {
         Ong ong = OngMapper.toEntity(ongDto);
-        /*
-         * TODO:
-         * Precisa usar dentro da ong o UserRequestDto
-         * fica muito feio usando get...User()
-         * e melhor usar ong.getUser()
-         * ai mata esse mapper
-         */
         User user = UserMapper.toEntity(ongDto.getUser());
 
         OngResponseDto result = OngMapper.toResponse(

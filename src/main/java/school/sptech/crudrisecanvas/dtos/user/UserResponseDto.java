@@ -11,6 +11,5 @@ public class UserResponseDto {
     private String name;
     private String email;
     private String cpf;
-    private String ip;
     private List<MappingResponseNoRelationDto> mapping;
 }

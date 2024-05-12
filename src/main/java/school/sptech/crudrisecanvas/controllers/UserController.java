@@ -72,8 +72,6 @@ public class UserController {
         return ResponseEntity.status(200).body(userDto);
     }
 
-    // TODO: somente o proprio usuario pode alterar seus dados deve validar token
-
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar um usuário existente pelo ID")
     @ApiResponses(value = {

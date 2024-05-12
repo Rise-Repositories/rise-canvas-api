@@ -14,6 +14,7 @@ import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.exception.ConflictException;
+import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.UserRepositary;
 
@@ -66,8 +67,13 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
     }
 
-    public User updateUser(int id, User user) {
+    public User updateUser(int id, User user, String token) {
         User userToUpdate = this.getUserById(id);
+        User userLogged = this.getAccount(token);
+
+        if(userLogged.getId() != userToUpdate.getId()){
+            throw new ForbiddenException("Você não tem permissão para fazer esta ação");
+        }
 
         if(
             this.userRepository.existsByCpfAndIdNot(userToUpdate.getCpf(), id)

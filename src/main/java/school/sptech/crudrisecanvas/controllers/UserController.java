@@ -72,27 +72,6 @@ public class UserController {
         return ResponseEntity.status(200).body(userDto);
     }
 
-    // @PostMapping
-    // @Operation(summary = "Criar um novo usuário")
-    // @ApiResponses(value = {
-    //         @ApiResponse(responseCode = "201", description = "Criado - Retorna os detalhes do novo usuário"),
-    //         @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
-    // })
-    // public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userDto) {
-    //     if(userRepositary.countWithEmailOrCpf(userDto.getEmail(), userDto.getCpf()) > 0) {
-    //         return ResponseEntity.status(409).build();
-    //     }
-        
-    //     User user = UserRequestMapper.toEntity(userDto);
-
-    //     UserResponseDto result = UserResponseMapper.toDto(userRepositary.save(user));
-    //     result.setMapping(new ArrayList<>());
-
-    //     return ResponseEntity.status(201).body(result);
-    // }
-
-
-
     // TODO: somente o proprio usuario pode alterar seus dados deve validar token
 
     @PutMapping("/{id}")
@@ -102,10 +81,14 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado"),
             @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
     })
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable int id,@RequestBody @Valid UserRequestUpdateDto userDto) {
+    public ResponseEntity<UserResponseDto> updateUser(
+        @PathVariable int id,
+        @RequestBody @Valid UserRequestUpdateDto userDto,
+        @RequestHeader HashMap<String,String> headers
+    ) {
         User user = UserMapper.toEntity(userDto);
 
-        UserResponseDto response = UserMapper.toDto(usuarioService.updateUser(id, user));
+        UserResponseDto response = UserMapper.toDto(usuarioService.updateUser(id, user, headers.get("authorization").substring(7)));
 
         return ResponseEntity.status(200).body(response);
     }

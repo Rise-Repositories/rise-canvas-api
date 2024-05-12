@@ -37,7 +37,7 @@ public class OngMapper {
         dto.setAddress(ong.getAddress());
         dto.setStatus(ong.getStatus());
         dto.setActions(ActionMapper.toNoRelation(ong.getActions()));
-        dto.setVoluntaries(VoluntaryMapper.toNoRelationDto(ong.getVoluntaries()));
+        dto.setVoluntaries(VoluntaryMapper.toOngNoRelationDto(ong.getVoluntaries()));
         return dto;
     }
 

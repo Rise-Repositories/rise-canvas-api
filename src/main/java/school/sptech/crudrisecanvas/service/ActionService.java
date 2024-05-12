@@ -9,15 +9,22 @@ import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.entities.Action;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.MappingAction;
+import school.sptech.crudrisecanvas.entities.Ong;
+import school.sptech.crudrisecanvas.entities.User;
+import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.ActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
+import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 
 @Service
 @RequiredArgsConstructor
 public class ActionService {
+    private final UserService userService;
     private final ActionRepository actionRepository;
+
+    //TODO: nao usar respository, usar sercives 
     private final MappingRepository mappingRepository;
     private final MappingActionRepository mappingActionRepository;
     
@@ -36,7 +43,18 @@ public class ActionService {
         return action.get();
     }   
 
-    public Action create(Action action){
+    public Action create(Action action, Integer ongId, String token){
+        User user = userService.getAccount(token);
+
+        Ong ong = user.getVoluntary()
+                .stream()
+                .filter(v -> v.getRole() != VoluntaryRoles.VOLUNTARY && v.getOng().getId() == ongId)
+                .findFirst()
+                .orElseThrow(() -> new ForbiddenException("Você não tem permissão para criar essa ação"))
+                .getOng();
+
+        action.setOng(ong);
+
         return actionRepository.save(action);
     }
 

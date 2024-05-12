@@ -53,21 +53,15 @@ public class ActionController {
         return ResponseEntity.status(200).body(actionResponse);
     }   
 
-    @PostMapping
+    @PostMapping("/{ongId}")
     public ResponseEntity<ActionResponseDto> createAction(
         @RequestBody @Valid ActionRequestDto actionDto,
+        @PathVariable Integer ongId,
         @RequestHeader HashMap<String, String> header
     ){
         Action action = ActionMapper.toEntity(actionDto);
 
-        /*
-            TODO:
-            Pegar usuario do token
-            Pegar ONG do usuario
-            Setar ONG na ação
-        */
-
-        Action createdAction = actionService.create(action);
+        Action createdAction = actionService.create(action, ongId, header.get("authorization").substring(7));
 
         ActionResponseDto actionResponse = ActionMapper.toResponse(createdAction);
         return ResponseEntity.status(201).body(actionResponse);

@@ -15,17 +15,14 @@ import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.ActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
-import school.sptech.crudrisecanvas.repositories.MappingRepository;
 import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 
 @Service
 @RequiredArgsConstructor
 public class ActionService {
     private final UserService userService;
+    private final MappingService mappingService;
     private final ActionRepository actionRepository;
-
-    //TODO: nao usar respository, usar sercives 
-    private final MappingRepository mappingRepository;
     private final MappingActionRepository mappingActionRepository;
     
     public List<Action> getAll(){
@@ -85,17 +82,11 @@ public class ActionService {
     ){
         // EmailConfig emailConfig = new EmailConfig();
 
-        Optional<Action> action = actionRepository.findById(id);
-        Optional<Mapping> mapping = mappingRepository.findById(mappingId);
+        Action action = this.getById(id);
+        Mapping mapping = mappingService.getMappingById(mappingId);
 
-        if(action.isEmpty()){
-            throw new NotFoundException("Ação não encontrado");
-        }
-        if(mapping.isEmpty()){
-            throw new NotFoundException("Mapeamento não encontrado");
-        }
 
-        MappingAction mappingAction = new MappingAction(action.get(), mapping.get(), mappingActionBody.getQtyServedPeople());
+        MappingAction mappingAction = new MappingAction(action, mapping, mappingActionBody.getQtyServedPeople());
 
         //TODO: Enviar email para usuario somente quando finalizar a ação
 

@@ -1,9 +1,10 @@
 package school.sptech.crudrisecanvas.controllers;
 
+import java.util.HashMap;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.user.UserLoginDto;
 import school.sptech.crudrisecanvas.dtos.user.UserRequestDto;
 import school.sptech.crudrisecanvas.dtos.user.UserMapper;
@@ -27,12 +30,10 @@ import school.sptech.crudrisecanvas.service.UserService;
 
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-
-    @Autowired
-    UserRepositary userRepositary;
-    @Autowired
-    UserService usuarioService;
+   private final UserRepositary userRepositary;
+    private final UserService usuarioService;
 
     @PostMapping("/auth/register")
     public ResponseEntity<Void> register(@RequestBody @Valid UserRequestDto userDto) {
@@ -49,11 +50,13 @@ public class UserController {
         return ResponseEntity.status(200).body(usuarioToken);
     }
 
-    /*
-        TODO:
-        criar um rota que o usuario consiga pegar os dados dele atraves do token
-        vai descriptografar o token pegar o id dentro do token e procurar no banco
-    */
+    @GetMapping("/account")
+    public ResponseEntity<UserResponseDto> account(@RequestHeader HashMap<String,String> headers) {
+        User user = usuarioService.getAccount(headers.get("authorization").substring(7));
+        
+        UserResponseDto response = UserMapper.toDto(user);
+        return ResponseEntity.status(200).body(response);
+    }
 
     @GetMapping("/{id}")
     @Operation(summary = "Obter detalhes de um usuário pelo ID")
@@ -69,29 +72,6 @@ public class UserController {
         return ResponseEntity.status(200).body(userDto);
     }
 
-    // @PostMapping
-    // @Operation(summary = "Criar um novo usuário")
-    // @ApiResponses(value = {
-    //         @ApiResponse(responseCode = "201", description = "Criado - Retorna os detalhes do novo usuário"),
-    //         @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
-    // })
-    // public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userDto) {
-    //     if(userRepositary.countWithEmailOrCpf(userDto.getEmail(), userDto.getCpf()) > 0) {
-    //         return ResponseEntity.status(409).build();
-    //     }
-        
-    //     User user = UserRequestMapper.toEntity(userDto);
-
-    //     UserResponseDto result = UserResponseMapper.toDto(userRepositary.save(user));
-    //     result.setMapping(new ArrayList<>());
-
-    //     return ResponseEntity.status(201).body(result);
-    // }
-
-
-
-    // TODO: somente o proprio usuario pode alterar seus dados deve validar token
-
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar um usuário existente pelo ID")
     @ApiResponses(value = {
@@ -99,10 +79,14 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado"),
             @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
     })
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable int id,@RequestBody @Valid UserRequestUpdateDto userDto) {
+    public ResponseEntity<UserResponseDto> updateUser(
+        @PathVariable int id,
+        @RequestBody @Valid UserRequestUpdateDto userDto,
+        @RequestHeader HashMap<String,String> headers
+    ) {
         User user = UserMapper.toEntity(userDto);
 
-        UserResponseDto response = UserMapper.toDto(usuarioService.updateUser(id, user));
+        UserResponseDto response = UserMapper.toDto(usuarioService.updateUser(id, user, headers.get("authorization").substring(7)));
 
         return ResponseEntity.status(200).body(response);
     }

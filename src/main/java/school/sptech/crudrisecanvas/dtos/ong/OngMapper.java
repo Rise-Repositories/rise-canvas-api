@@ -2,6 +2,7 @@ package school.sptech.crudrisecanvas.dtos.ong;
 
 import java.util.List;
 
+import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryMapper;
 import school.sptech.crudrisecanvas.dtos.action.ActionMapper;
 import school.sptech.crudrisecanvas.entities.Ong;
 
@@ -36,6 +37,7 @@ public class OngMapper {
         dto.setAddress(ong.getAddress());
         dto.setStatus(ong.getStatus());
         dto.setActions(ActionMapper.toNoRelation(ong.getActions()));
+        dto.setVoluntaries(VoluntaryMapper.toOngNoRelationDto(ong.getVoluntaries()));
         return dto;
     }
 

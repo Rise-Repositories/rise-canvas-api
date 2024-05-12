@@ -1,6 +1,7 @@
 package school.sptech.crudrisecanvas.controllers;
 
 import java.util.List;
+import java.util.HashMap;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,10 +48,12 @@ public class MappingController {
     }
 
     @PostMapping
-    public ResponseEntity<MappingResponseDto> createMapping(@RequestBody @Valid MappingRequestDto mappingDto){
+    public ResponseEntity<MappingResponseDto> createMapping(@RequestBody @Valid MappingRequestDto mappingDto, @RequestHeader HashMap<String,String> headers){
         Mapping mapping = MappingMapper.toEntity(mappingDto);
 
-        MappingResponseDto response = MappingMapper.toDto(mappingService.createMapping(mapping));
+        MappingResponseDto response = MappingMapper.toDto(
+            mappingService.createMapping(mapping, headers.get("authorization").substring(7))
+        );
 
         return ResponseEntity.status(201).body(response);
     }

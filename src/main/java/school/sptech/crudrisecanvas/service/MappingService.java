@@ -34,14 +34,13 @@ public class MappingService {
         return mapping.get();
     }
 
-    public Mapping createMapping(Mapping mapping){
-        //TODO: tem que pegar o token e buscar o usuário
-        User user = userService.getUserById(1);
+    public Mapping createMapping(Mapping mapping, String token){
+        User user = userService.getAccount(token);
         
         mapping.setUsers(List.of(user));
         mapping.setStatus(MappingStatus.ACTIVE);
 
-        return mapping;
+        return mappingRepository.save(mapping);
     }
 
     public Mapping updateMapping(Integer id, Mapping mapping){

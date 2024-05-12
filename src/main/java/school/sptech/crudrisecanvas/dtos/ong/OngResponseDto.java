@@ -3,6 +3,7 @@ package school.sptech.crudrisecanvas.dtos.ong;
 import java.util.List;
 
 import lombok.Data;
+import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryOngResponseNoRelationDto;
 import school.sptech.crudrisecanvas.dtos.action.ActionResponseNoRelationDto;
 import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
 
@@ -16,4 +17,5 @@ public class OngResponseDto {
     private String address;
     private OngStatus status;
     private List<ActionResponseNoRelationDto> actions;
+    private List<VoluntaryOngResponseNoRelationDto> voluntaries;
 }

@@ -8,16 +8,19 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.entities.Ong;
 import school.sptech.crudrisecanvas.entities.User;
+import school.sptech.crudrisecanvas.entities.Voluntary;
 import school.sptech.crudrisecanvas.exception.ConflictException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.OngRepository;
 import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
+import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 
 @Service
 @RequiredArgsConstructor
 public class OngService {
     private final OngRepository ongRepository;
     private final UserService userService;
+    private final VoluntaryService voluntaryService;
 
     public List<Ong> getOngs() {
         return ongRepository.findAll();
@@ -40,15 +43,14 @@ public class OngService {
 
         ong.setStatus(OngStatus.PENDING);
 
-        /*
-         * TODO:
-         * precisa relacionar os usario e a ong
-         * tem que mexer com a tabela voluntary
-         * tem que setar o rule e o status
-         */
-
         userService.register(user);
-        return ongRepository.save(ong);
+        ongRepository.save(ong);
+
+        voluntaryService.createVoluntary(
+            new Voluntary(user, ong, VoluntaryRoles.OWNER)
+        );
+
+        return ong;
     }
 
     public Ong updateOng(int id, Ong ong) {

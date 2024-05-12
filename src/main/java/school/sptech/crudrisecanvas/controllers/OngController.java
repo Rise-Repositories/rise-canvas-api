@@ -66,7 +66,7 @@ public class OngController {
         return ResponseEntity.status(200).body(result);
     }
 
-    @PostMapping("/register")
+    @PostMapping
     @Operation(summary = "Criar uma nova ONG")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Criado - Retorna os detalhes da nova ONG"),
@@ -74,13 +74,6 @@ public class OngController {
     })
     public ResponseEntity<OngResponseDto> createOng(@RequestBody @Valid OngRequestDto ongDto) {
         Ong ong = OngMapper.toEntity(ongDto);
-        /*
-         * TODO:
-         * Precisa usar dentro da ong o UserRequestDto
-         * fica muito feio usando get...User()
-         * e melhor usar ong.getUser()
-         * ai mata esse mapper
-         */
         User user = UserMapper.toEntity(ongDto.getUser());
 
         OngResponseDto result = OngMapper.toResponse(

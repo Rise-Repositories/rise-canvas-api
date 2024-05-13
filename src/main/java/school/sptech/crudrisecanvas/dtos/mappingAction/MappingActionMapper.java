@@ -8,7 +8,11 @@ public class MappingActionMapper {
 
     public static MappingAction toEntity(MappingActionRequestDto dto) {
         MappingAction mappingAction = new MappingAction();
-        mappingAction.setQtyServedPeople(dto.getQtyServedPeople());
+        mappingAction.setQtyServedAdults(dto.getQtyServedAdults());
+        mappingAction.setQtyServedChildren(dto.getQtyServedChildren());
+        mappingAction.setNoDonation(dto.getNoDonation());
+        mappingAction.setNoPeople(dto.getNoPeople());
+        mappingAction.setDescription(dto.getDescription());
         return mappingAction;
     }
 
@@ -17,14 +21,23 @@ public class MappingActionMapper {
         dto.setId(mappingAction.getId());
         dto.setAction(ActionMapper.toNoRelation(mappingAction.getAction()));
         dto.setMapping(MappingMapper.toNoRelationDto(mappingAction.getMapping()));
-        dto.setQtyServedPeople(mappingAction.getQtyServedPeople());
+        dto.setQtyServedAdults(mappingAction.getQtyServedAdults());
+        dto.setQtyServedChildren(mappingAction.getQtyServedChildren());
+        dto.setNoDonation(mappingAction.getNoDonation());
+        dto.setNoPeople(mappingAction.getNoPeople());
+        dto.setDescription(mappingAction.getDescription());
+
         return dto;
     }
 
     public static MappingActionResponseDto toNoRelationDto(MappingAction mappingAction) {
         MappingActionResponseDto dto = new MappingActionResponseDto();
         dto.setId(mappingAction.getId());
-        dto.setQtyServedPeople(mappingAction.getQtyServedPeople());
+        dto.setQtyServedAdults(mappingAction.getQtyServedAdults());
+        dto.setQtyServedChildren(mappingAction.getQtyServedChildren());
+        dto.setNoDonation(mappingAction.getNoDonation());
+        dto.setNoPeople(mappingAction.getNoPeople());
+        dto.setDescription(mappingAction.getDescription());
         return dto;
     }
     

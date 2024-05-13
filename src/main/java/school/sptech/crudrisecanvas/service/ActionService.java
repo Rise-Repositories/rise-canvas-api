@@ -85,8 +85,8 @@ public class ActionService {
         Action action = this.getById(id);
         Mapping mapping = mappingService.getMappingById(mappingId);
 
-
-        MappingAction mappingAction = new MappingAction(action, mapping, mappingActionBody.getQtyServedPeople());
+        mappingActionBody.setAction(action);
+        mappingActionBody.setMapping(mapping);
 
         //TODO: Enviar email para usuario somente quando finalizar a ação
 
@@ -97,6 +97,6 @@ public class ActionService {
         //         "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.get().getName() + " foi realizada e atendeu " + mappingActionBody.getQtyServedPeople() + " pessoas.");
         // });
 
-        return mappingActionRepository.save(mappingAction);
+        return mappingActionRepository.save(mappingActionBody);
     }
 }

@@ -14,8 +14,6 @@ public class OngRequestUpdateDto {
     @CNPJ
     private String cnpj;
 
-    private String description;
-
     @NotBlank
     @Size(min = 8, max = 8)
     private String cep;

@@ -21,7 +21,6 @@ public class Ong {
 
     private String name;
     private String cnpj;
-    private String description;
     private String cep;
     private String address;
 

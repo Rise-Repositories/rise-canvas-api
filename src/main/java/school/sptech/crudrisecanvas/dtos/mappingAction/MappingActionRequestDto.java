@@ -8,5 +8,17 @@ import lombok.Data;
 public class MappingActionRequestDto {
     @NotNull
     @Positive
-    private Integer qtyServedPeople;
+    private Integer qtyServedAdults;
+
+    @NotNull
+    @Positive
+    private Integer qtyServedChildren;
+
+    @NotNull
+    private Boolean noDonation;
+
+    @NotNull
+    private Boolean noPeople;
+
+    private String description;
 }

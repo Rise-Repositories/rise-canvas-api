@@ -46,7 +46,11 @@ public class MappingService {
     public Mapping updateMapping(Integer id, Mapping mapping){
         Mapping mappingToUpdate = this.getMappingById(id);
 
-        mappingToUpdate.setQtyPeople(mapping.getQtyPeople());
+
+        mappingToUpdate.setQtyAdults(mapping.getQtyAdults());
+        mappingToUpdate.setQtyChildren(mapping.getQtyChildren());
+        mappingToUpdate.setHasDisorders(mapping.getHasDisorders());
+        mappingToUpdate.setReferencePoint(mapping.getReferencePoint());
         mappingToUpdate.setDescription(mapping.getDescription());
         mappingToUpdate.setLatitude(mapping.getLatitude());
         mappingToUpdate.setLongitude(mapping.getLongitude());

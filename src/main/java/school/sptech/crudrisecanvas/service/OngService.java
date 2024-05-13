@@ -59,7 +59,6 @@ public class OngService {
         ongToUpdate.setName(ong.getName());
         ongToUpdate.setCnpj(ong.getCnpj());
         ongToUpdate.setCep(ong.getCep());
-        ongToUpdate.setDescription(ong.getDescription());
         ongToUpdate.setAddress(ong.getAddress());
 
         return ongRepository.save(ongToUpdate);

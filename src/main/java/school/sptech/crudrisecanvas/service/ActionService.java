@@ -80,22 +80,15 @@ public class ActionService {
         Integer mappingId,
         MappingAction mappingActionBody
     ){
-        // EmailConfig emailConfig = new EmailConfig();
-
         Action action = this.getById(id);
         Mapping mapping = mappingService.getMappingById(mappingId);
 
         mappingActionBody.setAction(action);
         mappingActionBody.setMapping(mapping);
 
-        //TODO: Enviar email para usuario somente quando finalizar a ação
-
-        // mapping.get().getUsers().stream().forEach(user -> {
-        //     emailConfig.sendEmail(
-        //         user.getEmail(),
-        //         "Rise Canvas - Seu pin foi atendido",
-        //         "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.get().getName() + " foi realizada e atendeu " + mappingActionBody.getQtyServedPeople() + " pessoas.");
-        // });
+        mapping.getUsers().stream().forEach(user -> {
+            ScheduleService.add(user.getEmail(), action, mappingActionBody);
+        });
 
         return mappingActionRepository.save(mappingActionBody);
     }

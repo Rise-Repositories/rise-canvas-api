@@ -94,14 +94,6 @@ public class ActionController {
             actionService.addMapping(id, mappingId, mappingAction)
         );
 
-        //TODO: Enviar email para usuario somente quando finalizar a ação
-
-        // mapping.get().getUsers().stream().forEach(user -> {
-        //     emailConfig.sendEmail(
-        //         user.getEmail(),
-        //         "Rise Canvas - Seu pin foi atendido",
-        //         "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.get().getName() + " foi realizada e atendeu " + mappingActionBody.getQtyServedPeople() + " pessoas.");
-        // });
         return ResponseEntity.status(200).body(response);
     }
 }

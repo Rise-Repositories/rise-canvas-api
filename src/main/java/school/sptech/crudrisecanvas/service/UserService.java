@@ -29,6 +29,12 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     public void register(User newUser) {
+        if(this.userRepository.existsByEmail(newUser.getEmail())){
+            throw new ConflictException("Já existe um usuário com este email");
+        }
+        if(this.userRepository.existsByCpf(newUser.getCpf())){
+            throw new ConflictException("Já existe um usuário com este CPF");
+        }
 
         String passwordHash = passwordEncoder.encode(newUser.getPassword());
         newUser.setPassword(passwordHash);
@@ -79,6 +85,11 @@ public class UserService {
             this.userRepository.existsByCpfAndIdNot(userToUpdate.getCpf(), id)
         ){
             throw new ConflictException("Já existe um usuário com este CPF");
+        }
+        if(
+            this.userRepository.existsByEmailAndIdNot(userToUpdate.getEmail(), id)
+        ){
+            throw new ConflictException("Já existe um usuário com este email");
         }
 
         userToUpdate.setName(user.getName());

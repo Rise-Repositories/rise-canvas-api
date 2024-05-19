@@ -324,7 +324,7 @@ class UserServiceTest {
         }
 
         @Test
-        @DisplayName("F. Quando CPF já existir em outro usuário, deve retornar ConflitoException")
+        @DisplayName("F. Quando CPF já existir em outro usuário, deve lançar ConflitoException")
         void cpfAlreadyExists() {
             Integer id = 1;
             String token = UserMocks.getToken();

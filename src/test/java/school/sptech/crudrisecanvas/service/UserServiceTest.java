@@ -56,11 +56,51 @@ class UserServiceTest {
             String oldPassword = user.getPassword();
 
             Mockito.when(passwordEncoder.encode(user.getPassword())).thenReturn(passwordHash);
+            Mockito.when(repository.existsByCpf(user.getCpf())).thenReturn(false);
+            Mockito.when(repository.existsByEmail(user.getEmail())).thenReturn(false);
 
             service.register(user);
 
             Mockito.verify(repository, Mockito.times(1)).save(user);
+            Mockito.verify(repository, Mockito.times(1)).existsByCpf(user.getCpf());
+            Mockito.verify(repository, Mockito.times(1)).existsByEmail(user.getEmail());
             Mockito.verify(passwordEncoder, Mockito.times(1)).encode(oldPassword);
+        }
+
+        @Test
+        @DisplayName("F. Quando CPF já existir, deve lançar ConflictException")
+        void repeatCPF() {
+            User user = UserMocks.getUser();
+
+            Mockito.when(repository.existsByCpf(user.getCpf())).thenReturn(true);
+            Mockito.when(repository.existsByEmail(user.getEmail())).thenReturn(false);
+
+            ConflictException exception = assertThrows(
+                    ConflictException.class,
+                    () -> service.register(user)
+            );
+
+            assertEquals("CPF já cadastrado", exception.getLocalizedMessage());
+
+            Mockito.verify(repository, Mockito.times(1)).existsByCpf(user.getCpf());
+        }
+
+        @Test
+        @DisplayName("F. Quando e-mail já existir, deve lançar ConflictException")
+        void repeatEmail() {
+            User user = UserMocks.getUser();
+
+            Mockito.when(repository.existsByCpf(user.getCpf())).thenReturn(false);
+            Mockito.when(repository.existsByEmail(user.getEmail())).thenReturn(true);
+
+            ConflictException exception = assertThrows(
+                    ConflictException.class,
+                    () -> service.register(user)
+            );
+
+            assertEquals("E-mail já cadastrado", exception.getLocalizedMessage());
+
+            Mockito.verify(repository, Mockito.times(1)).existsByEmail(user.getEmail());
         }
     }
 
@@ -241,6 +281,7 @@ class UserServiceTest {
             Mockito.doReturn(currentUser).when(spyService).getUserById(id);
             Mockito.doReturn(currentUser).when(spyService).getAccount(token);
             Mockito.when(repository.existsByCpfAndIdNot(currentUser.getCpf(), id)).thenReturn(false);
+            Mockito.when(repository.existsByEmailAndIdNot(currentUser.getEmail(), id)).thenReturn(false);
             Mockito.when(repository.save(updatedUser)).thenReturn(updatedUser);
 
             User returnedUser = spyService.updateUser(id, updatedUser, token);
@@ -252,6 +293,8 @@ class UserServiceTest {
 
             Mockito.verify(spyService, Mockito.times(1)).getUserById(id);
             Mockito.verify(spyService, Mockito.times(1)).getAccount(token);
+            Mockito.verify(repository, Mockito.times(1)).existsByCpfAndIdNot(currentUser.getCpf(), id);
+            Mockito.verify(repository, Mockito.times(1)).existsByEmailAndIdNot(currentUser.getEmail(), id);
             Mockito.verify(repository, Mockito.times(1)).save(updatedUser);
         }
 
@@ -298,7 +341,27 @@ class UserServiceTest {
             );
 
             assertEquals("Já existe um usuário com este CPF", exception.getLocalizedMessage());
+        }
 
+        @Test
+        @DisplayName("F. Quando e-mail já existir em outro usuário, deve retornar ConflitoException")
+        void emailAlreadyExists() {
+            Integer id = 1;
+            String token = UserMocks.getToken();
+            User currentUser = UserMocks.getUser();
+            UserService spyService = Mockito.spy(service);
+
+            Mockito.doReturn(currentUser).when(spyService).getUserById(id);
+            Mockito.doReturn(currentUser).when(spyService).getAccount(token);
+            Mockito.when(repository.existsByCpfAndIdNot(currentUser.getCpf(), id)).thenReturn(false);
+            Mockito.when(repository.existsByEmailAndIdNot(currentUser.getEmail(), id)).thenReturn(true);
+
+            ConflictException exception = assertThrows(
+                    ConflictException.class,
+                    () -> spyService.updateUser(id, currentUser, token)
+            );
+
+            assertEquals("Já existe um usuário com este e-mail", exception.getLocalizedMessage());
         }
     }
 

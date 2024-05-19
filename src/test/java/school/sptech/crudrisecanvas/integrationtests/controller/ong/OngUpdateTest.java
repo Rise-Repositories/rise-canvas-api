@@ -1,4 +1,4 @@
-package school.sptech.crudrisecanvas.controller.ong;
+package school.sptech.crudrisecanvas.integrationtests.controller.ong;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,8 +11,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import school.sptech.crudrisecanvas.utils.paths.OngEnum;
-import school.sptech.crudrisecanvas.utils.paths.UserEnum;
+import school.sptech.crudrisecanvas.integrationtests.utils.paths.OngEnum;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +33,7 @@ public class OngUpdateTest {
         private MockMvc mockMvc;
 
         @Test
-        @DisplayName("1.1 Correct ONG Data (200)")
+        @DisplayName("1.1 Correct ONG Data (changing all values) (200)")
         @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
         public void test1() throws Exception {
 
@@ -55,6 +54,32 @@ public class OngUpdateTest {
                     .andExpect(jsonPath("$.name").value("Instituto ACB"))
                     .andExpect(jsonPath("$.cep").value("03679010"))
                     .andExpect(jsonPath("$.cnpj").value("78.349.263/0001-06"))
+                    .andExpect(jsonPath("$.address").value("Rua Hélvio de Oliveira Albuquerque, 74"))
+                    .andExpect(jsonPath("$.description").value("Promover a integração social entre voluntários e crianças"));
+        }
+
+        @Test
+        @DisplayName("1.2 Correct ONG Data (keeping current CPNJ) (200)")
+        @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+        public void test2() throws Exception {
+
+            String json = """
+                    {
+                        "name": "Instituto ACB",
+                        "description": "Promover a integração social entre voluntários e crianças",
+                        "cep": "03679010",
+                        "cnpj": "20.438.196/0001-08",
+                        "address": "Rua Hélvio de Oliveira Albuquerque, 74"
+                    }""";
+
+            mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                            .content(json)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").value("1"))
+                    .andExpect(jsonPath("$.name").value("Instituto ACB"))
+                    .andExpect(jsonPath("$.cep").value("03679010"))
+                    .andExpect(jsonPath("$.cnpj").value("20.438.196/0001-08"))
                     .andExpect(jsonPath("$.address").value("Rua Hélvio de Oliveira Albuquerque, 74"))
                     .andExpect(jsonPath("$.description").value("Promover a integração social entre voluntários e crianças"));
         }

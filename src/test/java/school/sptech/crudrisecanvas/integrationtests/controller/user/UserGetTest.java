@@ -1,4 +1,4 @@
-package school.sptech.crudrisecanvas.controller.user;
+package school.sptech.crudrisecanvas.integrationtests.controller.user;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,7 +11,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import school.sptech.crudrisecanvas.utils.paths.UserEnum;
+import school.sptech.crudrisecanvas.integrationtests.utils.paths.UserEnum;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

@@ -1,4 +1,4 @@
-package school.sptech.crudrisecanvas.controller.user;
+package school.sptech.crudrisecanvas.integrationtests.controller.ong;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -6,13 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import school.sptech.crudrisecanvas.utils.paths.BaseEnum;
-import school.sptech.crudrisecanvas.utils.paths.UserEnum;
+import school.sptech.crudrisecanvas.integrationtests.utils.paths.OngEnum;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,10 +18,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 //@ActiveProfiles("test")
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@Sql(scripts = "/data/truncate_table.sql",
-        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@DisplayName("User Delete")
-public class UserDeleteTest {
+@Sql(scripts = {"/data/truncate_table.sql", "/data/add_ong.sql"},
+        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@DisplayName("ONG Delete")
+public class OngDeleteTest {
 
     @Nested
     @DisplayName("1. Valid scenarios")
@@ -37,20 +35,7 @@ public class UserDeleteTest {
         @WithMockUser(username = "testUser", password = "pass123")
         public void test1() throws Exception {
 
-            String json = """
-                    {
-                        "name": "Marcelo Soares",
-                        "email": "marcelo.soares@email.com",
-                        "password": "marcelo123",
-                        "cpf": "017.895.420-90"
-                    }""";
-
-            mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.CREATE.path)
-                    .content(json)
-                    .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isCreated());
-
-            mockMvc.perform(MockMvcRequestBuilders.delete(UserEnum.BY_ID.path + "1"))
+            mockMvc.perform(MockMvcRequestBuilders.delete(OngEnum.BY_ID.path + "1"))
                     .andExpect(status().isNoContent());
         }
     }
@@ -66,16 +51,16 @@ public class UserDeleteTest {
         @DisplayName("2.1 No Authorization (401)")
         public void test1() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.delete(UserEnum.BY_ID.path + "1"))
+            mockMvc.perform(MockMvcRequestBuilders.delete(OngEnum.BY_ID.path + "1"))
                     .andExpect(status().isUnauthorized());
         }
 
         @Test
-        @DisplayName("2.2 ID Doesn't exist (404)")
+        @DisplayName("2.2 ID doesn't exists (404)")
         @WithMockUser(username = "testUser", password = "pass123")
         public void test2() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.delete(UserEnum.BY_ID.path + "1"))
+            mockMvc.perform(MockMvcRequestBuilders.delete(OngEnum.BY_ID.path + "10"))
                     .andExpect(status().isNotFound());
         }
     }

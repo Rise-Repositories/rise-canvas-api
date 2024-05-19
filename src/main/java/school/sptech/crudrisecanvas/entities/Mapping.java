@@ -23,7 +23,10 @@ public class Mapping {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer qtyPeople;
+    private Integer qtyAdults;
+    private Integer qtyChildren;
+    private String referencePoint;
+    private Boolean hasDisorders;
     private String description;
     private Double latitude;
     private Double longitude;

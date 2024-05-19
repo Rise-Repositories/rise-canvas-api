@@ -8,7 +8,10 @@ import school.sptech.crudrisecanvas.entities.Mapping;
 public class MappingMapper {
     public static Mapping toEntity(MappingRequestDto mappingRequestDto){
         Mapping mapping = new Mapping();
-        mapping.setQtyPeople(mappingRequestDto.getQtyPeople());
+        mapping.setQtyAdults(mappingRequestDto.getQtyAdults());
+        mapping.setQtyChildren(mappingRequestDto.getQtyChildren());
+        mapping.setReferencePoint(mappingRequestDto.getReferencePoint());
+        mapping.setHasDisorders(mappingRequestDto.getHasDisorders());
         mapping.setDescription(mappingRequestDto.getDescription());
         mapping.setLatitude(mappingRequestDto.getLatitude());
         mapping.setLongitude(mappingRequestDto.getLongitude());
@@ -18,7 +21,10 @@ public class MappingMapper {
     public static MappingResponseDto toDto(Mapping mapping){
         MappingResponseDto mappingResponse = new MappingResponseDto();
         mappingResponse.setId(mapping.getId());
-        mappingResponse.setQtyPeople(mapping.getQtyPeople());
+        mappingResponse.setQtyAdults(mapping.getQtyAdults());
+        mappingResponse.setQtyChildren(mapping.getQtyChildren());
+        mappingResponse.setHasDisorders(mapping.getHasDisorders());
+        mappingResponse.setReferencePoint(mapping.getReferencePoint());
         mappingResponse.setDescription(mapping.getDescription());
         mappingResponse.setLatitude(mapping.getLatitude());
         mappingResponse.setLongitude(mapping.getLongitude());
@@ -37,7 +43,10 @@ public class MappingMapper {
     public static MappingResponseNoRelationDto toNoRelationDto(Mapping mapping){
         MappingResponseNoRelationDto mappingResponse = new MappingResponseNoRelationDto();
         mappingResponse.setId(mapping.getId());
-        mappingResponse.setQtyPeople(mapping.getQtyPeople());
+        mappingResponse.setQtyAdults(mapping.getQtyAdults());
+        mappingResponse.setQtyChildren(mapping.getQtyChildren());
+        mappingResponse.setHasDisorders(mapping.getHasDisorders());
+        mappingResponse.setReferencePoint(mapping.getReferencePoint());
         mappingResponse.setDescription(mapping.getDescription());
         mappingResponse.setLatitude(mapping.getLatitude());
         mappingResponse.setLongitude(mapping.getLongitude());

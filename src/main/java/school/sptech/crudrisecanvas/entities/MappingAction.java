@@ -12,11 +12,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class MappingAction {
-
-    public MappingAction(Action action, Mapping mapping, int qtyServedPeople) {
+    public MappingAction(Action action, Mapping mapping, int qtyServedAdults, int qtyServedChildren, boolean noDonation, boolean noPeople, String description) {
         this.action = action;
         this.mapping = mapping;
-        this.qtyServedPeople = qtyServedPeople;
+        this.qtyServedAdults = qtyServedAdults;
+        this.qtyServedChildren = qtyServedChildren;
+        this.noDonation = noDonation;
+        this.noPeople = noPeople;
+        this.description = description;
     }
 
     @Id
@@ -29,5 +32,9 @@ public class MappingAction {
     @ManyToOne
     private Mapping mapping;
 
-    private int qtyServedPeople;
+    private int qtyServedAdults;
+    private int qtyServedChildren;
+    private Boolean noDonation;
+    private Boolean noPeople;
+    private String description;
 }

@@ -26,6 +26,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("ONG Service")
 class OngServiceTest {
 
     @InjectMocks
@@ -64,13 +65,10 @@ class OngServiceTest {
         void emptyTable() {
             List<Ong> lista = Collections.emptyList();
 
-            //when
             Mockito.when(repository.findAll()).thenReturn(lista);
 
-            //then
             List<Ong> ongs = service.getOngs();
 
-            //assert
             assertTrue(ongs.isEmpty());
         }
     }

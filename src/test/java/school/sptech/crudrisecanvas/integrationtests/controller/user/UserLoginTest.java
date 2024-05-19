@@ -1,4 +1,4 @@
-package school.sptech.crudrisecanvas.controller.user;
+package school.sptech.crudrisecanvas.integrationtests.controller.user;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -10,8 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import school.sptech.crudrisecanvas.utils.paths.BaseEnum;
-import school.sptech.crudrisecanvas.utils.paths.UserEnum;
+import school.sptech.crudrisecanvas.integrationtests.utils.paths.UserEnum;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,8 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Sql(scripts = "/data/truncate_table.sql",
         executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@DisplayName("User Creation")
-public class UserCreateTest {
+@DisplayName("User Login")
+public class UserLoginTest {
 
     @Nested
     @DisplayName("1. Valid scenarios")
@@ -33,7 +32,7 @@ public class UserCreateTest {
         private MockMvc mockMvc;
 
         @Test
-        @DisplayName("1.1 Correct User Data (201)")
+        @DisplayName("1.1 Correct login data (200)")
         public void test1() throws Exception {
 
             String json = """
@@ -45,9 +44,25 @@ public class UserCreateTest {
                     }""";
 
             mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.CREATE.path)
-                    .content(json)
-                    .contentType(MediaType.APPLICATION_JSON))
+                            .content(json)
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated());
+
+            String json2 = """
+                    {
+                        "email": "marcelo.soares@email.com",
+                        "password": "marcelo123"
+                    }""";
+
+            mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
+                            .content(json2)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.userId").isNumber())
+                    .andExpect(jsonPath("$.nome").value("Marcelo Soares"))
+                    .andExpect(jsonPath("$.email").value("marcelo.soares@email.com"))
+                    .andExpect(jsonPath("$.token").isNotEmpty())
+                    .andExpect(jsonPath("$.password").doesNotExist());
         }
     }
 
@@ -59,7 +74,7 @@ public class UserCreateTest {
         private MockMvc mockMvc;
 
         @Test
-        @DisplayName("2.1 Invalid CPF (400)")
+        @DisplayName("2.1 Incorrect email (401)")
         public void test1() throws Exception {
 
             String json = """
@@ -67,93 +82,53 @@ public class UserCreateTest {
                         "name": "Marcelo Soares",
                         "email": "marcelo.soares@email.com",
                         "password": "marcelo123",
-                        "cpf": "017.895.420-92"
+                        "cpf": "017.895.420-90"
                     }""";
 
             mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.CREATE.path)
                             .content(json)
                             .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest());
-        }
-
-        @Test
-        @DisplayName("2.2 Duplicate CPF (409)")
-        public void test2() throws Exception {
-
-            String json1 = """
-                    {
-                        "name": "Marcelo Soares",
-                        "email": "marcelo.soares@email.com",
-                        "password": "marcelo123",
-                        "cpf": "017.895.420-90"
-                    }""";
-
-            mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.CREATE.path)
-                            .content(json1)
-                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated());
 
             String json2 = """
                     {
-                        "name": "João Silva",
-                        "email": "joao.silva@email.com",
-                        "password": "joao@99",
-                        "cpf": "017.895.420-90"
+                        "email": "marcelo.silva@email.com",
+                        "password": "marcelo123"
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.CREATE.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
                             .content(json2)
                             .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isConflict());
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
-        @DisplayName("2.1 Invalid e-mail (400)")
-        public void test3() throws Exception {
+        @DisplayName("2.2 Incorrect password (401)")
+        public void test2() throws Exception {
 
             String json = """
                     {
                         "name": "Marcelo Soares",
-                        "email": "marcelo.soaresemail.com",
+                        "email": "marcelo.soares@email.com",
                         "password": "marcelo123",
-                        "cpf": "017.895.420-92"
+                        "cpf": "017.895.420-90"
                     }""";
 
             mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.CREATE.path)
                             .content(json)
                             .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest());
-        }
-
-        @Test
-        @DisplayName("2.4 Duplicate e-mail (409)")
-        public void test4() throws Exception {
-
-            String json1 = """
-                    {
-                        "name": "Marcelo Soares",
-                        "email": "marcelo.soares@email.com",
-                        "password": "marcelo123",
-                        "cpf": "017.895.420-90"
-                    }""";
-
-            mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.CREATE.path)
-                            .content(json1)
-                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated());
 
             String json2 = """
                     {
-                        "name": "João Silva",
                         "email": "marcelo.soares@email.com",
-                        "password": "joao@99",
-                        "cpf": "017.895.420-90"
+                        "password": "senha123"
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.CREATE.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
                             .content(json2)
                             .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isConflict());
+                    .andExpect(status().isUnauthorized());
         }
     }
 }

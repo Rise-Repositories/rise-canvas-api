@@ -1,4 +1,4 @@
-package school.sptech.crudrisecanvas.utils.paths;
+package school.sptech.crudrisecanvas.integrationtests.utils.paths;
 
 public enum OngEnum {
 

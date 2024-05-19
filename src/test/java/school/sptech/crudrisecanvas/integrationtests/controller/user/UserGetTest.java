@@ -1,4 +1,4 @@
-package school.sptech.crudrisecanvas.controller.ong;
+package school.sptech.crudrisecanvas.integrationtests.controller.user;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,8 +11,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import school.sptech.crudrisecanvas.utils.paths.OngEnum;
-import school.sptech.crudrisecanvas.utils.paths.UserEnum;
+import school.sptech.crudrisecanvas.integrationtests.utils.paths.UserEnum;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,10 +20,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 //@ActiveProfiles("test")
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@Sql(scripts = {"/data/truncate_table.sql", "/data/add_ong.sql"},
+@Sql(scripts = {"/data/truncate_table.sql", "/data/add_user.sql"},
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@DisplayName("ONG Get")
-public class OngGetTest {
+@DisplayName("User Get")
+public class UserGetTest {
 
     @Nested
     @DisplayName("1. Valid scenarios")
@@ -38,16 +37,14 @@ public class OngGetTest {
         @WithMockUser(username = "testUser", password = "pass123")
         public void test1() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.get(OngEnum.BY_ID.path + "1")
+            mockMvc.perform(MockMvcRequestBuilders.get(UserEnum.BY_ID.path + "1")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value("1"))
-                    .andExpect(jsonPath("$.address").value("R. Claudino Barbosa, 248, Macedo"))
-                    .andExpect(jsonPath("$.cep").value("07113040"))
-                    .andExpect(jsonPath("$.cnpj").value("20.438.196/0001-08"))
-                    .andExpect(jsonPath("$.description").value("Promover a integração social entre voluntários e crianças através de uma experiência inédita a fim de torná-las pessoas melhores."))
-                    .andExpect(jsonPath("$.name").value("Hamburgada do Bem"))
-                    .andExpect(jsonPath("$.status").value("PENDING"));
+                    .andExpect(jsonPath("$.name").value("Ana Silva"))
+                    .andExpect(jsonPath("$.email").value("ana@email.com"))
+                    .andExpect(jsonPath("$.cpf").value("106.873.500-77"))
+                    .andExpect(jsonPath("$.password").doesNotExist());
         }
     }
 
@@ -62,7 +59,7 @@ public class OngGetTest {
         @DisplayName("2.1 No Authorization (401)")
         public void test1() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.get(OngEnum.BY_ID.path + "1")
+            mockMvc.perform(MockMvcRequestBuilders.get(UserEnum.BY_ID.path + "1")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isUnauthorized());
         }
@@ -72,7 +69,7 @@ public class OngGetTest {
         @WithMockUser(username = "testUser", password = "pass123")
         public void test2() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.get(OngEnum.BY_ID.path + "10")
+            mockMvc.perform(MockMvcRequestBuilders.get(UserEnum.BY_ID.path + "10")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound());
         }

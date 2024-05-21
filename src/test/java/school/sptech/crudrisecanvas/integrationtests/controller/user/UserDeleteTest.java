@@ -1,4 +1,4 @@
-package school.sptech.crudrisecanvas.controller.user;
+package school.sptech.crudrisecanvas.integrationtests.controller.user;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,19 +11,18 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import school.sptech.crudrisecanvas.utils.paths.UserEnum;
+import school.sptech.crudrisecanvas.integrationtests.utils.paths.UserEnum;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 //@ActiveProfiles("test")
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@Sql(scripts = {"/data/truncate_table.sql", "/data/add_user.sql"},
-        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@DisplayName("User Get")
-public class UserGetTest {
+@Sql(scripts = "/data/truncate_table.sql",
+        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@DisplayName("User Delete")
+public class UserDeleteTest {
 
     @Nested
     @DisplayName("1. Valid scenarios")
@@ -33,18 +32,25 @@ public class UserGetTest {
         private MockMvc mockMvc;
 
         @Test
-        @DisplayName("1.1 Correct ID (200)")
+        @DisplayName("1.1 Correct ID (204)")
         @WithMockUser(username = "testUser", password = "pass123")
         public void test1() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.get(UserEnum.BY_ID.path + "1")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.id").value("1"))
-                    .andExpect(jsonPath("$.name").value("Ana Silva"))
-                    .andExpect(jsonPath("$.email").value("ana@email.com"))
-                    .andExpect(jsonPath("$.cpf").value("106.873.500-77"))
-                    .andExpect(jsonPath("$.password").doesNotExist());
+            String json = """
+                    {
+                        "name": "Marcelo Soares",
+                        "email": "marcelo.soares@email.com",
+                        "password": "marcelo123",
+                        "cpf": "017.895.420-90"
+                    }""";
+
+            mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.CREATE.path)
+                    .content(json)
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isCreated());
+
+            mockMvc.perform(MockMvcRequestBuilders.delete(UserEnum.BY_ID.path + "1"))
+                    .andExpect(status().isNoContent());
         }
     }
 
@@ -59,18 +65,16 @@ public class UserGetTest {
         @DisplayName("2.1 No Authorization (401)")
         public void test1() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.get(UserEnum.BY_ID.path + "1")
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(MockMvcRequestBuilders.delete(UserEnum.BY_ID.path + "1"))
                     .andExpect(status().isUnauthorized());
         }
 
         @Test
-        @DisplayName("2.2 ID doesn't exist (404)")
+        @DisplayName("2.2 ID Doesn't exist (404)")
         @WithMockUser(username = "testUser", password = "pass123")
         public void test2() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.get(UserEnum.BY_ID.path + "10")
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(MockMvcRequestBuilders.delete(UserEnum.BY_ID.path + "1"))
                     .andExpect(status().isNotFound());
         }
     }

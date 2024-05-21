@@ -6,4 +6,6 @@ import school.sptech.crudrisecanvas.entities.Ong;
 
 public interface OngRepository extends JpaRepository<Ong, Integer>{
     boolean existsByCnpj(String cnpj);
+
+    boolean existsByCnpjAndIdNot(String cnpj, Integer id);
 }

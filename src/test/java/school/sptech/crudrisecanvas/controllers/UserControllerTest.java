@@ -611,8 +611,251 @@ class UserControllerTest {
         }
     }
 
-    @Test
-    void updateUser() {
+    @Nested
+    @DisplayName("updateUser()")
+    public class updateUser {
+
+
+        @Nested
+        @SpringBootTest
+        @AutoConfigureMockMvc
+        @DisplayName("F. 400 - Bad Requests")
+        public class badRequests {
+
+            @Autowired
+            private MockMvc mockMvc;
+
+            @Test
+            @DisplayName("Nome nulo")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void nameIsNull() throws Exception {
+
+                String json = """
+                        {
+                            "email": "marcelo.soares@email.com",
+                            "cpf": "017.895.420-90"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("Nome vazio")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void nameIsEmpty() throws Exception {
+
+                String json = """
+                        {
+                            "name": "",
+                            "email": "marcelo.soares@email.com",
+                            "cpf": "017.895.420-90"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("Nome em branco")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void nameIsBlank() throws Exception {
+
+                String json = """
+                        {
+                            "name": "             ",
+                            "email": "marcelo.soares@email.com",
+                            "cpf": "017.895.420-90"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("E-mail nulo")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void emailIsNull() throws Exception {
+
+                String json = """
+                        {
+                            "name": "Marcelo Soares",
+                            "cpf": "017.895.420-90"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("E-mail vazio")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void emailIsEmpty() throws Exception {
+
+                String json = """
+                        {
+                            "name": "Marcelo Soares",
+                            "email": "",
+                            "cpf": "017.895.420-90"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("E-mail em branco")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void emailIsBlank() throws Exception {
+
+                String json = """
+                        {
+                            "name": "Marcelo Soares",
+                            "email": "           ",
+                            "cpf": "017.895.420-90"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("E-mail sem @")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void emailNoAt() throws Exception {
+
+                String json = """
+                        {
+                            "name": "Marcelo Soares",
+                            "email": "marcelo.soaresemail.com",
+                            "cpf": "017.895.420-90"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("E-mail sem usuário")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void emailNoUser() throws Exception {
+
+                String json = """
+                        {
+                            "name": "Marcelo Soares",
+                            "email": "@email.com",
+                            "cpf": "017.895.420-90"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("E-mail sem domínio")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void emailNoDomain() throws Exception {
+
+                String json = """
+                        {
+                            "name": "Marcelo Soares",
+                            "email": "marcelo.soares@",
+                            "cpf": "017.895.420-90"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("CPF nulo")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void cpfIsNull() throws Exception {
+
+                String json = """
+                        {
+                            "name": "Marcelo Soares",
+                            "email": "marcelo.soares@email.com"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("CPF vazio")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void cpfIsEmpty() throws Exception {
+
+                String json = """
+                        {
+                            "name": "Marcelo Soares",
+                            "email": "marcelo.soares@email.com",
+                            "cpf": ""
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("CPF em branco")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void cpfIsBlank() throws Exception {
+
+                String json = """
+                        {
+                            "name": "Marcelo Soares",
+                            "email": "marcelo.soares@email.com",
+                            "cpf": "           "
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("CPF inválido")
+            @WithMockUser(username = "marcelo.soares@email.com", password = "marcelo123")
+            void cpfInvalid() throws Exception {
+
+                String json = """
+                        {
+                            "name": "Marcelo Soares",
+                            "email": "marcelo.soares@email.com",
+                            "cpf": "017.895.420-86"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
     }
 
     @Nested

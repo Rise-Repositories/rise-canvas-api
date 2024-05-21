@@ -10,9 +10,9 @@ public class UserMocks {
     public static User getUser() {
         User user = new User();
         user.setId(1);
-        user.setName("marcelo");
+        user.setName("Marcelo Soares");
         user.setEmail("marcelo.soares@email.com");
-        user.setCpf("123.456.789-10");
+        user.setCpf("017.895.420-90");
         return user;
     }
 

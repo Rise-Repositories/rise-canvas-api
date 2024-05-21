@@ -39,6 +39,6 @@ public class ActionMocks {
     }
 
     public static List<Action> getActionList() {
-        return (ArrayList<Action>) List.of(getAction(), getAction2());
+        return List.of(getAction(), getAction2());
     }
 }

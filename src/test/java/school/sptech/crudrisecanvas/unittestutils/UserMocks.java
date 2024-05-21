@@ -19,10 +19,10 @@ public class UserMocks {
     public static User getAuthUser() {
         User user = new User();
         user.setId(1);
-        user.setName("marcelo");
+        user.setName("Marcelo Soares");
         user.setEmail("marcelo.soares@email.com");
         user.setPassword("$2a$10$1LVW48XLAeC7pg8cJJlHNeYD5pILhE1iNZjEYH3aAE3jvaoiQmo2m");
-        user.setCpf("123.456.789-10");
+        user.setCpf("017.895.420-90");
         return user;
     }
 

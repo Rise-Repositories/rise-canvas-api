@@ -204,7 +204,7 @@ class OngServiceTest {
 
             ConflictException exception = assertThrows(
                     ConflictException.class,
-                    () -> service.updateOng(id, newOng)
+                    () -> spyService.updateOng(id, newOng)
             );
 
             assertEquals("Já existe uma ONG com este CNPJ", exception.getLocalizedMessage());

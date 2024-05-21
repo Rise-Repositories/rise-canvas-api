@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -21,6 +22,7 @@ import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.service.MappingService;
+import school.sptech.crudrisecanvas.utils.Coordinates;
 
 @RestController
 @RequestMapping("/mapping")
@@ -29,10 +31,14 @@ public class MappingController {
     private final MappingService mappingService;
 
     @GetMapping
-    public ResponseEntity<List<MappingResponseDto>> getMappings(){
-        List<MappingResponseDto> mappings = MappingMapper.toDto(mappingService.getMappings());
+    public ResponseEntity<List<MappingResponseDto>> getMappings(@RequestParam("coordinates") String coordinates, @RequestParam("radius") Double radius){
+
+        Coordinates coords = new Coordinates(coordinates);
+
+        List<MappingResponseDto> mappings = MappingMapper.toDto(mappingService.getMappings(coords, radius));
+
         if(mappings.isEmpty()){
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(204).build();
         }
 
         return ResponseEntity.status(200).body(mappings);

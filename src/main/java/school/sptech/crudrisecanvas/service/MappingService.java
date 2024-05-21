@@ -12,6 +12,7 @@ import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
+import school.sptech.crudrisecanvas.utils.Coordinates;
 import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 
 @Service
@@ -21,8 +22,12 @@ public class MappingService {
     private final MappingRepository mappingRepository;
     private final UserService userService;
 
-    public List<Mapping> getMappings(){
-        return mappingRepository.findAll();
+    public List<Mapping> getMappings(Coordinates coordinates, Double radius){
+        return mappingRepository.findWhenInsideArea(
+            coordinates.getLatitude(), 
+            coordinates.getLongitude(), 
+            radius
+        );
     }
 
     public Mapping getMappingById(Integer id){

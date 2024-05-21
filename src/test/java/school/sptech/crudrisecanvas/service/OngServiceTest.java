@@ -44,7 +44,7 @@ class OngServiceTest {
 
         @Test
         @DisplayName("V. Quando banco possui ONGs, deve retornar lista preenchida")
-        void getOngs() {
+        void tableHasData() {
             List<Ong> lista = OngMocks.getOngList();
 
             Mockito.when(repository.findAll()).thenReturn(lista);
@@ -85,13 +85,13 @@ class OngServiceTest {
 
             Mockito.when(repository.findById(id)).thenReturn(Optional.of(ong));
 
-            Ong ongRetornada = service.getOngById(id);
+            Ong returnedOng = service.getOngById(id);
 
-            assertEquals(ong.getId(), ongRetornada.getId());
-            assertEquals(ong.getName(), ongRetornada.getName());
-            assertEquals(ong.getCnpj(), ongRetornada.getCnpj());
-            assertEquals(ong.getCep(), ongRetornada.getCep());
-            assertEquals(ong.getAddress(), ongRetornada.getAddress());
+            assertEquals(ong.getId(), returnedOng.getId());
+            assertEquals(ong.getName(), returnedOng.getName());
+            assertEquals(ong.getCnpj(), returnedOng.getCnpj());
+            assertEquals(ong.getCep(), returnedOng.getCep());
+            assertEquals(ong.getAddress(), returnedOng.getAddress());
         }
 
         @Test

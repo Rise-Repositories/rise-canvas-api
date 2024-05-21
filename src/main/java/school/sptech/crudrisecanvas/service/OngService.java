@@ -56,6 +56,10 @@ public class OngService {
     public Ong updateOng(int id, Ong ong) {
         Ong ongToUpdate = this.getOngById(id);
 
+        if(ongRepository.existsByCnpjAndIdNot(ong.getCnpj(), id)){
+            throw new ConflictException("CNPJ já cadastrado");
+        }
+
         ongToUpdate.setName(ong.getName());
         ongToUpdate.setCnpj(ong.getCnpj());
         ongToUpdate.setCep(ong.getCep());

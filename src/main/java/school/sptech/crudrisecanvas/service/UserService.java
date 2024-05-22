@@ -30,10 +30,10 @@ public class UserService {
 
     public void register(User newUser) {
         if(this.userRepository.existsByEmail(newUser.getEmail())){
-            throw new ConflictException("Já existe um usuário com este email");
+            throw new ConflictException("E-mail já cadastrado");
         }
         if(this.userRepository.existsByCpf(newUser.getCpf())){
-            throw new ConflictException("Já existe um usuário com este CPF");
+            throw new ConflictException("CPF já cadastrado");
         }
 
         String passwordHash = passwordEncoder.encode(newUser.getPassword());
@@ -89,7 +89,7 @@ public class UserService {
         if(
             this.userRepository.existsByEmailAndIdNot(userToUpdate.getEmail(), id)
         ){
-            throw new ConflictException("Já existe um usuário com este email");
+            throw new ConflictException("Já existe um usuário com este e-mail");
         }
 
         userToUpdate.setName(user.getName());

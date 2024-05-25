@@ -30,7 +30,7 @@ public class MappingController {
 
     @GetMapping
     public ResponseEntity<List<MappingResponseDto>> getMappings(){
-        List<MappingResponseDto> mappings = MappingMapper.toDto(mappingService.getMappings());
+        List<MappingResponseDto> mappings = MappingMapper.toResponse(mappingService.getMappings());
         if(mappings.isEmpty()){
             return ResponseEntity.status(404).build();
         }
@@ -42,7 +42,7 @@ public class MappingController {
     public ResponseEntity<MappingResponseDto> getMappingById(@PathVariable Integer id){
         Mapping mapping = mappingService.getMappingById(id);
 
-        MappingResponseDto response = MappingMapper.toDto(mapping);
+        MappingResponseDto response = MappingMapper.toResponse(mapping);
 
         return ResponseEntity.status(200).body(response);
     }
@@ -51,7 +51,7 @@ public class MappingController {
     public ResponseEntity<MappingResponseDto> createMapping(@RequestBody @Valid MappingRequestDto mappingDto, @RequestHeader HashMap<String,String> headers){
         Mapping mapping = MappingMapper.toEntity(mappingDto);
 
-        MappingResponseDto response = MappingMapper.toDto(
+        MappingResponseDto response = MappingMapper.toResponse(
             mappingService.createMapping(mapping, headers.get("authorization").substring(7))
         );
 
@@ -62,7 +62,7 @@ public class MappingController {
     public ResponseEntity<MappingResponseDto> updateMapping(@PathVariable Integer id, @RequestBody MappingRequestDto mappingDto){
         Mapping mapping = MappingMapper.toEntity(mappingDto);
 
-        MappingResponseDto response = MappingMapper.toDto(
+        MappingResponseDto response = MappingMapper.toResponse(
             mappingService.updateMapping(id, mapping)
         );
 
@@ -77,7 +77,7 @@ public class MappingController {
 
     @PostMapping("/{id}/add-user/{userId}")
     public ResponseEntity<MappingResponseDto> addUser(@PathVariable("id") Integer id,@PathVariable("userId") Integer userId){
-        MappingResponseDto response = MappingMapper.toDto(
+        MappingResponseDto response = MappingMapper.toResponse(
             mappingService.addUser(id, userId)
         );
 

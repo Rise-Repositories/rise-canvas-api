@@ -90,7 +90,7 @@ public class ActionController {
     ){
         MappingAction mappingAction = MappingActionMapper.toEntity(mappingActionDto);
 
-        MappingActionResponseDto response = MappingActionMapper.toDto(
+        MappingActionResponseDto response = MappingActionMapper.toResponse(
             actionService.addMapping(id, mappingId, mappingAction)
         );
 

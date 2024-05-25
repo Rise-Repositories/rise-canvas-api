@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Sql(scripts = {"/data/truncate_table.sql", "/data/add_user.sql"},
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@DisplayName("User Get")
+@DisplayName("Integration Test - User Get")
 public class UserGetTest {
 
     @Nested

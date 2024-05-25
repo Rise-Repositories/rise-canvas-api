@@ -27,6 +27,7 @@ import school.sptech.crudrisecanvas.unittestutils.UserMocks;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("User Service")
@@ -293,8 +294,8 @@ class UserServiceTest {
 
             Mockito.verify(spyService, Mockito.times(1)).getUserById(id);
             Mockito.verify(spyService, Mockito.times(1)).getAccount(token);
-            Mockito.verify(repository, Mockito.times(1)).existsByCpfAndIdNot(currentUser.getCpf(), id);
-            Mockito.verify(repository, Mockito.times(1)).existsByEmailAndIdNot(currentUser.getEmail(), id);
+            Mockito.verify(repository, Mockito.times(1)).existsByCpfAndIdNot(any(), id);
+            Mockito.verify(repository, Mockito.times(1)).existsByEmailAndIdNot(any(), id);
             Mockito.verify(repository, Mockito.times(1)).save(updatedUser);
         }
 

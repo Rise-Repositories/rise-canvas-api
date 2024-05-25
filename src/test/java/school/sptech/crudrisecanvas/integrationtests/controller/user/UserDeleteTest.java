@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Sql(scripts = "/data/truncate_table.sql",
         executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@DisplayName("User Delete")
+@DisplayName("Integration Test - User Delete")
 public class UserDeleteTest {
 
     @Nested

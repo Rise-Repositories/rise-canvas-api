@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Sql(scripts = "/data/truncate_table.sql",
         executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@DisplayName("User Login")
+@DisplayName("Integration Test - User Login")
 public class UserLoginTest {
 
     @Nested

@@ -2,14 +2,9 @@ package school.sptech.crudrisecanvas.entities;
 
 
 import java.util.List;
+import java.util.Set;
 
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import school.sptech.crudrisecanvas.utils.Converters.VoluntaryRolesConvert;
@@ -39,6 +34,6 @@ public class Voluntary {
     @Convert(converter = VoluntaryRolesConvert.class)
     private VoluntaryRoles role;
 
-    @ManyToMany
-    private List<Action> actions;
+    @OneToMany(mappedBy = "voluntary")
+    private Set<ActionVoluntary> actions;
 }

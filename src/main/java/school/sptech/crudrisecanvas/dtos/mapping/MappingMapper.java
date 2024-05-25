@@ -4,6 +4,7 @@ import java.util.List;
 
 import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.entities.Mapping;
+import school.sptech.crudrisecanvas.entities.UserMapping;
 
 public class MappingMapper {
     public static Mapping toEntity(MappingRequestDto mappingRequestDto){
@@ -18,7 +19,7 @@ public class MappingMapper {
         return mapping;
     }
 
-    public static MappingResponseDto toDto(Mapping mapping){
+    public static MappingResponseDto toResponse(Mapping mapping){
         MappingResponseDto mappingResponse = new MappingResponseDto();
         mappingResponse.setId(mapping.getId());
         mappingResponse.setQtyAdults(mapping.getQtyAdults());
@@ -34,10 +35,10 @@ public class MappingMapper {
         return mappingResponse;
     }
 
-    public static List<MappingResponseDto> toDto(List<Mapping> mappings){
+    public static List<MappingResponseDto> toResponse(List<Mapping> mappings){
         return mappings == null
             ? null
-            : mappings.stream().map(MappingMapper::toDto).toList();
+            : mappings.stream().map(MappingMapper::toResponse).toList();
     }
     
     public static MappingResponseNoRelationDto toNoRelationDto(Mapping mapping){
@@ -56,9 +57,20 @@ public class MappingMapper {
     }
 
     public static List<MappingResponseNoRelationDto> toNoRelationDto(List<Mapping> mappings){
-        return mappings == null 
-            ? null 
-            : mappings.stream().map(MappingMapper::toNoRelationDto).toList();
+        return mappings == null
+                ? null
+                : mappings.stream().map(MappingMapper::toNoRelationDto).toList();
     }
-    
+
+    public static MappingResponseNoRelationDto toUserNoRelationDto(UserMapping userMapping){
+        Mapping mapping = userMapping.getMapping();
+        return toNoRelationDto(mapping);
+    }
+
+    public static List<MappingResponseNoRelationDto> toUserNoRelationDto(List<UserMapping> userMappings){
+        return userMappings == null
+                ? null
+                : userMappings.stream().map(MappingMapper::toUserNoRelationDto).toList();
+    }
+
 }

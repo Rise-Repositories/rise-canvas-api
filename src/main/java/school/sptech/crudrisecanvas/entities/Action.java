@@ -2,6 +2,7 @@ package school.sptech.crudrisecanvas.entities;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -37,8 +38,8 @@ public class Action {
     @JoinColumn(name = "ong_id")
     private Ong ong;
 
-    @ManyToMany(mappedBy = "actions")
-    private List<Voluntary> voluntaries;
+    @OneToMany(mappedBy = "actions")
+    private Set<ActionVoluntary> voluntaries;
 
     @OneToMany(mappedBy = "action")
     private List<MappingAction> mappingActions;

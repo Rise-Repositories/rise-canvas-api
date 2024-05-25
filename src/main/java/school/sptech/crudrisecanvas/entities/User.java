@@ -1,6 +1,7 @@
 package school.sptech.crudrisecanvas.entities;
 
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,11 +22,9 @@ public class User {
     private String password;
     private String cpf;
     private String address;
-
-    @ManyToMany(mappedBy = "users")
-    private List<Mapping> mapping;
+    private Voluntary voluntary;
 
     @OneToMany(mappedBy = "user")
-    private List<Voluntary> voluntary;
+    private List<UserMapping> mapping;
 
 }

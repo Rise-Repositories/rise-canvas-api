@@ -24,21 +24,21 @@ public class UserMapper {
         return user;
     }
 
-    public static UserResponseDto toDto(User user) {
+    public static UserResponseDto toResponse(User user) {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(user.getId());
         userResponseDto.setName(user.getName());
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setCpf(user.getCpf());
-        userResponseDto.setMapping(MappingMapper.toNoRelationDto(user.getMapping()));
+        userResponseDto.setMapping(MappingMapper.toUserNoRelationDto(user.getMapping()));
         userResponseDto.setVoluntary(VoluntaryMapper.toUserNoRelationDto(user.getVoluntary()));
         return userResponseDto;
     }
 
-    public static List<UserResponseDto> toDto(List<User> users) {
+    public static List<UserResponseDto> toResponse(List<User> users) {
         return users == null
             ? null
-            : users.stream().map(UserMapper::toDto).toList();
+            : users.stream().map(UserMapper::toResponse).toList();
     }
 
     public static UserResponseNoRelationDto toNoRelationDto(User user) {

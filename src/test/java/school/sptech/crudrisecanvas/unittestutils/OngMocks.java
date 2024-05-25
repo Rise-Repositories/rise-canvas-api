@@ -1,11 +1,9 @@
 package school.sptech.crudrisecanvas.unittestutils;
 
 import school.sptech.crudrisecanvas.entities.Ong;
-import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class OngMocks {

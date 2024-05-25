@@ -17,7 +17,6 @@ import school.sptech.crudrisecanvas.repositories.OngRepository;
 import school.sptech.crudrisecanvas.unittestutils.OngMocks;
 import school.sptech.crudrisecanvas.unittestutils.UserMocks;
 import school.sptech.crudrisecanvas.unittestutils.VoluntaryMocks;
-import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 
 import java.util.Collections;
 import java.util.List;

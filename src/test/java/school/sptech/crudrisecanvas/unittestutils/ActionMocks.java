@@ -3,7 +3,6 @@ package school.sptech.crudrisecanvas.unittestutils;
 import school.sptech.crudrisecanvas.entities.Action;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ActionMocks {

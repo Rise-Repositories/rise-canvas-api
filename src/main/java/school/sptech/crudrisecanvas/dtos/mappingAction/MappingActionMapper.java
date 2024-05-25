@@ -18,7 +18,7 @@ public class MappingActionMapper {
         return mappingAction;
     }
 
-    public static MappingActionResponseDto toDto(MappingAction mappingAction) {
+    public static MappingActionResponseDto toResponse(MappingAction mappingAction) {
         MappingActionResponseDto dto = new MappingActionResponseDto();
         dto.setId(mappingAction.getId());
         dto.setAction(ActionMapper.toNoRelation(mappingAction.getAction()));

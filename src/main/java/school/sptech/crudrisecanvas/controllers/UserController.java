@@ -54,7 +54,7 @@ public class UserController {
     public ResponseEntity<UserResponseDto> account(@RequestHeader HashMap<String,String> headers) {
         User user = usuarioService.getAccount(headers.get("authorization").substring(7));
         
-        UserResponseDto response = UserMapper.toDto(user);
+        UserResponseDto response = UserMapper.toResponse(user);
         return ResponseEntity.status(200).body(response);
     }
 
@@ -67,7 +67,7 @@ public class UserController {
     public ResponseEntity<UserResponseDto> getUser(@PathVariable int id) {
         User user = usuarioService.getUserById(id);
 
-        UserResponseDto userDto = UserMapper.toDto(user);
+        UserResponseDto userDto = UserMapper.toResponse(user);
 
         return ResponseEntity.status(200).body(userDto);
     }
@@ -86,7 +86,7 @@ public class UserController {
     ) {
         User user = UserMapper.toEntity(userDto);
 
-        UserResponseDto response = UserMapper.toDto(usuarioService.updateUser(id, user, headers.get("authorization").substring(7)));
+        UserResponseDto response = UserMapper.toResponse(usuarioService.updateUser(id, user, headers.get("authorization").substring(7)));
 
         return ResponseEntity.status(200).body(response);
     }

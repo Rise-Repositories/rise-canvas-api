@@ -17,7 +17,7 @@ public class ActionMocks {
         action.setLatitude(-23.564032);
         action.setLongitude(-46.752337);
         action.setOng(OngMocks.getOng());
-        action.setVoluntaries(List.of(VoluntaryMocks.getVoluntary()));
+        // action.setVoluntaries(List.of(VoluntaryMocks.getVoluntary()));
 
         return action;
     }
@@ -32,7 +32,7 @@ public class ActionMocks {
         action.setLatitude(-23.531682);
         action.setLongitude(-46.721047);
         action.setOng(OngMocks.getOng());
-        action.setVoluntaries(List.of(VoluntaryMocks.getVoluntary()));
+        // action.setVoluntaries(List.of(VoluntaryMocks.getVoluntary()));
 
         return action;
     }

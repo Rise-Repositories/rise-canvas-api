@@ -64,7 +64,7 @@ class MappingServiceTest {
             assertEquals(lista.get(0).getLongitude(), mappings.get(0).getLongitude());
             assertEquals(lista.get(0).getStatus(), mappings.get(0).getStatus());
             assertEquals(lista.get(0).getDate(), mappings.get(0).getDate());
-            assertEquals(lista.get(0).getUsers().get(0).getName(), mappings.get(0).getUsers().get(0).getName());
+            assertEquals(lista.get(0).getUsersMappings().get(0).getUser().getName(), mappings.get(0).getUsersMappings().get(0).getUser().getName());
         }
 
         @Test
@@ -104,7 +104,7 @@ class MappingServiceTest {
             assertEquals(mapping.getLongitude(), returnedMapping.getLongitude());
             assertEquals(mapping.getStatus(), returnedMapping.getStatus());
             assertEquals(mapping.getDate(), returnedMapping.getDate());
-            assertEquals(mapping.getUsers().get(0).getName(), returnedMapping.getUsers().get(0).getName());
+            assertEquals(mapping.getUsersMappings().get(0).getUser().getName(), returnedMapping.getUsersMappings().get(0).getUser().getName());
         }
 
         @Test
@@ -149,7 +149,7 @@ class MappingServiceTest {
             assertEquals(mapping.getLongitude(), returnedMapping.getLongitude());
             assertEquals(MappingStatus.ACTIVE, returnedMapping.getStatus());
             assertEquals(mapping.getDate(), returnedMapping.getDate());
-            assertEquals(user.getName(), returnedMapping.getUsers().get(0).getName());
+            assertEquals(user.getName(), returnedMapping.getUsersMappings().get(0).getUser().getName());
 
             Mockito.verify(mappingRepository, Mockito.times(1)).save(any());
         }
@@ -184,7 +184,7 @@ class MappingServiceTest {
             assertEquals(newMapping.getLongitude(), returnedMapping.getLongitude());
             assertEquals(MappingStatus.ACTIVE, returnedMapping.getStatus());
             assertEquals(newMapping.getDate(), returnedMapping.getDate());
-            assertEquals(newMapping.getUsers().get(0).getName(), returnedMapping.getUsers().get(0).getName());
+            assertEquals(newMapping.getUsersMappings().get(0).getUser().getName(), returnedMapping.getUsersMappings().get(0).getUser().getName());
 
             Mockito.verify(mappingRepository, Mockito.times(1)).save(any());
             Mockito.verify(spyService, Mockito.times(1)).getMappingById(id);

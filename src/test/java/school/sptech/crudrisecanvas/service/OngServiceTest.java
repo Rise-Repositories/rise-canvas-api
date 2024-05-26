@@ -139,7 +139,6 @@ class OngServiceTest {
         void repeatCnpj() {
             Ong ong = OngMocks.getOng();
             User user = UserMocks.getUser();
-            Voluntary voluntary = VoluntaryMocks.getVoluntary();
 
             Mockito.when(repository.existsByCnpj(ong.getCnpj())).thenReturn(true);
 

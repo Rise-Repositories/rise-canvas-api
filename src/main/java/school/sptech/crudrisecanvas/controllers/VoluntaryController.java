@@ -9,17 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.service.annotation.PatchExchange;
 
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryMapper;
-import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryOngResponseNoRelationDto;
+import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryOngResponseDto;
 import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryRequestDto;
 import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryRoleRequestDto;
 import school.sptech.crudrisecanvas.entities.Voluntary;
@@ -33,13 +30,13 @@ public class VoluntaryController {
     private final VoluntaryService voluntaryService;
 
     @GetMapping("/{ongId}")
-    public ResponseEntity<List<VoluntaryOngResponseNoRelationDto>> getVoluntary(
+    public ResponseEntity<List<VoluntaryOngResponseDto>> getVoluntary(
         @PathVariable Integer ongId,
         @RequestHeader HashMap<String, String> headers
     ){
         String token = headers.get("Authorization").substring(7);
 
-        List<VoluntaryOngResponseNoRelationDto> response = 
+        List<VoluntaryOngResponseDto> response = 
             VoluntaryMapper.toOngNoRelationDto(voluntaryService.getVoluntary(ongId, token));
 
         if(response.isEmpty()){
@@ -50,7 +47,7 @@ public class VoluntaryController {
     }
 
     @PostMapping("/{ongId}")
-    public ResponseEntity<VoluntaryOngResponseNoRelationDto> createVoluntary(
+    public ResponseEntity<VoluntaryOngResponseDto> createVoluntary(
         @RequestBody VoluntaryRequestDto voluntaryDto,
         @RequestHeader HashMap<String, String> headers,
         @PathVariable Integer ongId
@@ -59,7 +56,7 @@ public class VoluntaryController {
 
         Voluntary voluntary = VoluntaryMapper.toEntity(voluntaryDto);
 
-        VoluntaryOngResponseNoRelationDto response = 
+        VoluntaryOngResponseDto response = 
             VoluntaryMapper.toOngNoRelationDto(voluntaryService.createVoluntary(voluntary, ongId, token));
 
         return ResponseEntity.ok(response);
@@ -67,7 +64,7 @@ public class VoluntaryController {
     }
 
     @PostMapping("/{ongId}/{userId}")
-    public ResponseEntity<VoluntaryOngResponseNoRelationDto> createVoluntary(
+    public ResponseEntity<VoluntaryOngResponseDto> createVoluntary(
         @RequestBody VoluntaryRoleRequestDto roleDto,
         @RequestHeader HashMap<String, String> headers,
         @PathVariable Integer ongId,
@@ -76,21 +73,21 @@ public class VoluntaryController {
         String token = headers.get("Authorization").substring(7);
 
 
-        VoluntaryOngResponseNoRelationDto response = 
+        VoluntaryOngResponseDto response = 
             VoluntaryMapper.toOngNoRelationDto(voluntaryService.createVoluntary(roleDto.getRole(), ongId, userId, token));
 
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/role")
-    public ResponseEntity<VoluntaryOngResponseNoRelationDto> updateRole(
+    public ResponseEntity<VoluntaryOngResponseDto> updateRole(
         @RequestBody VoluntaryRoleRequestDto roleDto,
         @RequestHeader HashMap<String, String> headers,
         @PathVariable Integer id
     ){
         String token = headers.get("Authorization").substring(7);
 
-        VoluntaryOngResponseNoRelationDto response = 
+        VoluntaryOngResponseDto response = 
             VoluntaryMapper.toOngNoRelationDto(voluntaryService.updateRole(roleDto.getRole(), id, token));
 
         return ResponseEntity.ok(response);

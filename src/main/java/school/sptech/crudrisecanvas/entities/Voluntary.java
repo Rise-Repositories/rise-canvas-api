@@ -1,8 +1,6 @@
 package school.sptech.crudrisecanvas.entities;
 
-
 import java.util.List;
-import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -35,5 +33,5 @@ public class Voluntary {
     private VoluntaryRoles role;
 
     @OneToMany(mappedBy = "voluntary")
-    private Set<ActionVoluntary> actions;
+    private List<ActionVoluntary> actions;
 }

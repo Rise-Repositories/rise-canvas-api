@@ -22,7 +22,9 @@ public class User {
     private String password;
     private String cpf;
     private String address;
-    private Voluntary voluntary;
+    
+    @OneToMany(mappedBy = "user")
+    private List<Voluntary> voluntary;
 
     @OneToMany(mappedBy = "user")
     private List<UserMapping> mapping;

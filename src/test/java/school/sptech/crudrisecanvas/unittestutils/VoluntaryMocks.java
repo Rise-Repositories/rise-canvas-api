@@ -1,6 +1,5 @@
 package school.sptech.crudrisecanvas.unittestutils;
 
-import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.entities.Voluntary;
 import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 

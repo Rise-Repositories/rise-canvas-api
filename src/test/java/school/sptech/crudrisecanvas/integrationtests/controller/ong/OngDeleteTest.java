@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Sql(scripts = {"/data/truncate_table.sql", "/data/add_ong.sql"},
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@DisplayName("ONG Delete")
+@DisplayName("Integration Test - ONG Delete")
 public class OngDeleteTest {
 
     @Nested

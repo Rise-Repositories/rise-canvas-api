@@ -8,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
 import school.sptech.crudrisecanvas.entities.*;
 import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
@@ -103,7 +102,7 @@ class ActionServiceTest {
 
         @Test
         @DisplayName("F. Quando ID não existir, deve lançar NotFoundException")
-        void emptyTable() {
+        void idDoesntExists() {
             Integer id = 10;
 
             Mockito.when(repository.findById(id)).thenReturn(Optional.empty());
@@ -122,7 +121,7 @@ class ActionServiceTest {
     public class create {
         @Test
         @DisplayName("V. Quando dados forem válidos, deve criar uma ação")
-        void idExists() {
+        void validData() {
             Integer ongId = 1;
             String token = UserMocks.getToken();
             User user = UserMocks.getUserWithVoluntary();

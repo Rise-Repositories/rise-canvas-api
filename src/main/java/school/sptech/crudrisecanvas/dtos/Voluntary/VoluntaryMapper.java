@@ -7,7 +7,6 @@ import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.entities.Voluntary;
 
 public class VoluntaryMapper {
-
     public static Voluntary toEntity(VoluntaryRequestDto dto) {
         if(dto == null) return null;
         Voluntary voluntary = new Voluntary();
@@ -16,31 +15,42 @@ public class VoluntaryMapper {
         return voluntary;
     }
 
-    public static VoluntaryOngResponseNoRelationDto toOngNoRelationDto(Voluntary voluntary) {
+    public static VoluntaryOngResponseDto toOngNoRelationDto(Voluntary voluntary) {
         if(voluntary == null) return null;
-        VoluntaryOngResponseNoRelationDto dto = new VoluntaryOngResponseNoRelationDto();
+        VoluntaryOngResponseDto dto = new VoluntaryOngResponseDto();
         dto.setId(voluntary.getId());
         dto.setRole(voluntary.getRole());
         dto.setUser(UserMapper.toNoRelationDto(voluntary.getUser()));
         return dto;
     }
 
-    public static List<VoluntaryOngResponseNoRelationDto> toOngNoRelationDto(List<Voluntary> voluntaries) {
+    public static List<VoluntaryOngResponseDto> toOngNoRelationDto(List<Voluntary> voluntaries) {
         return voluntaries == null
             ? null 
             : voluntaries.stream().map(VoluntaryMapper::toOngNoRelationDto).toList();
     }
 
-    public static VoluntaryUserResponseNoRelationDto toUserNoRelationDto(Voluntary voluntary) {
+    public static VoluntaryUserResponseDto toUserNoRelationDto(Voluntary voluntary) {
         if(voluntary == null) return null;
-        VoluntaryUserResponseNoRelationDto dto = new VoluntaryUserResponseNoRelationDto();
+        VoluntaryUserResponseDto dto = new VoluntaryUserResponseDto();
         dto.setId(voluntary.getId());
         dto.setRole(voluntary.getRole());
         dto.setOng(OngMapper.toNoRelationDto(voluntary.getOng()));
         return dto;
     }
 
-    public static List<VoluntaryUserResponseNoRelationDto> toUserNoRelationDto(List<Voluntary> voluntaries) {
+    public static VoluntaryResponseDto toResponse(Voluntary voluntary){
+        if(voluntary == null) return null;
+        VoluntaryResponseDto dto = new VoluntaryResponseDto();
+        dto.setId(voluntary.getId());
+        dto.setRole(voluntary.getRole());
+        dto.setOng(OngMapper.toNoRelationDto(voluntary.getOng()));
+        dto.setUser(UserMapper.toNoRelationDto(voluntary.getUser()));
+        return dto;
+    }
+
+
+    public static List<VoluntaryUserResponseDto> toUserNoRelationDto(List<Voluntary> voluntaries) {
         return voluntaries == null
             ? null 
             : voluntaries.stream().map(VoluntaryMapper::toUserNoRelationDto).toList();

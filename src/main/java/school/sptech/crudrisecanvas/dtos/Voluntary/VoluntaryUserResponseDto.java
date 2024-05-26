@@ -5,7 +5,7 @@ import school.sptech.crudrisecanvas.dtos.ong.OngResponseNoRelationDto;
 import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 
 @Data
-public class VoluntaryUserResponseNoRelationDto {
+public class VoluntaryUserResponseDto {
     
     private int id;
     private VoluntaryRoles role;

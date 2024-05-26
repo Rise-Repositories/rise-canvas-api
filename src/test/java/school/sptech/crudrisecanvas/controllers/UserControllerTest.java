@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,10 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import school.sptech.crudrisecanvas.dtos.user.UserLoginDto;
 import school.sptech.crudrisecanvas.dtos.user.UserRequestDto;
 import school.sptech.crudrisecanvas.dtos.user.UserResponseDto;
@@ -26,8 +23,6 @@ import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.integrationtests.utils.paths.UserEnum;
 import school.sptech.crudrisecanvas.service.UserService;
 import school.sptech.crudrisecanvas.unittestutils.UserMocks;
-
-import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

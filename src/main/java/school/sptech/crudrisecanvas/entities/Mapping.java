@@ -2,6 +2,7 @@ package school.sptech.crudrisecanvas.entities;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -10,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 import school.sptech.crudrisecanvas.utils.Converters.MappingStatusConvert;
@@ -37,8 +37,8 @@ public class Mapping {
     @CreationTimestamp
     private LocalDate date;
 
-    @ManyToMany
-    private List<User> users;
+    @OneToMany(mappedBy = "mapping")
+    private Set<UserMapping> users;
 
     @OneToMany(mappedBy = "mapping")
     private List<MappingAction> mappingActions;

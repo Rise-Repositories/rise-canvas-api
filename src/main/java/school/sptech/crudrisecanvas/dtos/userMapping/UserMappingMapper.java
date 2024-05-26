@@ -1,7 +1,7 @@
 package school.sptech.crudrisecanvas.dtos.userMapping;
 
 import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
-import school.sptech.crudrisecanvas.dtos.user.UserResponseDto;
+import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.entities.UserMapping;
@@ -20,11 +20,10 @@ public class UserMappingMapper {
 
     public static UserMappingDto toResponse(UserMapping userMapping){
         if(userMapping == null) return null;
-
-        UserResponseDto result = new UserResponseDto();
+        UserMappingDto result = new UserMappingDto();
         result.setId(userMapping.getId());
         result.setMapping(MappingMapper.toResponse(userMapping.getMapping()));
-//        result.setMapping(MappingMapper.toResponse(userMapping.getMapping()));
+        result.setUser(UserMapper.toResponse(userMapping.getUser()));
 
         return result;
     }

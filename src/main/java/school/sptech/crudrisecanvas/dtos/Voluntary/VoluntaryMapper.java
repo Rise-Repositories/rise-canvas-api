@@ -7,6 +7,14 @@ import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.entities.Voluntary;
 
 public class VoluntaryMapper {
+    public static Voluntary toEntity(VoluntaryRequestDto dto) {
+        if(dto == null) return null;
+        Voluntary voluntary = new Voluntary();
+        voluntary.setRole(dto.getRole());
+        voluntary.setUser(UserMapper.toEntity(dto.getUser()));
+        return voluntary;
+    }
+
     public static VoluntaryOngResponseDto toOngNoRelationDto(Voluntary voluntary) {
         if(voluntary == null) return null;
         VoluntaryOngResponseDto dto = new VoluntaryOngResponseDto();

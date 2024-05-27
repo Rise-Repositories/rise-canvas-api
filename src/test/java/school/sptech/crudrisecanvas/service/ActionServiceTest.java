@@ -59,7 +59,7 @@ class ActionServiceTest {
             assertEquals(lista.get(0).getLatitude(), actions.get(0).getLatitude());
             assertEquals(lista.get(0).getLongitude(), actions.get(0).getLongitude());
             assertEquals(lista.get(0).getOng(), actions.get(0).getOng());
-            assertEquals(lista.get(0).getVoluntaries(), actions.get(0).getVoluntaries());
+            assertEquals(lista.get(0).getActionVoluntaries(), actions.get(0).getActionVoluntaries().get(0).getVoluntary());
         }
 
         @Test
@@ -97,7 +97,7 @@ class ActionServiceTest {
             assertEquals(action.getLongitude(), returnedAction.getLongitude());
             assertEquals(action.getLatitude(), returnedAction.getLatitude());
             assertEquals(action.getOng(), returnedAction.getOng());
-            assertEquals(action.getVoluntaries(), returnedAction.getVoluntaries());
+            assertEquals(action.getActionVoluntaries(), returnedAction.getActionVoluntaries());
         }
 
         @Test
@@ -139,7 +139,7 @@ class ActionServiceTest {
             assertEquals(action.getLongitude(), returnedAction.getLongitude());
             assertEquals(action.getLatitude(), returnedAction.getLatitude());
             assertEquals(action.getOng(), returnedAction.getOng());
-            assertEquals(action.getVoluntaries(), returnedAction.getVoluntaries());
+            assertEquals(action.getActionVoluntaries(), returnedAction.getActionVoluntaries());
 
             Mockito.verify(repository, Mockito.times(1)).save(action);
         }

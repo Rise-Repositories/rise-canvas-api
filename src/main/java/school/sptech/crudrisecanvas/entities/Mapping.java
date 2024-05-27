@@ -2,7 +2,6 @@ package school.sptech.crudrisecanvas.entities;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -38,7 +37,7 @@ public class Mapping {
     private LocalDate date;
 
     @OneToMany(mappedBy = "mapping")
-    private Set<UserMapping> users;
+    private List<UserMapping> usersMappings;
 
     @OneToMany(mappedBy = "mapping")
     private List<MappingAction> mappingActions;

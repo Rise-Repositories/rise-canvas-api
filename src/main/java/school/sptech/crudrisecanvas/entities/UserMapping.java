@@ -5,12 +5,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class UserMapping {
+
+    public UserMapping(User user, Mapping mapping) {
+        this.user = user;
+        this.mapping = mapping;
+    }
 
     @Id
     private int id;

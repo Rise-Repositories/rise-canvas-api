@@ -1,7 +1,6 @@
 package school.sptech.crudrisecanvas.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -31,7 +30,7 @@ public class VoluntaryService {
             throw new ForbiddenException("Você não tem permissão para acessar essa ONG");
         }
 
-        return voluntaryRepository.findAllByOngId();
+        return voluntaryRepository.findAllByOngId(ongId);
     }
 
     public Voluntary createVoluntary(VoluntaryRoles role, Integer ongId, Integer userId, String token){

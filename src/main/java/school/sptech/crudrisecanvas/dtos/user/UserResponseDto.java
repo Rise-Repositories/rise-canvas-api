@@ -13,5 +13,5 @@ public class UserResponseDto {
     private String email;
     private String cpf;
     private List<MappingResponseNoRelationDto> mapping;
-    private VoluntaryUserResponseDto voluntary;
+    private List<VoluntaryUserResponseDto> voluntary;
 }

@@ -14,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import school.sptech.crudrisecanvas.api.configuration.security.jwt.JwtTokenManager;
-import school.sptech.crudrisecanvas.dtos.user.UserDetailsDto;
 import school.sptech.crudrisecanvas.dtos.user.UserLoginDto;
 import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
 import school.sptech.crudrisecanvas.entities.User;
@@ -121,8 +120,6 @@ class UserServiceTest {
             );
 
             User user = UserMocks.getUser();
-
-            UserDetailsDto detailsDto = new UserDetailsDto(user);
 
             final Authentication authentication = authenticationManager.authenticate(credentials);
 
@@ -245,7 +242,6 @@ class UserServiceTest {
             String token = UserMocks.getToken();
             String email = "marcelo.soares@email.com";
 
-            User user = UserMocks.getUser();
 
             Mockito.when(gerenciadorTokenJwt.getUsernameFromToken(token)).thenReturn(email);
             Mockito.when(repository.findByEmail(email)).thenReturn(Optional.empty());

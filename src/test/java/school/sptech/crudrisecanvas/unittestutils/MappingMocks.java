@@ -21,7 +21,7 @@ public class MappingMocks {
         mapping.setLongitude(-46.721047);
         mapping.setStatus(MappingStatus.ACTIVE);
         mapping.setDate(LocalDate.of(2024, 5, 19));
-        mapping.setUsers(List.of(UserMocks.getUser()));
+        mapping.setUsersMappings(List.of());
 
         return mapping;
     }
@@ -39,7 +39,7 @@ public class MappingMocks {
         mapping.setLongitude(-46.724012);
         mapping.setStatus(MappingStatus.ACTIVE);
         mapping.setDate(LocalDate.of(2024, 3, 8));
-        mapping.setUsers(List.of(UserMocks.getUser()));
+        mapping.setUsersMappings(List.of(UserMappingMocks.getUserMapping()));
 
         return mapping;
     }
@@ -61,7 +61,7 @@ public class MappingMocks {
         mapping.setLongitude(-46.721047);
         mapping.setStatus(null);
         mapping.setDate(LocalDate.of(2024, 5, 19));
-        mapping.setUsers(null);
+        mapping.setUsersMappings(List.of(UserMappingMocks.getUserMapping(), UserMappingMocks.getUserMapping2()));
 
         return mapping;
     }

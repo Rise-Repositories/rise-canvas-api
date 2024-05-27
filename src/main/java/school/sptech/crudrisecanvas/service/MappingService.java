@@ -1,6 +1,5 @@
 package school.sptech.crudrisecanvas.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.User;
+import school.sptech.crudrisecanvas.entities.UserMapping;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
@@ -17,7 +17,9 @@ import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 @Service
 @RequiredArgsConstructor
 public class MappingService {
+    // TODO: use service instead of repository
     private final MappingActionRepository mappingActionRepository;
+    private final UserMappingService userMappingService;
     private final MappingRepository mappingRepository;
     private final UserService userService;
 
@@ -36,8 +38,11 @@ public class MappingService {
 
     public Mapping createMapping(Mapping mapping, String token){
         User user = userService.getAccount(token);
+
+        UserMapping userMapping = userMappingService.createRelation(user, mapping);
         
-        mapping.setUsers(List.of(user));
+        
+        mapping.setUsersMappings(List.of(userMapping));
         mapping.setStatus(MappingStatus.ACTIVE);
 
         return mappingRepository.save(mapping);
@@ -70,14 +75,10 @@ public class MappingService {
         Mapping mapping = this.getMappingById(id);
         User user = userService.getUserById(userId);
 
-        List<User> users = mapping.getUsers() == null 
-            ? new ArrayList<>() 
-            : mapping.getUsers();
+        Mapping response = mappingRepository.save(mapping);
 
-        users.add(user);
+        userMappingService.createRelation(user, response);
 
-        mapping.setUsers(users);
-
-        return mappingRepository.save(mapping);
+        return response;
     }
 }

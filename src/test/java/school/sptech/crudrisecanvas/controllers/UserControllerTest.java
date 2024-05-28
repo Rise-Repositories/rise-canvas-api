@@ -42,7 +42,7 @@ class UserControllerTest {
     @DisplayName("register()")
     public class register {
         @Test
-        @DisplayName("Quando dados forem válidos, deve chamar service e retornar 201")
+        @DisplayName("V. Quando dados forem válidos, deve chamar service e retornar 201")
         void validData() throws Exception {
 
             User user = new User();

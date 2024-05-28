@@ -1,6 +1,7 @@
 package school.sptech.crudrisecanvas.unittestutils;
 
 import school.sptech.crudrisecanvas.entities.Action;
+import school.sptech.crudrisecanvas.entities.ActionVoluntary;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +18,8 @@ public class ActionMocks {
         action.setLatitude(-23.564032);
         action.setLongitude(-46.752337);
         action.setOng(OngMocks.getOng());
-        // action.setVoluntaries(List.of(VoluntaryMocks.getVoluntary()));
+        action.setActionVoluntaries(List.of(ActionVoluntaryMocks.getActionVoluntaryNoAction()));
+
 
         return action;
     }

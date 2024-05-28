@@ -6,6 +6,8 @@ import school.sptech.crudrisecanvas.entities.Action;
 import school.sptech.crudrisecanvas.entities.ActionVoluntary;
 import school.sptech.crudrisecanvas.entities.Voluntary;
 
+import java.util.List;
+
 public class ActionVoluntaryMapper {
 
     public static ActionVoluntary toEntity(Action action, Voluntary voluntary) {
@@ -27,5 +29,38 @@ public class ActionVoluntaryMapper {
         result.setVoluntary(VoluntaryMapper.toResponse(actionVoluntary.getVoluntary()));
 
         return result;
+    }
+
+    public static ActionVoluntaryVoluntaryResponseDto toVoluntary(ActionVoluntary actionVoluntary){
+        if(actionVoluntary == null)return null;
+
+        ActionVoluntaryVoluntaryResponseDto result = new ActionVoluntaryVoluntaryResponseDto();
+        result.setId(actionVoluntary.getId());
+        result.setVoluntary(VoluntaryMapper.toResponse(actionVoluntary.getVoluntary()));
+
+        return result;
+    }
+
+    public static List<ActionVoluntaryVoluntaryResponseDto> toVoluntary(List<ActionVoluntary> actionVoluntaries){
+        return actionVoluntaries == null
+                ? null
+                : actionVoluntaries.stream().map(ActionVoluntaryMapper::toVoluntary).toList();
+
+    }
+
+    public static ActionVoluntaryActionResponseDto toAction(ActionVoluntary actionVoluntary){
+        if(actionVoluntary == null) return null;
+
+        ActionVoluntaryActionResponseDto result = new ActionVoluntaryActionResponseDto();
+        result.setId(actionVoluntary.getId());
+        result.setAction(ActionMapper.toResponse(actionVoluntary.getAction()));
+
+        return result;
+    }
+
+    public static List<ActionVoluntaryActionResponseDto> toAction(List<ActionVoluntary> actionVoluntaries){
+        return actionVoluntaries == null
+                ? null
+                : actionVoluntaries.stream().map(ActionVoluntaryMapper::toAction).toList();
     }
 }

@@ -16,6 +16,7 @@ import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.ActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
 import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
+import school.sptech.crudrisecanvas.utils.adpters.MailValue;
 
 @Service
 @RequiredArgsConstructor
@@ -80,22 +81,21 @@ public class ActionService {
         Integer mappingId,
         MappingAction mappingActionBody
     ){
-        // EmailConfig emailConfig = new EmailConfig();
-
         Action action = this.getById(id);
         Mapping mapping = mappingService.getMappingById(mappingId);
 
         mappingActionBody.setAction(action);
         mappingActionBody.setMapping(mapping);
 
-        //TODO: Enviar email para usuario somente quando finalizar a ação
-
-        // mapping.get().getUsers().stream().forEach(user -> {
-        //     emailConfig.sendEmail(
-        //         user.getEmail(),
-        //         "Rise Canvas - Seu pin foi atendido",
-        //         "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.get().getName() + " foi realizada e atendeu " + mappingActionBody.getQtyServedPeople() + " pessoas.");
-        // });
+        mapping.getUsers().stream().forEach(user -> {
+            ScheduleService.add(
+                new MailValue(
+                    user.getEmail(),
+                    "Rise Canvas - Seu pin foi atendido",
+                    "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.getName() + " foi realizada e atendeu " + (mappingActionBody.getQtyServedAdults() + mappingActionBody.getQtyServedChildren()) + " pessoas."
+                )
+            );
+        });
 
         return mappingActionRepository.save(mappingActionBody);
     }

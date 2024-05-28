@@ -16,6 +16,7 @@ import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.ActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
 import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
+import school.sptech.crudrisecanvas.utils.adpters.MailValue;
 
 @Service
 @RequiredArgsConstructor
@@ -87,7 +88,13 @@ public class ActionService {
         mappingActionBody.setMapping(mapping);
 
         mapping.getUsers().stream().forEach(user -> {
-            ScheduleService.add(user.getEmail(), action, mappingActionBody);
+            ScheduleService.add(
+                new MailValue(
+                    user.getEmail(),
+                    "Rise Canvas - Seu pin foi atendido",
+                    "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.getName() + " foi realizada e atendeu " + (mappingActionBody.getQtyServedAdults() + mappingActionBody.getQtyServedChildren()) + " pessoas."
+                )
+            );
         });
 
         return mappingActionRepository.save(mappingActionBody);

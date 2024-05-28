@@ -18,6 +18,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import school.sptech.crudrisecanvas.dtos.ong.OngRequestDto;
+import school.sptech.crudrisecanvas.dtos.ong.OngRequestUpdateDto;
 import school.sptech.crudrisecanvas.dtos.ong.OngResponseDto;
 import school.sptech.crudrisecanvas.dtos.user.UserRequestDto;
 import school.sptech.crudrisecanvas.entities.Ong;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -510,11 +512,295 @@ class OngControllerTest {
         }
     }
 
-    @Test
-    void updateOng() {
+    @Nested
+    @DisplayName("updateOng()")
+    public class updateOng {
+
+        @Test
+        @DisplayName("V. Quando dados forem válidos, deve chamar service e retornar 200")
+        void validData() throws Exception {
+            Integer id = 1;
+
+            OngRequestUpdateDto ongReqDto = new OngRequestUpdateDto();
+            ongReqDto.setName("Instituto A Corrente do Bem");
+            ongReqDto.setCnpj("44.454.154/0001-29");
+            ongReqDto.setCep("04446060");
+            ongReqDto.setAddress("232");
+
+            Ong ong = OngMocks.getOng();
+
+            Mockito.when(service.updateOng(eq(id), any())).thenReturn(ong);
+
+            ResponseEntity<OngResponseDto> response = controller.updateOng(id, ongReqDto);
+            OngResponseDto returnedOng = response.getBody();
+
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+            assertEquals(ong.getId(), returnedOng.getId());
+            assertEquals(ong.getName(), returnedOng.getName());
+            assertEquals(ong.getCnpj(), returnedOng.getCnpj());
+            assertEquals(ong.getCep(), returnedOng.getCep());
+            assertEquals(ong.getAddress(), returnedOng.getAddress());
+
+            Mockito.verify(service, Mockito.times(1)).updateOng(eq(id), any());
+        }
+
+        @Nested
+        @SpringBootTest
+        @AutoConfigureMockMvc
+        @DisplayName("F. 400 - Bad Requests")
+        public class badRequests {
+
+            @Autowired
+            private MockMvc mockMvc;
+
+            @Test
+            @DisplayName("Nome nulo")
+            @WithMockUser
+            void nameIsNull() throws Exception {
+                String json = """
+                        {
+                            "cnpj": "44.454.154/0001-29",
+                            "cep": "04446060",
+                            "address": "232"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("Nome vazio")
+            @WithMockUser
+            void nameIsEmpty() throws Exception {
+                String json = """
+                        {
+                            "name": "",
+                            "cnpj": "44.454.154/0001-29",
+                            "cep": "04446060",
+                            "address": "232"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("Nome em branco")
+            @WithMockUser
+            void nameIsBlank() throws Exception {
+                String json = """
+                        {
+                            "name": "           ",
+                            "cnpj": "44.454.154/0001-29",
+                            "cep": "04446060",
+                            "address": "232"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("CNPJ nulo")
+            @WithMockUser
+            void cnpjIsNull() throws Exception {
+                String json = """
+                        {
+                            "name": "Instituto a corrente do bem",
+                            "cep": "04446060",
+                            "address": "232"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("CNPJ vazio")
+            @WithMockUser
+            void cnpjIsEmpty() throws Exception {
+                String json = """
+                        {
+                            "name": "Instituto a corrente do bem",
+                            "cnpj": "",
+                            "cep": "04446060",
+                            "address": "232"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("CNPJ em branco")
+            @WithMockUser
+            void cnpjIsBlank() throws Exception {
+                String json = """
+                        {
+                            "name": "Instituto a corrente do bem",
+                            "cnpj": "                ",
+                            "cep": "04446060",
+                            "address": "232"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("CEP nulo")
+            @WithMockUser
+            void cepIsNull() throws Exception {
+                String json = """
+                        {
+                            "name": "Instituto a corrente do bem",
+                            "cnpj": "44.454.154/0001-29",
+                            "address": "232"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("CEP vazio")
+            @WithMockUser
+            void cepIsEmpty() throws Exception {
+                String json = """
+                        {
+                            "name": "Instituto a corrente do bem",
+                            "cnpj": "44.454.154/0001-29",
+                            "cep": "",
+                            "address": "232"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("CEP vazio")
+            @WithMockUser
+            void cepIsBlank() throws Exception {
+                String json = """
+                        {
+                            "name": "Instituto a corrente do bem",
+                            "cnpj": "44.454.154/0001-29",
+                            "cep": "        ",
+                            "address": "232"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("CEP inválido")
+            @WithMockUser
+            void invalidCep() throws Exception {
+                String json = """
+                        {
+                            "name": "Instituto a corrente do bem",
+                            "cnpj": "44.454.154/0001-29",
+                            "cep": "00000000",
+                            "address": "232"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("Endereço nulo")
+            @WithMockUser
+            void addressIsNull() throws Exception {
+                String json = """
+                        {
+                            "name": "Instituto a corrente do bem",
+                            "cnpj": "44.454.154/0001-29",
+                            "cep": "04446060"
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("Endereço vazio")
+            @WithMockUser
+            void addressIsEmpty() throws Exception {
+                String json = """
+                        {
+                            "name": "Instituto a corrente do bem",
+                            "cnpj": "44.454.154/0001-29",
+                            "cep": "04446060",
+                            "address": ""
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("Endereço em branco")
+            @WithMockUser
+            void addressIsBlank() throws Exception {
+                String json = """
+                        {
+                            "name": "Instituto a corrente do bem",
+                            "cnpj": "44.454.154/0001-29",
+                            "cep": "04446060",
+                            "address": "    "
+                        }""";
+
+                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
     }
 
-    @Test
-    void deleteOng() {
+    @Nested
+    @DisplayName("deleteOng()")
+    public class deleteOng {
+
+        @Test
+        @DisplayName("Quando id existir, deve retornar 204")
+        void deleteOng() {
+            Integer id = 1;
+            Mockito.doNothing().when(service).deleteOng(id);
+
+            ResponseEntity<Void> response = controller.deleteOng(id);
+
+            assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+            Mockito.verify(service, Mockito.times(1)).deleteOng(id);
+        }
+
+
     }
 }

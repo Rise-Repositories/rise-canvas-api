@@ -92,7 +92,7 @@ class OngControllerTest {
     public class getOng {
 
         @Test
-        @DisplayName("Quando ID existir, deve retornar a ONG")
+        @DisplayName("V. Quando ID existir, deve retornar a ONG")
         void validId() {
             Integer id = 1;
             Ong ong = OngMocks.getOng();

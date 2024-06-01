@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
@@ -152,6 +154,23 @@ class MappingServiceTest {
             assertEquals(user.getName(), returnedMapping.getUsersMappings().get(0).getUser().getName());
 
             Mockito.verify(mappingRepository, Mockito.times(1)).save(any());
+        }
+
+        @Test
+        @DisplayName("F. Quando houver 0 adultos e 0 crianças, deve retornar 400")
+        void noPerson() {
+            Mapping mapping = MappingMocks.getCreationMapping();
+            mapping.setQtyAdults(0);
+            mapping.setQtyChildren(0);
+            String token = UserMocks.getToken();
+
+            ResponseStatusException exception = assertThrows(
+                    ResponseStatusException.class,
+                    () -> service.createMapping(mapping, token)
+            );
+
+            assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+            assertEquals("É necessário que haja pelo menos 1 pessoa no local", exception.getLocalizedMessage());
         }
     }
 

@@ -87,10 +87,10 @@ public class ActionService {
         mappingActionBody.setAction(action);
         mappingActionBody.setMapping(mapping);
 
-        mapping.getUsers().stream().forEach(user -> {
+        mapping.getUsersMappings().stream().forEach(userMapping -> {
             ScheduleService.add(
                 new MailValue(
-                    user.getEmail(),
+                    userMapping.getUser().getEmail(),
                     "Rise Canvas - Seu pin foi atendido",
                     "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.getName() + " foi realizada e atendeu " + (mappingActionBody.getQtyServedAdults() + mappingActionBody.getQtyServedChildren()) + " pessoas."
                 )

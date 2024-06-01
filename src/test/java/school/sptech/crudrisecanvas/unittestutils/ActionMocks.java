@@ -1,5 +1,6 @@
 package school.sptech.crudrisecanvas.unittestutils;
 
+import school.sptech.crudrisecanvas.dtos.action.ActionRequestDto;
 import school.sptech.crudrisecanvas.entities.Action;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,8 @@ public class ActionMocks {
         action.setLatitude(-23.564032);
         action.setLongitude(-46.752337);
         action.setOng(OngMocks.getOng());
-        // action.setVoluntaries(List.of(VoluntaryMocks.getVoluntary()));
+        action.setActionVoluntaries(List.of(ActionVoluntaryMocks.getActionVoluntaryNoAction()));
+
 
         return action;
     }
@@ -39,5 +41,18 @@ public class ActionMocks {
 
     public static List<Action> getActionList() {
         return List.of(getAction(), getAction2());
+    }
+
+    public static ActionRequestDto getActionRequestDto() {
+        ActionRequestDto action = new ActionRequestDto();
+
+        action.setName("R. Jacques Gabriel, 260");
+        action.setDescription("Doação de cestas básicas");
+        action.setDateTimeStart(LocalDateTime.of(2024, 5, 15, 10, 30, 0));
+        action.setDateTimeEnd(LocalDateTime.of(2024, 5, 15, 17, 0, 0));
+        action.setLatitude(-23.564032);
+        action.setLongitude(-46.752337);
+
+        return action;
     }
 }

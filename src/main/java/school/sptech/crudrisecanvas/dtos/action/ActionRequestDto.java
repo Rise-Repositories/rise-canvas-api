@@ -14,10 +14,10 @@ public class ActionRequestDto {
     private String description;
 
     @FutureOrPresent
-    private LocalDateTime datetimeStart;
+    private LocalDateTime dateTimeStart;
 
     @Future
-    private LocalDateTime datetimeEnd;
+    private LocalDateTime dateTimeEnd;
 
     private Double longitude;
     private Double latitude;

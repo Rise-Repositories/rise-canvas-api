@@ -19,6 +19,18 @@ public class OngMocks {
         return ong;
     }
 
+    public static Ong getOng2() {
+        Ong ong = new Ong();
+        ong.setId(2);
+        ong.setName("Teto");
+        ong.setCnpj("76852512000148");
+        ong.setCep("01223010");
+        ong.setAddress("56");
+        ong.setStatus(OngStatus.PENDING);
+
+        return ong;
+    }
+
 
     public static List<Ong> getOngList() {
         List<Ong> ongList = new ArrayList<>();

@@ -11,8 +11,8 @@ public class ActionMapper {
         Action action = new Action();
         action.setName(actionRequestDto.getName());
         action.setDescription(actionRequestDto.getDescription());
-        action.setDatetimeStart(actionRequestDto.getDatetimeStart());
-        action.setDatetimeEnd(actionRequestDto.getDatetimeEnd());
+        action.setDatetimeStart(actionRequestDto.getDateTimeStart());
+        action.setDatetimeEnd(actionRequestDto.getDateTimeEnd());
         action.setLatitude(actionRequestDto.getLatitude());
         action.setLongitude(actionRequestDto.getLongitude());
         return action;

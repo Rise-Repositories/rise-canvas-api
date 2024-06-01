@@ -1,5 +1,6 @@
 package school.sptech.crudrisecanvas.unittestutils;
 
+import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestDto;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 
@@ -62,6 +63,21 @@ public class MappingMocks {
         mapping.setStatus(null);
         mapping.setDate(LocalDate.of(2024, 5, 19));
         mapping.setUsersMappings(List.of(UserMappingMocks.getUserMapping(), UserMappingMocks.getUserMapping2()));
+
+        return mapping;
+    }
+
+
+    public static MappingRequestDto getMappingRequestDto() {
+        MappingRequestDto mapping = new MappingRequestDto();
+
+        mapping.setQtyAdults(2);
+        mapping.setQtyChildren(0);
+        mapping.setReferencePoint("Muro verde");
+        mapping.setHasDisorders(false);
+        mapping.setDescription("Dois adultos");
+        mapping.setLatitude(-23.531682);
+        mapping.setLongitude(-46.721047);
 
         return mapping;
     }

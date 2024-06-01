@@ -16,6 +16,24 @@ public class UserMocks {
         return user;
     }
 
+    public static User getUser2() {
+        User user = new User();
+        user.setId(2);
+        user.setName("Ana Soares");
+        user.setEmail("ana.soares@email.com");
+        user.setCpf("080.277.410-50");
+        return user;
+    }
+
+    public static User getUser3() {
+        User user = new User();
+        user.setId(3);
+        user.setName("José Soares");
+        user.setEmail("jose.soares@email.com");
+        user.setCpf("336.089.690-47");
+        return user;
+    }
+
     public static User getAuthUser() {
         User user = new User();
         user.setId(1);
@@ -33,6 +51,20 @@ public class UserMocks {
     public static User getUserWithVoluntary() {
         User user = getUser();
         Voluntary voluntary = VoluntaryMocks.getVoluntary();
+        user.setVoluntary(List.of(voluntary));
+        return user;
+    }
+
+    public static User getUserWithVoluntary2() {
+        User user = getUser2();
+        Voluntary voluntary = VoluntaryMocks.getVoluntary2();
+        user.setVoluntary(List.of(voluntary));
+        return user;
+    }
+
+    public static User getUserWithVoluntary3() {
+        User user = getUser3();
+        Voluntary voluntary = VoluntaryMocks.getVoluntary3();
         user.setVoluntary(List.of(voluntary));
         return user;
     }

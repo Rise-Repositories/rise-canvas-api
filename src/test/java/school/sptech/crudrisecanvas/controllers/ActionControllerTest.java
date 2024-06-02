@@ -121,7 +121,7 @@ class ActionControllerTest {
     public class createAction {
 
         @Test
-        @DisplayName("V. QUando dados forem válidos, deve chamar service e retornar 201")
+        @DisplayName("V. Quando dados forem válidos, deve chamar service e retornar 201")
         void validData() throws Exception {
             ActionRequestDto actionReqDto = ActionMocks.getActionRequestDto();
             Action action = ActionMocks.getAction();
@@ -133,16 +133,16 @@ class ActionControllerTest {
             Mockito.when(service.create(any(), any(), any())).thenReturn(action);
 
             ResponseEntity<ActionResponseDto> response = controller.createAction(actionReqDto, ongId, hashMap);
-            ActionResponseDto returnedACtion = response.getBody();
+            ActionResponseDto returnedAction = response.getBody();
 
             assertEquals(HttpStatus.CREATED, response.getStatusCode());
-            assertEquals(action.getId(), returnedACtion.getId());
-            assertEquals(action.getName(), returnedACtion.getName());
-            assertEquals(action.getDescription(), returnedACtion.getDescription());
-            assertEquals(action.getDatetimeStart(), returnedACtion.getDatetimeStart());
-            assertEquals(action.getDatetimeEnd(), returnedACtion.getDatetimeEnd());
-            assertEquals(action.getLatitude(), returnedACtion.getLatitude());
-            assertEquals(action.getLongitude(), returnedACtion.getLongitude());
+            assertEquals(action.getId(), returnedAction.getId());
+            assertEquals(action.getName(), returnedAction.getName());
+            assertEquals(action.getDescription(), returnedAction.getDescription());
+            assertEquals(action.getDatetimeStart(), returnedAction.getDatetimeStart());
+            assertEquals(action.getDatetimeEnd(), returnedAction.getDatetimeEnd());
+            assertEquals(action.getLatitude(), returnedAction.getLatitude());
+            assertEquals(action.getLongitude(), returnedAction.getLongitude());
 
             Mockito.verify(service, Mockito.times(1)).create(any(), any(), any());
         }

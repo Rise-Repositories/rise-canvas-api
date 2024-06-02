@@ -1,5 +1,6 @@
 package school.sptech.crudrisecanvas.unittestutils;
 
+import school.sptech.crudrisecanvas.dtos.user.UserRequestDto;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.entities.Voluntary;
 
@@ -66,6 +67,17 @@ public class UserMocks {
         User user = getUser3();
         Voluntary voluntary = VoluntaryMocks.getVoluntary3();
         user.setVoluntary(List.of(voluntary));
+        return user;
+    }
+
+    public static UserRequestDto getUserRequestDto() {
+        UserRequestDto user = new UserRequestDto();
+
+        user.setName("Marcelo Soares");
+        user.setEmail("marcelo.soares@email.com");
+        user.setCpf("017.895.420-90");
+        user.setPassword("Senha@123");
+
         return user;
     }
 }

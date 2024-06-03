@@ -3,6 +3,8 @@ package school.sptech.crudrisecanvas.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -46,6 +48,13 @@ public class MappingService {
         mapping.setStatus(MappingStatus.ACTIVE);
 
         return mappingRepository.save(mapping);
+    }
+
+    public void addUser(Integer mappingId, String token){
+        User user = userService.getAccount(token);
+        Mapping mapping = this.getMappingById(mappingId);
+
+        userMappingService.createRelation(user, mapping);
     }
 
     public Mapping updateMapping(Integer id, Mapping mapping){

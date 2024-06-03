@@ -3,6 +3,8 @@ package school.sptech.crudrisecanvas.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -21,10 +23,10 @@ import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 @RequiredArgsConstructor
 public class ActionService {
     private final UserService userService;
-    private final MappingService mappingService;
     private final ActionRepository actionRepository;
     private final MappingActionRepository mappingActionRepository;
-    
+    private final MappingService mappingService;
+
     public List<Action> getAll(){
         List<Action> actions = actionRepository.findAll();
         return actions;

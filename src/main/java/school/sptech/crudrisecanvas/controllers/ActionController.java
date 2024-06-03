@@ -20,12 +20,16 @@ import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.action.ActionRequestDto;
 import school.sptech.crudrisecanvas.dtos.action.ActionMapper;
 import school.sptech.crudrisecanvas.dtos.action.ActionResponseDto;
+import school.sptech.crudrisecanvas.dtos.actionVoluntary.ActionVoluntaryDto;
+import school.sptech.crudrisecanvas.dtos.actionVoluntary.ActionVoluntaryMapper;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionRequestDto;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseDto;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionMapper;
 import school.sptech.crudrisecanvas.entities.Action;
+import school.sptech.crudrisecanvas.entities.ActionVoluntary;
 import school.sptech.crudrisecanvas.entities.MappingAction;
 import school.sptech.crudrisecanvas.service.ActionService;
+import school.sptech.crudrisecanvas.service.ActionVoluntaryService;
 
 @RestController
 @RequestMapping("/actions")
@@ -33,6 +37,7 @@ import school.sptech.crudrisecanvas.service.ActionService;
 public class ActionController {
 
     private final ActionService actionService;
+    private final ActionVoluntaryService actionVoluntaryService;
 
     @GetMapping
     public ResponseEntity<List<ActionResponseDto>> getActions(){
@@ -65,6 +70,23 @@ public class ActionController {
 
         ActionResponseDto actionResponse = ActionMapper.toResponse(createdAction);
         return ResponseEntity.status(201).body(actionResponse);
+    }
+
+    @PostMapping("actionVoluntary/{actionId}")
+    public ResponseEntity<ActionVoluntaryDto> createActionVoluntary(
+            @PathVariable Integer actionId,
+        @RequestHeader HashMap<String, String> header
+    ){
+        ActionVoluntary createActionVoluntary = actionVoluntaryService.createRelation(actionId, header.get("authorization").substring(7));
+
+        ActionVoluntaryDto actionVoluntaryResponse = ActionVoluntaryMapper.toResponse(createActionVoluntary);
+        return ResponseEntity.status(201).body(actionVoluntaryResponse);
+    }
+
+    @DeleteMapping("actionVoluntary/{relationId}")
+    public ResponseEntity<Void> deleteRelation(@PathVariable Integer relationId){
+        actionVoluntaryService.deleteRelation(relationId);
+        return ResponseEntity.status(204).build();
     }
 
     @PutMapping("/{id}")

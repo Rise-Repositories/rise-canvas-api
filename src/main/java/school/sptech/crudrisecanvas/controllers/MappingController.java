@@ -19,14 +19,22 @@ import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
+import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingDto;
+import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingMapper;
 import school.sptech.crudrisecanvas.entities.Mapping;
+import school.sptech.crudrisecanvas.entities.User;
+import school.sptech.crudrisecanvas.entities.UserMapping;
 import school.sptech.crudrisecanvas.service.MappingService;
+import school.sptech.crudrisecanvas.service.UserMappingService;
+import school.sptech.crudrisecanvas.service.UserService;
 
 @RestController
 @RequestMapping("/mapping")
 @RequiredArgsConstructor
 public class MappingController {
     private final MappingService mappingService;
+    private final UserService userService;
+    private final UserMappingService userMappingService;
 
     @GetMapping
     public ResponseEntity<List<MappingResponseDto>> getMappings(){
@@ -56,6 +64,21 @@ public class MappingController {
         );
 
         return ResponseEntity.status(201).body(response);
+    }
+
+    @PostMapping("userMapping/{mappingId}/{userId}")
+    public ResponseEntity<UserMappingDto> createUserMapping(
+            @PathVariable Integer mappingId,
+            @PathVariable Integer userId,
+            @RequestHeader HashMap<String, String> headers
+    ){
+        Mapping mapping = mappingService.getMappingById(mappingId);
+        User user = userService.getUserById(userId);
+
+        UserMapping userMapping = userMappingService.createRelation(user, mapping);
+
+        UserMappingDto userMappingResponse = UserMappingMapper.toResponse(userMapping);
+        return ResponseEntity.status(201).body(userMappingResponse);
     }
 
     @PutMapping("/{id}")

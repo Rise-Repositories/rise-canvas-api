@@ -1,0 +1,26 @@
+--INSERT INTO User (id_user, name, email, password, cpf, address)
+--VALUES (1, 'John Doe', 'john.doe@example.com', 'password123', '12345678901', '123 Main St');
+--
+--INSERT INTO Mapping (id_mapping, qty_adults, qty_children, reference_point, latitude, longitude, status, date,
+--has_disorders, description)
+--VALUES (1, 10, 5, 'Park Entrance', 34.0522, -118.2437, 'active', '2024-05-29 10:00:00', 0, 'Regular checkup');
+--
+--INSERT INTO User_Mapping (mapping_fk, user_fk)
+--VALUES (1, 1);
+--
+--INSERT INTO Ong (id_ong, name, cep, address, cnpj, status)
+--VALUES (1, 'Helping Hands', '12345678', '456 Charity Ave', '9876543210001', 'active');
+--
+--INSERT INTO 'Action' (id_action, name, date, description, ong_fk)
+--VALUES (1, 'Food Distribution', '2024-06-01', 'Distributing food to homeless people', 1);
+--
+--INSERT INTO Mapping_Action (Mapping_id_mapping, Action_id_action, qty_served_adults, qty_served_children, no_donation,
+-- no_people, description)
+--VALUES (1, 1, 30, 20, 0, 10, 'Successful action');
+--
+--INSERT INTO Volutary (user_fk, ong_fk, role)
+--VALUES (1, 1, 'Coordinator');
+--
+--INSERT INTO Action_Volutary (id_action, id_user, id_ong)
+--VALUES (1, 1, 1);
+

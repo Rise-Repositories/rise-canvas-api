@@ -8,9 +8,11 @@ import lombok.Data;
 
 @Data
 public class MappingRequestDto {
+    @NotNull
     @Positive
     private Integer qtyAdults;
 
+    @NotNull
     @Positive
     private Integer qtyChildren;
 
@@ -21,10 +23,12 @@ public class MappingRequestDto {
 
     private String description;
 
+    @NotNull
     @DecimalMax("90")
     @DecimalMin("-90")
     private Double latitude;
 
+    @NotNull
     @DecimalMax("180")
     @DecimalMin("-180")
     private Double longitude;

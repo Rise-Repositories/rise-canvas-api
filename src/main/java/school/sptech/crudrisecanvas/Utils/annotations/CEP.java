@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Target( { ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CEP {
-    String message() default "Falha ViaCEP";
+    String message() default "CEP inválido";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

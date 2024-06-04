@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CNPJ;
+import school.sptech.crudrisecanvas.Utils.annotations.CEP;
 
 @Data
 public class OngRequestUpdateDto {
@@ -15,9 +16,10 @@ public class OngRequestUpdateDto {
     private String cnpj;
 
     @NotBlank
-    @Size(min = 8, max = 8)
+    @Size(min = 8, max = 9)
+    @CEP
     private String cep;
-    
+
     @NotBlank
     private String address;
 }

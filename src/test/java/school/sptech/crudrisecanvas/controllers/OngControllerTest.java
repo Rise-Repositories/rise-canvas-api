@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ONG Controller")
-class OngControllerTest {
+class   OngControllerTest {
 
     @InjectMocks
     private OngController controller;
@@ -68,7 +68,7 @@ class OngControllerTest {
             assertEquals(ongs.get(0).getCep(), returnedOngs.get(0).getCep());
             assertEquals(ongs.get(0).getAddress(), returnedOngs.get(0).getAddress());
 
-            Mockito.verify(controller, Mockito.times(1)).getOngs();
+            Mockito.verify(service, Mockito.times(1)).getOngs();
         }
 
         @Test

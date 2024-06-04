@@ -17,7 +17,9 @@ import school.sptech.crudrisecanvas.exception.ConflictException;
 import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.UserRepositary;
+import school.sptech.crudrisecanvas.utils.adpters.MailValue;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -48,6 +50,44 @@ public class UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = gerenciadorTokenJwt.generateToken(authentication);
         return UserMapper.toTokenDto(UserAutenticado, token);
+    }
+
+    public void recover(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new NotFoundException("Email do usuário não cadastrado"));
+
+        LocalDateTime limiteTime = LocalDateTime.now().plusMinutes(10);
+
+        user.setAllowedToUpdate(limiteTime);
+
+        userRepository.save(user);
+
+        ScheduleService.add(
+            new MailValue(
+                email,
+                "Recuperação de senha",
+                String.format("""
+                    <h1>Olá, deseja alterar sua senha?</h1>
+                    <a href="http://localhost:8080/recover/%s">Alterar</a>
+                """, user.getId())
+            )
+        );
+    }
+
+    public void changePassword(Integer id, String password) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+        if(user.getAllowedToUpdate() == null){
+            throw new ForbiddenException("Ainda não solicitou alteração de senha");
+        }
+
+        if(user.getAllowedToUpdate().isBefore(LocalDateTime.now())){
+            throw new ForbiddenException("Tempo para alteração de senha expirado");
+        }
+
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 
     public User getUserById(Integer id) {

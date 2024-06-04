@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import school.sptech.crudrisecanvas.Utils.annotations.CEP;
 import school.sptech.crudrisecanvas.dtos.user.UserRequestDto;
 
 @Data
@@ -18,7 +19,8 @@ public class OngRequestDto {
     private String cnpj;
 
     @NotBlank
-    @Size(min = 8, max = 8)
+    @Size(min = 8, max = 9)
+    @CEP
     private String cep;
     
     @NotBlank

@@ -1,5 +1,6 @@
 package school.sptech.crudrisecanvas.entities;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -20,6 +21,7 @@ public class User {
     private String password;
     private String cpf;
     private String address;
+    private LocalDateTime allowedToUpdate;
     
     @OneToMany(mappedBy = "user")
     private List<Voluntary> voluntary;

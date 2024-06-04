@@ -17,7 +17,7 @@ public class ScheduleService {
     public void AsyncMailSender() {
         if(queue.isEmpty()) return;
 
-        int runTimes = queue.getTamanho() / 3;
+        int runTimes = (int) Math.ceil(queue.getTamanho() / 3.0);
 
         for(int i = 0; i < runTimes; i++) {
             MailValue mail = queue.poll();

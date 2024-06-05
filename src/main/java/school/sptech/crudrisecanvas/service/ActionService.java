@@ -87,15 +87,15 @@ public class ActionService {
         mappingActionBody.setAction(action);
         mappingActionBody.setMapping(mapping);
 
-        mapping.getUsers().stream().forEach(user -> {
-            ScheduleService.add(
-                new MailValue(
-                    user.getEmail(),
-                    "Rise Canvas - Seu pin foi atendido",
-                    "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.getName() + " foi realizada e atendeu " + (mappingActionBody.getQtyServedAdults() + mappingActionBody.getQtyServedChildren()) + " pessoas."
-                )
-            );
-        });
+//        mapping.getUsers().stream().forEach(user -> {
+//            ScheduleService.add(
+//                new MailValue(
+//                    user.getEmail(),
+//                    "Rise Canvas - Seu pin foi atendido",
+//                    "<h1>Olá, seu pin foi atendido!</h1><br> A ação " + action.getName() + " foi realizada e atendeu " + (mappingActionBody.getQtyServedAdults() + mappingActionBody.getQtyServedChildren()) + " pessoas."
+//                )
+//            );
+//        });
 
         return mappingActionRepository.save(mappingActionBody);
     }

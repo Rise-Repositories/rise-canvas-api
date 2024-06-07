@@ -3,6 +3,7 @@ package school.sptech.crudrisecanvas.dtos.mapping;
 import java.util.List;
 
 import lombok.Data;
+import school.sptech.crudrisecanvas.dtos.address.AddressResponseDto;
 import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingMappingResponsDto;
 
 @Data
@@ -18,4 +19,5 @@ public class MappingResponseDto {
     private String status;
     private String date;
     private List<UserMappingMappingResponsDto> userMappings;
+    private AddressResponseDto address;
 }

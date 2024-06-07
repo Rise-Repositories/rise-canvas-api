@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.Utils.HeatmapGenerator;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
+import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.entities.UserMapping;
@@ -27,6 +28,7 @@ public class MappingService {
     private final UserMappingService userMappingService;
     private final MappingRepository mappingRepository;
     private final UserService userService;
+    private final AddressService addressService;
 
     public List<Mapping> getMappings(){
         return mappingRepository.findAll();
@@ -41,16 +43,19 @@ public class MappingService {
         return mapping.get();
     }
 
-    public Mapping createMapping(Mapping mapping, String token){
+    public Mapping createMapping(Mapping mapping, Address address, String token){
         User user = userService.getAccount(token);
+        Address savedAddress = addressService.saveByCep(address.getCep(), address.getNumber(), address.getComplement());
 
-        UserMapping userMapping = userMappingService.createRelation(user, mapping);
-        
-        
-        mapping.setUsersMappings(List.of(userMapping));
+
+//        mapping.setUsersMappings(List.of(userMapping));
         mapping.setStatus(MappingStatus.ACTIVE);
+        mapping.setAddress(savedAddress);
 
-        return mappingRepository.save(mapping);
+        Mapping savedMapping = mappingRepository.save(mapping);
+        UserMapping userMapping = userMappingService.createRelation(user, savedMapping);
+
+        return savedMapping;
     }
 
     public Mapping updateMapping(Integer id, Mapping mapping){

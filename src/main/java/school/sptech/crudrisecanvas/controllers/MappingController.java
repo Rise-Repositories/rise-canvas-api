@@ -1,5 +1,6 @@
 package school.sptech.crudrisecanvas.controllers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
@@ -76,18 +78,5 @@ public class MappingController {
         );
 
         return ResponseEntity.status(200).body(response);
-    }
-
-    @GetMapping("/heatmap")
-    public ResponseEntity<Double[][]> getHeatmapPoints(
-            @RequestParam double radiusToGroup,
-            @RequestParam LocalDateTime olderThan
-    ) {
-        Double[][] heatmapPoints = mappingService.getHeatmapPoints(radiusToGroup, olderThan);
-        if (heatmapPoints.length == 0) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.ok(heatmapPoints);
-        }
     }
 }

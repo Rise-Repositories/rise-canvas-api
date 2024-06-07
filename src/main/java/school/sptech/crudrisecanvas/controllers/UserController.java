@@ -8,12 +8,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -48,6 +50,17 @@ public class UserController {
     public ResponseEntity<UserTokenDto> login(@RequestBody UserLoginDto usuarioLoginDto) {
         UserTokenDto usuarioToken = this.usuarioService.autenticar(usuarioLoginDto);
         return ResponseEntity.status(200).body(usuarioToken);
+    }
+
+    @PatchMapping("/auth/recover")
+    public ResponseEntity<String> recover(@RequestParam("email") String email) {
+        this.usuarioService.recover(email);
+        return ResponseEntity.status(204).build();
+    }
+    @PatchMapping("/auth/recover/{id}")
+    public ResponseEntity<String> changePassword(@PathVariable int id, @RequestBody HashMap<String,String> body) {
+        this.usuarioService.changePassword(id, body.get("password"));
+        return ResponseEntity.status(204).build();
     }
 
     @GetMapping("/account")

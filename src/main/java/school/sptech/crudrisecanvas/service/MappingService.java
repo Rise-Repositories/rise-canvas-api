@@ -1,11 +1,16 @@
 package school.sptech.crudrisecanvas.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import school.sptech.crudrisecanvas.Utils.HeatmapGenerator;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.entities.UserMapping;
@@ -80,5 +85,19 @@ public class MappingService {
         userMappingService.createRelation(user, response);
 
         return response;
+    }
+
+    public Double[][] getHeatmapPoints(double radiusToGroup, LocalDateTime olderThan) {
+        List<MappingHeatmapDto> mappings = mappingRepository.getMappingsHeatmap();
+
+        return HeatmapGenerator.getHeatmapPointsNotHelped(mappings, radiusToGroup, olderThan);
+    }
+
+    public MappingKpiDto getKpisAfterDate(LocalDate data) {
+        return mappingRepository.getKpisAfterDate(data);
+    }
+
+    public MappingKpiDto getKpisTotal() {
+        return mappingRepository.getKpisTotal();
     }
 }

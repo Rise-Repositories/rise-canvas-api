@@ -4,21 +4,20 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.entities.UserMapping;
+import school.sptech.crudrisecanvas.exception.BadRequestException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
-import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
 import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 
 @Service
 @RequiredArgsConstructor
 public class MappingService {
-    // TODO: use service instead of repository
-    private final MappingActionRepository mappingActionRepository;
     private final UserMappingService userMappingService;
     private final MappingRepository mappingRepository;
     private final UserService userService;
@@ -30,17 +29,19 @@ public class MappingService {
     public Mapping getMappingById(Integer id){
         Optional<Mapping> mapping = mappingRepository.findById(id);
         if(mapping.isEmpty()){
-            throw new NotFoundException("Mappeamento não encontrado");
+            throw new NotFoundException("Mapeamento não encontrado");
         }
 
         return mapping.get();
     }
 
     public Mapping createMapping(Mapping mapping, String token){
+        if(mapping.getQtyAdults() + mapping.getQtyChildren() == 0){
+            throw new BadRequestException("É necessário que haja pelo menos 1 pessoa no local");
+        }
         User user = userService.getAccount(token);
 
         UserMapping userMapping = userMappingService.createRelation(user, mapping);
-        
         
         mapping.setUsersMappings(List.of(userMapping));
         mapping.setStatus(MappingStatus.ACTIVE);
@@ -65,9 +66,6 @@ public class MappingService {
 
     public void deleteMapping(Integer id){
         Mapping mapping = this.getMappingById(id);
-
-        List<Integer> ids = mapping.getMappingActions().stream().map(e -> e.getId()).toList();
-        mappingActionRepository.deleteAllById(ids);
         mappingRepository.delete(mapping);
     }
 

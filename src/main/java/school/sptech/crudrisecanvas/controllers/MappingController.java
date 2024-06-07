@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import school.sptech.crudrisecanvas.dtos.address.AddressMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
+import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.service.MappingService;
 
@@ -46,9 +48,9 @@ public class MappingController {
     @PostMapping
     public ResponseEntity<MappingResponseDto> createMapping(@RequestBody @Valid MappingRequestDto mappingDto, @RequestHeader HashMap<String,String> headers){
         Mapping mapping = MappingMapper.toEntity(mappingDto);
-
+        Address address = AddressMapper.toEntity(mappingDto.getAddress());
         MappingResponseDto response = MappingMapper.toResponse(
-            mappingService.createMapping(mapping, headers.get("authorization").substring(7))
+            mappingService.createMapping(mapping, address, headers.get("authorization").substring(7))
         );
 
         return ResponseEntity.status(201).body(response);

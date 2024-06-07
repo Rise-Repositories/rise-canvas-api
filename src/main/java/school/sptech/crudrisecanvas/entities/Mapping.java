@@ -3,14 +3,9 @@ package school.sptech.crudrisecanvas.entities;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
 import school.sptech.crudrisecanvas.utils.Converters.MappingStatusConvert;
 import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
@@ -41,4 +36,7 @@ public class Mapping {
 
     @OneToMany(mappedBy = "mapping")
     private List<MappingAction> mappingActions;
+
+    @ManyToOne
+    private Address address;
 }

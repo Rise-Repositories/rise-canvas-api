@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingCountDto;
+import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingCountResponseDto;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.entities.UserMapping;
@@ -24,7 +25,14 @@ public class UserMappingService {
         return userMappingRepository.save(userMapping);
     }
 
-    public List<UserMappingCountDto> getMappingCountByUser() {
-        return userMappingRepository.getMappingCountByUser();
+    public UserMappingCountResponseDto getMappingCountByUser() {
+        List<UserMappingCountDto> mappingCount = userMappingRepository.getMappingCountByUser();
+        UserMappingCountResponseDto mappingCountResponse = new UserMappingCountResponseDto();
+
+        mappingCount.stream().forEach((count) -> {
+            mappingCountResponse.addTo(count.getQtyMapping());
+        });
+
+        return mappingCountResponse;
     }
 }

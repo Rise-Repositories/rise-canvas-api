@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import lombok.RequiredArgsConstructor;
-import school.sptech.crudrisecanvas.Utils.HeatmapGenerator;
+import school.sptech.crudrisecanvas.utils.HeatmapGenerator;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
@@ -43,7 +42,7 @@ public class MappingService {
         return mapping.get();
     }
 
-    public Mapping createMapping(Mapping mapping, String token){
+    public Mapping createMapping(Mapping mapping, Address address,String token){
         if(mapping.getQtyAdults() + mapping.getQtyChildren() == 0){
             throw new BadRequestException("É necessário que haja pelo menos 1 pessoa no local");
         }
@@ -57,7 +56,6 @@ public class MappingService {
         mapping.setAddress(savedAddress);
 
         Mapping savedMapping = mappingRepository.save(mapping);
-        UserMapping userMapping = userMappingService.createRelation(user, savedMapping);
 
         return savedMapping;
     }

@@ -17,6 +17,7 @@ import school.sptech.crudrisecanvas.repositories.OngRepository;
 import school.sptech.crudrisecanvas.unittestutils.OngMocks;
 import school.sptech.crudrisecanvas.unittestutils.UserMocks;
 import school.sptech.crudrisecanvas.unittestutils.VoluntaryMocks;
+import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 
 import java.util.Collections;
 import java.util.List;
@@ -119,8 +120,10 @@ class OngServiceTest {
             Ong ong = OngMocks.getOng();
             User user = UserMocks.getUser();
             Voluntary voluntary = VoluntaryMocks.getVoluntary();
+            voluntary.setId(null);
 
             Mockito.when(repository.existsByCnpj(ong.getCnpj())).thenReturn(false);
+            Mockito.when(voluntaryService.createVoluntary(voluntary)).thenReturn(voluntary);
 
             Ong returnedOng = service.createOng(ong, user);
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.Utils.HeatmapGenerator;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.entities.Address;
@@ -89,6 +90,10 @@ public class MappingService {
         userMappingService.createRelation(user, response);
 
         return response;
+    }
+
+    public List<MappingAlertDto> getMappingAlerts() {
+        return mappingRepository.getMappingAlerts();
     }
 
     public Double[][] getHeatmapPoints(double radiusToGroup, LocalDateTime olderThan) {

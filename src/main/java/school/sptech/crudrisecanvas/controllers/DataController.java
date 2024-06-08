@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingCountDto;
 import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingCountResponseDto;
@@ -23,6 +24,18 @@ public class DataController {
 
     private final MappingService mappingService;
     private final UserMappingService userMappingService;
+
+    @GetMapping("/mapping/alerts")
+    public ResponseEntity<List<MappingAlertDto>> getMappingAlerts() {
+        List<MappingAlertDto> mappingAlerts = mappingService.getMappingAlerts();
+
+        if (mappingAlerts.isEmpty()) {
+            return ResponseEntity.noContent().build();
+
+        } else {
+            return ResponseEntity.ok(mappingAlerts);
+        }
+    }
 
     @GetMapping("/heatmap")
     public ResponseEntity<Double[][]> getHeatmapPoints(

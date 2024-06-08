@@ -10,12 +10,14 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.exception.BadRequestException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
+import school.sptech.crudrisecanvas.unittestutils.AddressMocks;
 import school.sptech.crudrisecanvas.unittestutils.MappingMocks;
 import school.sptech.crudrisecanvas.unittestutils.UserMappingMocks;
 import school.sptech.crudrisecanvas.unittestutils.UserMocks;
@@ -43,6 +45,8 @@ class MappingServiceTest {
     private UserService userService;
     @Mock
     private UserMappingService userMappingService;
+    @Mock
+    private AddressService addressService;
 
     @Nested
     @DisplayName("getMappings()")
@@ -138,12 +142,14 @@ class MappingServiceTest {
             Mapping mapping = MappingMocks.getCreationMapping();
             User user = UserMocks.getUser();
             String token = UserMocks.getToken();
+            Address address = AddressMocks.getAddress();
 
             Mockito.when(userService.getAccount(token)).thenReturn(user);
             Mockito.when(userMappingService.createRelation(user, mapping)).thenReturn(UserMappingMocks.getUserMapping());
             Mockito.when(mappingRepository.save(mapping)).thenReturn(mapping);
+            Mockito.when(addressService.saveByCep(address.getCep(), address.getNumber(), address.getComplement())).thenReturn(address);
 
-            Mapping returnedMapping = service.createMapping(mapping, token);
+            Mapping returnedMapping = service.createMapping(mapping, address, token);
 
             assertEquals(mapping.getId(), returnedMapping.getId());
             assertEquals(mapping.getQtyAdults(), returnedMapping.getQtyAdults());
@@ -167,6 +173,7 @@ class MappingServiceTest {
             mapping.setQtyAdults(0);
             mapping.setQtyChildren(0);
             String token = UserMocks.getToken();
+            Address address = AddressMocks.getAddress();
 
             BadRequestException exception = assertThrows(
                     BadRequestException.class,

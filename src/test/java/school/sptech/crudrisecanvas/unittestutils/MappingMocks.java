@@ -78,6 +78,7 @@ public class MappingMocks {
         mapping.setDescription("Dois adultos");
         mapping.setLatitude(-23.531682);
         mapping.setLongitude(-46.721047);
+        mapping.setAddress(AddressMocks.getAddressRequestDto());
 
         return mapping;
     }

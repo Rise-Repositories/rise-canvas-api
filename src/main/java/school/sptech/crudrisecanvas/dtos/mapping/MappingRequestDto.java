@@ -5,6 +5,8 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import school.sptech.crudrisecanvas.dtos.address.AddressRequestDto;
+import school.sptech.crudrisecanvas.entities.Address;
 
 @Data
 public class MappingRequestDto {
@@ -32,4 +34,7 @@ public class MappingRequestDto {
     @DecimalMax("180")
     @DecimalMin("-180")
     private Double longitude;
+
+    @NotNull
+    private AddressRequestDto address;
 }

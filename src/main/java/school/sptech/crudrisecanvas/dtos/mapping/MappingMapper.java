@@ -2,6 +2,7 @@ package school.sptech.crudrisecanvas.dtos.mapping;
 
 import java.util.List;
 
+import school.sptech.crudrisecanvas.dtos.address.AddressMapper;
 import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingMapper;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.UserMapping;
@@ -32,6 +33,7 @@ public class MappingMapper {
         mappingResponse.setStatus(mapping.getStatus().toString());
         mappingResponse.setDate(mapping.getDate().toString());
         mappingResponse.setUserMappings(UserMappingMapper.toMapping(mapping.getUsersMappings()));
+        mappingResponse.setAddress(AddressMapper.toDto(mapping.getAddress()));
         return mappingResponse;
     }
 

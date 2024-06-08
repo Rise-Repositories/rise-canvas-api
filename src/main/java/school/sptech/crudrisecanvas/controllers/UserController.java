@@ -27,14 +27,12 @@ import school.sptech.crudrisecanvas.dtos.user.UserRequestUpdateDto;
 import school.sptech.crudrisecanvas.dtos.user.UserResponseDto;
 import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
 import school.sptech.crudrisecanvas.entities.User;
-import school.sptech.crudrisecanvas.repositories.UserRepositary;
 import school.sptech.crudrisecanvas.service.UserService;
 
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-   private final UserRepositary userRepositary;
     private final UserService usuarioService;
 
     @PostMapping("/auth/register")
@@ -47,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<UserTokenDto> login(@RequestBody UserLoginDto usuarioLoginDto) {
+    public ResponseEntity<UserTokenDto> login(@RequestBody @Valid UserLoginDto usuarioLoginDto) {
         UserTokenDto usuarioToken = this.usuarioService.autenticar(usuarioLoginDto);
         return ResponseEntity.status(200).body(usuarioToken);
     }
@@ -111,7 +109,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado")
     })
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
-        userRepositary.deleteById(id);
+        usuarioService.deleteUser(id);
 
         return ResponseEntity.status(204).build();
     }

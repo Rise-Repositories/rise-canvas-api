@@ -30,7 +30,7 @@ public class MappingController {
     public ResponseEntity<List<MappingResponseDto>> getMappings(){
         List<MappingResponseDto> mappings = MappingMapper.toResponse(mappingService.getMappings());
         if(mappings.isEmpty()){
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(204).build();
         }
 
         return ResponseEntity.status(200).body(mappings);

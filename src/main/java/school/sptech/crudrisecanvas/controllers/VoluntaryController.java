@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryMapper;
 import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryOngResponseDto;
@@ -48,7 +49,7 @@ public class VoluntaryController {
 
     @PostMapping("/{ongId}")
     public ResponseEntity<VoluntaryOngResponseDto> createVoluntary(
-        @RequestBody VoluntaryRequestDto voluntaryDto,
+        @RequestBody @Valid VoluntaryRequestDto voluntaryDto,
         @RequestHeader HashMap<String, String> headers,
         @PathVariable Integer ongId
     ){
@@ -59,13 +60,13 @@ public class VoluntaryController {
         VoluntaryOngResponseDto response = 
             VoluntaryMapper.toOngNoRelationDto(voluntaryService.createVoluntary(voluntary, ongId, token));
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(201).body(response);
 
     }
 
     @PostMapping("/{ongId}/{userId}")
     public ResponseEntity<VoluntaryOngResponseDto> createVoluntary(
-        @RequestBody VoluntaryRoleRequestDto roleDto,
+        @RequestBody @Valid VoluntaryRoleRequestDto roleDto,
         @RequestHeader HashMap<String, String> headers,
         @PathVariable Integer ongId,
         @PathVariable Integer userId
@@ -76,7 +77,7 @@ public class VoluntaryController {
         VoluntaryOngResponseDto response = 
             VoluntaryMapper.toOngNoRelationDto(voluntaryService.createVoluntary(roleDto.getRole(), ongId, userId, token));
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(201).body(response);
     }
 
     @PatchMapping("/{id}/role")

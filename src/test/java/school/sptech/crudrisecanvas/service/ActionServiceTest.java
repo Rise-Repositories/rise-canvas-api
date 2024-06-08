@@ -59,7 +59,7 @@ class ActionServiceTest {
             assertEquals(lista.get(0).getLatitude(), actions.get(0).getLatitude());
             assertEquals(lista.get(0).getLongitude(), actions.get(0).getLongitude());
             assertEquals(lista.get(0).getOng(), actions.get(0).getOng());
-            assertEquals(lista.get(0).getActionVoluntaries(), actions.get(0).getActionVoluntaries().get(0).getVoluntary());
+            assertEquals(lista.get(0).getActionVoluntaries(), actions.get(0).getActionVoluntaries());
         }
 
         @Test

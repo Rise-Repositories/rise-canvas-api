@@ -126,7 +126,7 @@ class UserControllerTest {
 
             @Test
             @DisplayName("Nome maior que 255")
-            void nameTooBig() throws Exception {
+            void    nameTooBig() throws Exception {
 
                 String json = """
                             {
@@ -440,7 +440,7 @@ class UserControllerTest {
                 mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isUnauthorized());
+                        .andExpect(status().isBadRequest());
             }
 
             @Test
@@ -456,7 +456,7 @@ class UserControllerTest {
                 mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isUnauthorized());
+                        .andExpect(status().isBadRequest());
             }
 
             @Test
@@ -472,7 +472,7 @@ class UserControllerTest {
                 mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isUnauthorized());
+                        .andExpect(status().isBadRequest());
             }
 
             @Test
@@ -488,7 +488,7 @@ class UserControllerTest {
                 mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isUnauthorized());
+                        .andExpect(status().isBadRequest());
             }
 
             @Test
@@ -504,7 +504,7 @@ class UserControllerTest {
                 mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isUnauthorized());
+                        .andExpect(status().isBadRequest());
             }
 
             @Test
@@ -520,7 +520,7 @@ class UserControllerTest {
                 mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isUnauthorized());
+                        .andExpect(status().isBadRequest());
             }
 
             @Test
@@ -535,7 +535,7 @@ class UserControllerTest {
                 mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isUnauthorized());
+                        .andExpect(status().isBadRequest());
             }
 
             @Test
@@ -551,7 +551,7 @@ class UserControllerTest {
                 mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isUnauthorized());
+                        .andExpect(status().isBadRequest());
             }
 
             @Test
@@ -567,7 +567,7 @@ class UserControllerTest {
                 mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.LOGIN.path)
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isUnauthorized());
+                        .andExpect(status().isBadRequest());
             }
         }
     }

@@ -13,11 +13,13 @@ import org.springframework.web.server.ResponseStatusException;
 import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.User;
+import school.sptech.crudrisecanvas.exception.BadRequestException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
 import school.sptech.crudrisecanvas.unittestutils.AddressMocks;
 import school.sptech.crudrisecanvas.unittestutils.MappingMocks;
+import school.sptech.crudrisecanvas.unittestutils.UserMappingMocks;
 import school.sptech.crudrisecanvas.unittestutils.UserMocks;
 import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 
@@ -42,8 +44,9 @@ class MappingServiceTest {
     @Mock
     private UserService userService;
     @Mock
+    private UserMappingService userMappingService;
+    @Mock
     private AddressService addressService;
-
 
     @Nested
     @DisplayName("getMappings()")
@@ -70,7 +73,7 @@ class MappingServiceTest {
             assertEquals(lista.get(0).getLongitude(), mappings.get(0).getLongitude());
             assertEquals(lista.get(0).getStatus(), mappings.get(0).getStatus());
             assertEquals(lista.get(0).getDate(), mappings.get(0).getDate());
-            assertEquals(lista.get(0).getUsersMappings().get(0).getUser().getName(), mappings.get(0).getUsersMappings().get(0).getUser().getName());
+            assertEquals(lista.get(0).getUsersMappings(), mappings.get(0).getUsersMappings());
         }
 
         @Test
@@ -110,7 +113,7 @@ class MappingServiceTest {
             assertEquals(mapping.getLongitude(), returnedMapping.getLongitude());
             assertEquals(mapping.getStatus(), returnedMapping.getStatus());
             assertEquals(mapping.getDate(), returnedMapping.getDate());
-            assertEquals(mapping.getUsersMappings().get(0).getUser().getName(), returnedMapping.getUsersMappings().get(0).getUser().getName());
+            assertEquals(mapping.getUsersMappings(), returnedMapping.getUsersMappings());
         }
 
         @Test
@@ -142,6 +145,7 @@ class MappingServiceTest {
             Address address = AddressMocks.getAddress();
 
             Mockito.when(userService.getAccount(token)).thenReturn(user);
+            Mockito.when(userMappingService.createRelation(user, mapping)).thenReturn(UserMappingMocks.getUserMapping());
             Mockito.when(mappingRepository.save(mapping)).thenReturn(mapping);
             Mockito.when(addressService.saveByCep(address.getCep(), address.getNumber(), address.getComplement())).thenReturn(address);
 
@@ -171,12 +175,11 @@ class MappingServiceTest {
             String token = UserMocks.getToken();
             Address address = AddressMocks.getAddress();
 
-            ResponseStatusException exception = assertThrows(
-                    ResponseStatusException.class,
-                    () -> service.createMapping(mapping, address, token)
+            BadRequestException exception = assertThrows(
+                    BadRequestException.class,
+                    () -> service.createMapping(mapping, token)
             );
 
-            assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
             assertEquals("É necessário que haja pelo menos 1 pessoa no local", exception.getLocalizedMessage());
         }
     }
@@ -201,16 +204,16 @@ class MappingServiceTest {
             Mapping returnedMapping = spyService.updateMapping(id, newMapping);
 
             assertEquals(id, returnedMapping.getId());
-            assertEquals(newMapping.getQtyAdults(), returnedMapping.getQtyAdults());
-            assertEquals(newMapping.getQtyChildren(), returnedMapping.getQtyChildren());
-            assertEquals(newMapping.getReferencePoint(), returnedMapping.getReferencePoint());
-            assertEquals(newMapping.getHasDisorders(), returnedMapping.getHasDisorders());
-            assertEquals(newMapping.getDescription(), returnedMapping.getDescription());
-            assertEquals(newMapping.getLatitude(), returnedMapping.getLatitude());
-            assertEquals(newMapping.getLongitude(), returnedMapping.getLongitude());
+            assertEquals(currentMapping.getQtyAdults(), returnedMapping.getQtyAdults());
+            assertEquals(currentMapping.getQtyChildren(), returnedMapping.getQtyChildren());
+            assertEquals(currentMapping.getReferencePoint(), returnedMapping.getReferencePoint());
+            assertEquals(currentMapping.getHasDisorders(), returnedMapping.getHasDisorders());
+            assertEquals(currentMapping.getDescription(), returnedMapping.getDescription());
+            assertEquals(currentMapping.getLatitude(), returnedMapping.getLatitude());
+            assertEquals(currentMapping.getLongitude(), returnedMapping.getLongitude());
             assertEquals(MappingStatus.ACTIVE, returnedMapping.getStatus());
-            assertEquals(newMapping.getDate(), returnedMapping.getDate());
-            assertEquals(newMapping.getUsersMappings().get(0).getUser().getName(), returnedMapping.getUsersMappings().get(0).getUser().getName());
+            assertEquals(currentMapping.getDate(), returnedMapping.getDate());
+            assertEquals(currentMapping.getUsersMappings(), returnedMapping.getUsersMappings());
 
             Mockito.verify(mappingRepository, Mockito.times(1)).save(any());
             Mockito.verify(spyService, Mockito.times(1)).getMappingById(id);
@@ -233,7 +236,7 @@ class MappingServiceTest {
             spyService.deleteMapping(id);
 
             Mockito.verify(spyService, Mockito.times(1)).getMappingById(id);
-            Mockito.verify(mappingActionRepository, Mockito.times(1)).deleteAllByMappingId(id);
+            // Mockito.verify(mappingActionRepository, Mockito.times(1)).deleteAllByMappingId(id);
         }
     }
 

@@ -1,7 +1,6 @@
 package school.sptech.crudrisecanvas.unittestutils;
 
 import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryRequestDto;
-import school.sptech.crudrisecanvas.dtos.user.UserRequestDto;
 import school.sptech.crudrisecanvas.entities.Voluntary;
 import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 

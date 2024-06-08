@@ -73,7 +73,6 @@ class UserServiceTest {
             User user = UserMocks.getUser();
 
             Mockito.when(repository.existsByCpf(user.getCpf())).thenReturn(true);
-            Mockito.when(repository.existsByEmail(user.getEmail())).thenReturn(false);
 
             ConflictException exception = assertThrows(
                     ConflictException.class,
@@ -277,8 +276,8 @@ class UserServiceTest {
 
             Mockito.doReturn(currentUser).when(spyService).getUserById(id);
             Mockito.doReturn(currentUser).when(spyService).getAccount(token);
-            Mockito.when(repository.existsByCpfAndIdNot(currentUser.getCpf(), id)).thenReturn(false);
-            Mockito.when(repository.existsByEmailAndIdNot(currentUser.getEmail(), id)).thenReturn(false);
+            Mockito.when(repository.existsByCpfAndIdNot(updatedUser.getCpf(), id)).thenReturn(false);
+            Mockito.when(repository.existsByEmailAndIdNot(updatedUser.getEmail(), id)).thenReturn(false);
             Mockito.when(repository.save(updatedUser)).thenReturn(updatedUser);
 
             User returnedUser = spyService.updateUser(id, updatedUser, token);
@@ -290,8 +289,8 @@ class UserServiceTest {
 
             Mockito.verify(spyService, Mockito.times(1)).getUserById(id);
             Mockito.verify(spyService, Mockito.times(1)).getAccount(token);
-            Mockito.verify(repository, Mockito.times(1)).existsByCpfAndIdNot(any(), id);
-            Mockito.verify(repository, Mockito.times(1)).existsByEmailAndIdNot(any(), id);
+            Mockito.verify(repository, Mockito.times(1)).existsByCpfAndIdNot(updatedUser.getCpf(), id);
+            Mockito.verify(repository, Mockito.times(1)).existsByEmailAndIdNot(updatedUser.getEmail(), id);
             Mockito.verify(repository, Mockito.times(1)).save(updatedUser);
         }
 

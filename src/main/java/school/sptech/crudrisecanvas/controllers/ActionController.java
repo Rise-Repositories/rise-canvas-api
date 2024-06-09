@@ -72,7 +72,7 @@ public class ActionController {
         return ResponseEntity.status(201).body(actionResponse);
     }
 
-    @PostMapping("actionVoluntary/{actionId}")
+    @PostMapping("/actionVoluntary/{actionId}")
     public ResponseEntity<ActionVoluntaryDto> createActionVoluntary(
             @PathVariable Integer actionId,
         @RequestHeader HashMap<String, String> header
@@ -83,7 +83,7 @@ public class ActionController {
         return ResponseEntity.status(201).body(actionVoluntaryResponse);
     }
 
-    @DeleteMapping("actionVoluntary/{relationId}")
+    @DeleteMapping("/actionVoluntary/{relationId}")
     public ResponseEntity<Void> deleteRelation(@PathVariable Integer relationId){
         actionVoluntaryService.deleteRelation(relationId);
         return ResponseEntity.status(204).build();

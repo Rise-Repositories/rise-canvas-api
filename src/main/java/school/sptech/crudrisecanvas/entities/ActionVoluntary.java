@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 public class ActionVoluntary {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne

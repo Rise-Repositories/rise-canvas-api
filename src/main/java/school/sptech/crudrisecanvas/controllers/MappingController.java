@@ -66,7 +66,7 @@ public class MappingController {
         return ResponseEntity.status(201).body(response);
     }
 
-    @PostMapping("userMapping/{mappingId}/{userId}")
+    @PostMapping("/userMapping/{mappingId}/{userId}")
     public ResponseEntity<UserMappingDto> createUserMapping(
             @PathVariable Integer mappingId,
             @PathVariable Integer userId,

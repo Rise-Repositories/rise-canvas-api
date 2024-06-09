@@ -1,4 +1,4 @@
-package school.sptech.crudrisecanvas.Utils.annotations;
+package school.sptech.crudrisecanvas.utils.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

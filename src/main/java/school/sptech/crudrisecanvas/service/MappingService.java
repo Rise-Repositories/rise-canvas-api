@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import lombok.RequiredArgsConstructor;
-import school.sptech.crudrisecanvas.Utils.HeatmapGenerator;
+import school.sptech.crudrisecanvas.utils.HeatmapGenerator;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;

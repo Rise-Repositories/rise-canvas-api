@@ -1,7 +1,7 @@
 package school.sptech.crudrisecanvas.utils.Enums;
 
 public enum OngStatus {
-    ACPECTED,
+    ACCEPTED,
     PENDING,
     REJECTED;
 }

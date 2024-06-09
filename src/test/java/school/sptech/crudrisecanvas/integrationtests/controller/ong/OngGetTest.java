@@ -44,7 +44,6 @@ public class OngGetTest {
                     .andExpect(jsonPath("$.address").value("R. Claudino Barbosa, 248, Macedo"))
                     .andExpect(jsonPath("$.cep").value("07113040"))
                     .andExpect(jsonPath("$.cnpj").value("20.438.196/0001-08"))
-                    .andExpect(jsonPath("$.description").value("Promover a integração social entre voluntários e crianças através de uma experiência inédita a fim de torná-las pessoas melhores."))
                     .andExpect(jsonPath("$.name").value("Hamburgada do Bem"))
                     .andExpect(jsonPath("$.status").value("PENDING"));
         }

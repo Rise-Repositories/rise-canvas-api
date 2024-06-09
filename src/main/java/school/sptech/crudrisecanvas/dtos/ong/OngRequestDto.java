@@ -1,5 +1,6 @@
 package school.sptech.crudrisecanvas.dtos.ong;
 
+import jakarta.validation.Valid;
 import org.hibernate.validator.constraints.br.CNPJ;
 
 import jakarta.validation.constraints.NotBlank;
@@ -27,5 +28,6 @@ public class OngRequestDto {
     private String address;
 
     @NotNull
+    @Valid
     private UserRequestDto user;
 }

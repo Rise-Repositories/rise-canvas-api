@@ -42,6 +42,8 @@ public class UserMapper {
     }
 
     public static UserResponseNoRelationDto toNoRelationDto(User user) {
+        if (user == null) return null;
+
         UserResponseNoRelationDto userResponseNoRelationDto = new UserResponseNoRelationDto();
         userResponseNoRelationDto.setId(user.getId());
         userResponseNoRelationDto.setName(user.getName());

@@ -12,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import school.sptech.crudrisecanvas.integrationtests.utils.paths.UserEnum;
+import school.sptech.crudrisecanvas.unittestutils.UserMocks;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,7 +48,8 @@ public class UserUpdateTest {
 
             mockMvc.perform(MockMvcRequestBuilders.post(UserEnum.CREATE.path)
                             .content(json1)
-                            .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("authorization", "Bearer " + UserMocks.getToken()))
                     .andExpect(status().isCreated());
 
             String json2 = """
@@ -59,7 +61,8 @@ public class UserUpdateTest {
 
             mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "1")
                             .content(json2)
-                            .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON)
+                        .header("authorization", "Bearer " + UserMocks.getToken()))
                     .andExpect(status().isOk());
         }
     }
@@ -155,7 +158,8 @@ public class UserUpdateTest {
 
             mockMvc.perform(MockMvcRequestBuilders.put(UserEnum.BY_ID.path + "10")
                     .content(json2)
-                    .contentType(MediaType.APPLICATION_JSON))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("authorization", "Bearer " + UserMocks.getToken()))
                     .andExpect(status().isNotFound());
         }
     }

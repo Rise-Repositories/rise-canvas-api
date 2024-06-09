@@ -7,6 +7,7 @@ import org.springframework.web.client.RestClient;
 import school.sptech.crudrisecanvas.dtos.address.AddressMapper;
 import school.sptech.crudrisecanvas.dtos.address.AddressViacepDto;
 import school.sptech.crudrisecanvas.entities.Address;
+import school.sptech.crudrisecanvas.exception.BadRequestException;
 import school.sptech.crudrisecanvas.repositories.AddressRepository;
 
 import java.util.Optional;
@@ -16,15 +17,6 @@ import java.util.Optional;
 public class AddressService {
 
     private final AddressRepository repository;
-
-    public Integer getIdByCepAndNumber(String cep, Integer number) {
-        Optional<Integer> idOpt = repository.findIdByCepAndNumber(cep, number);
-        if (idOpt.isEmpty()) {
-            return -1;
-        } else {
-            return idOpt.get();
-        }
-    }
 
     public Address saveByCep(String cep, Integer number, String complement) {
         RestClient client = RestClient.builder()
@@ -38,6 +30,10 @@ public class AddressService {
                 .uri(cep + "/json")
                 .retrieve()
                 .body(AddressViacepDto.class);
+
+        if (viacep.getCep() == null) {
+            throw new BadRequestException("CEP inválido");
+        }
 
         viacep.setCep(viacep.getCep().replace("-", ""));
 

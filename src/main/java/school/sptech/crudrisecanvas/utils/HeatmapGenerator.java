@@ -1,7 +1,6 @@
-package school.sptech.crudrisecanvas.Utils;
+package school.sptech.crudrisecanvas.utils;
 
 import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
-import school.sptech.crudrisecanvas.entities.Mapping;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

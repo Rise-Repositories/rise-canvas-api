@@ -26,8 +26,12 @@ public class DataController {
     private final UserMappingService userMappingService;
 
     @GetMapping("/mapping/alerts")
-    public ResponseEntity<List<MappingAlertDto>> getMappingAlerts() {
-        List<MappingAlertDto> mappingAlerts = mappingService.getMappingAlerts();
+    public ResponseEntity<List<MappingAlertDto>> getMappingAlerts(@RequestParam(required = false) LocalDate beforeDate
+    ) {
+        if (beforeDate == null) {
+            beforeDate = LocalDate.now();
+        }
+        List<MappingAlertDto> mappingAlerts = mappingService.getMappingAlerts(beforeDate);
 
         if (mappingAlerts.isEmpty()) {
             return ResponseEntity.noContent().build();

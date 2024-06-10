@@ -90,8 +90,8 @@ public class MappingService {
         return response;
     }
 
-    public List<MappingAlertDto> getMappingAlerts() {
-        return mappingRepository.getMappingAlerts();
+    public List<MappingAlertDto> getMappingAlerts(LocalDate beforeDate) {
+        return mappingRepository.getMappingAlerts(beforeDate);
     }
 
     public Double[][] getHeatmapPoints(double radiusToGroup, LocalDateTime olderThan) {

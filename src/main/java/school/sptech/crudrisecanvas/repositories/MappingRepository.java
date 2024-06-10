@@ -28,9 +28,9 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
                             WHERE a.datetime_start = (
                         		SELECT MAX(a.datetime_start) FROM mapping m2
                                 LEFT JOIN Mapping_Action ma on m2.id = ma.mapping_id
-                        		LEFT JOIN Action a ON ma.action_id = a.id AND m2.id = m.id)
+                        		LEFT JOIN Action a ON ma.action_id = a.id AND m2.id = m.id AND a.datetime_start < ?1)
                             GROUP BY m.id;""", nativeQuery = true)
-    List<MappingAlertDto> getMappingAlerts();
+    List<MappingAlertDto> getMappingAlerts(LocalDate beforeDate);
 
     @Query(value = """
             SELECT m.id AS MappingId, m.latitude AS Latitude, m.longitude AS Longitude, m.qty_adults AS QtyAdults, m.qty_children AS QtyChildren, ma.no_donation AS NoDonation, a.datetime_start AS DatetimeStart

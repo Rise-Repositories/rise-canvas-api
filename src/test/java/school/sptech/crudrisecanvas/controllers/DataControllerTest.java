@@ -44,13 +44,13 @@ class DataControllerTest {
         void noData() {
             List<MappingAlertDto> lista = Collections.emptyList();
 
-            Mockito.when(mappingService.getMappingAlerts()).thenReturn(lista);
+            Mockito.when(mappingService.getMappingAlerts(LocalDate.now())).thenReturn(lista);
 
-            ResponseEntity<List<MappingAlertDto>> response = controller.getMappingAlerts();
+            ResponseEntity<List<MappingAlertDto>> response = controller.getMappingAlerts(null);
 
             assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 
-            Mockito.verify(mappingService, Mockito.times(1)).getMappingAlerts();
+            Mockito.verify(mappingService, Mockito.times(1)).getMappingAlerts(LocalDate.now());
         }
 
         @Test
@@ -78,9 +78,9 @@ class DataControllerTest {
             };
             List<MappingAlertDto> lista = List.of(mapAlert);
 
-            Mockito.when(mappingService.getMappingAlerts()).thenReturn(lista);
+            Mockito.when(mappingService.getMappingAlerts(LocalDate.now())).thenReturn(lista);
 
-            ResponseEntity<List<MappingAlertDto>> response = controller.getMappingAlerts();
+            ResponseEntity<List<MappingAlertDto>> response = controller.getMappingAlerts(null);
             List<MappingAlertDto> body = response.getBody();
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -89,7 +89,7 @@ class DataControllerTest {
             assertEquals(mapAlert.getDate(), body.get(0).getDate());
             assertEquals(mapAlert.getLastServed(), body.get(0).getLastServed());
 
-            Mockito.verify(mappingService, Mockito.times(1)).getMappingAlerts();
+            Mockito.verify(mappingService, Mockito.times(1)).getMappingAlerts(LocalDate.now());
         }
     }
 

@@ -51,7 +51,7 @@ public class OngCreateTest {
                     	}
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                             .content(json)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated());
@@ -84,7 +84,7 @@ public class OngCreateTest {
                     	}
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                             .content(json)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest());
@@ -110,7 +110,7 @@ public class OngCreateTest {
                     	}
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                             .content(json1)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated());
@@ -130,7 +130,7 @@ public class OngCreateTest {
                     	}
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                             .content(json2)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isConflict());
@@ -156,7 +156,7 @@ public class OngCreateTest {
                     	}
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                             .content(json)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest());
@@ -182,7 +182,7 @@ public class OngCreateTest {
                     	}
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                             .content(json)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest());
@@ -208,7 +208,7 @@ public class OngCreateTest {
                     	}
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                             .content(json1)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated());
@@ -228,7 +228,7 @@ public class OngCreateTest {
                     	}
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                             .content(json2)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isConflict());
@@ -254,7 +254,7 @@ public class OngCreateTest {
                     	}
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                             .content(json)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest());
@@ -280,7 +280,7 @@ public class OngCreateTest {
                     	}
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                             .content(json1)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated());
@@ -300,7 +300,7 @@ public class OngCreateTest {
                     	}
                     }""";
 
-            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+            mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                             .content(json2)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isConflict());

@@ -177,7 +177,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -201,7 +201,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -225,7 +225,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -248,7 +248,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -272,7 +272,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -296,7 +296,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -320,7 +320,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -343,7 +343,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -367,7 +367,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -391,7 +391,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -415,7 +415,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -438,7 +438,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -462,7 +462,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -486,7 +486,7 @@ class   OngControllerTest {
                                 }
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -504,7 +504,7 @@ class   OngControllerTest {
                                 "address": "232"
                         }""";
 
-                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path)
+                mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
                                 .content(json)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());

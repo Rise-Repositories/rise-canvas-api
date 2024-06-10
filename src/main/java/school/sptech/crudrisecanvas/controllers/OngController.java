@@ -57,7 +57,7 @@ public class OngController {
         return ResponseEntity.status(200).body(result);
     }
 
-    @PostMapping
+    @PostMapping("/auth")
     @Operation(summary = "Criar uma nova ONG")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Criado - Retorna os detalhes da nova ONG"),

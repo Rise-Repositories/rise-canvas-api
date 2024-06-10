@@ -177,7 +177,7 @@ class MappingServiceTest {
 
             BadRequestException exception = assertThrows(
                     BadRequestException.class,
-                    () -> service.createMapping(mapping, token)
+                    () -> service.createMapping(mapping, address,token)
             );
 
             assertEquals("É necessário que haja pelo menos 1 pessoa no local", exception.getLocalizedMessage());

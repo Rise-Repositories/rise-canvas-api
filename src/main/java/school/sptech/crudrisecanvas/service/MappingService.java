@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.utils.HeatmapGenerator;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.entities.Address;
@@ -108,4 +109,9 @@ public class MappingService {
     public MappingKpiDto getKpisTotal() {
         return mappingRepository.getKpisTotal();
     }
+    
+    public List<MappingGraphDto> getMappingGraph(LocalDate date) {
+        return mappingRepository.getChartData(date);
+    }
+    
 }

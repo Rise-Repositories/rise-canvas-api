@@ -2,16 +2,17 @@ package school.sptech.crudrisecanvas.dtos.mappingAction;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 @Data
 public class MappingActionRequestDto {
     @NotNull
-    @Positive
+    @PositiveOrZero
     private Integer qtyServedAdults;
 
     @NotNull
-    @Positive
+    @PositiveOrZero
     private Integer qtyServedChildren;
 
     @NotNull

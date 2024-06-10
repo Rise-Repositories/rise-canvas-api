@@ -23,13 +23,6 @@ public class HeatmapGenerator {
             int qtyPoints = 0;
             Double maxIntensity = 0.;
 
-//            List<Mapping> validMappings = mappings.stream()
-//                .filter((map) -> map.getMappingActions().isEmpty() || !map.getMappingActions().stream()
-//                    .filter((mapAction) -> !mapAction.getNoDonation() &&
-//                                            mapAction.getAction().getDatetimeStart().isBefore(olderThan)
-//                    ).toList().isEmpty()
-//                ).toList();
-
             List<MappingHeatmapDto> validMappings = mappings.stream()
                     .filter((map) -> map.getDatetimeStart() == null ||
                                      map.getDatetimeStart().isBefore(olderThan)).toList();

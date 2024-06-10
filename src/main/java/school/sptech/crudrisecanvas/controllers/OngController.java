@@ -7,25 +7,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import school.sptech.crudrisecanvas.dtos.ong.OngRequestDto;
-import school.sptech.crudrisecanvas.dtos.ong.OngMapper;
-import school.sptech.crudrisecanvas.dtos.ong.OngResponseDto;
-import school.sptech.crudrisecanvas.dtos.ong.OngRequestUpdateDto;
+import school.sptech.crudrisecanvas.dtos.ong.*;
 import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.entities.Ong;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.service.OngService;
+import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
 
 @RestController
 @RequestMapping("/ong")
@@ -107,5 +98,19 @@ public class OngController {
     public ResponseEntity<Void> deleteOng(@PathVariable int id) {
         ongService.deleteOng(id);
         return ResponseEntity.status(204).build();
+    }
+
+    @PatchMapping("/{id}/status")
+    @Operation(summary = "Atualizar o status de uma ONG pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Retorna os detalhes da ONG atualizada"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado - ONG não encontrada")
+    })
+    public ResponseEntity<OngResponseDto> patchStatusOng(@PathVariable int id, @RequestBody @Valid OngPatchStatusDto ongDto) {
+        OngStatus ongStatus = ongDto.getStatus();
+
+        OngResponseDto result = OngMapper.toResponse(ongService.changeStatus(id, ongStatus));
+
+        return ResponseEntity.status(200).body(result);
     }
 }

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import school.sptech.crudrisecanvas.dtos.ong.OngResponseDto;
 import school.sptech.crudrisecanvas.entities.Ong;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.entities.Voluntary;
@@ -71,5 +72,13 @@ public class OngService {
     public void deleteOng(int id) {
         Ong ong = this.getOngById(id);
         ongRepository.delete(ong);
+    }
+
+    public Ong changeStatus(int id, OngStatus newStatus) {
+        Ong ongToUpdate = this.getOngById(id);
+
+        ongToUpdate.setStatus(newStatus);
+
+        return ongRepository.save(ongToUpdate);
     }
 }

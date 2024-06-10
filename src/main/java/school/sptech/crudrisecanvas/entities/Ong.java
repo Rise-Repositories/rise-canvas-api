@@ -27,9 +27,9 @@ public class Ong {
     @Convert(converter = OngStatusConvert.class)
     private OngStatus status;
 
-    @OneToMany(mappedBy = "ong")
+    @OneToMany(mappedBy = "ong", orphanRemoval = true)
     private List<Action> actions;
 
-    @OneToMany(mappedBy = "ong")
+    @OneToMany(mappedBy = "ong", orphanRemoval = true)
     private List<Voluntary> voluntaries;
 }

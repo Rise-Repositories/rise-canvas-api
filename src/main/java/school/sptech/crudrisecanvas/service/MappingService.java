@@ -50,9 +50,7 @@ public class MappingService {
         User user = userService.getAccount(token);
         Address savedAddress = addressService.saveByCep(address.getCep(), address.getNumber(), address.getComplement());
 
-        UserMapping userMapping = userMappingService.createRelation(user, mapping);
-        
-        mapping.setUsersMappings(List.of(userMapping));
+    //    mapping.setUsersMappings(List.of(userMapping));
         mapping.setStatus(MappingStatus.ACTIVE);
         mapping.setAddress(savedAddress);
 

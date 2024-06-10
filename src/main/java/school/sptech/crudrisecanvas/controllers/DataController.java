@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
-import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingCountDto;
 import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingCountResponseDto;
 import school.sptech.crudrisecanvas.service.MappingService;
 import school.sptech.crudrisecanvas.service.UserMappingService;
@@ -63,5 +63,10 @@ public class DataController {
     @GetMapping("/mapping-count")
     public ResponseEntity<UserMappingCountResponseDto> getMappingCountByUser() {
         return ResponseEntity.status(200).body(userMappingService.getMappingCountByUser());
+    }
+
+    @GetMapping("/mapping/graph")
+    public ResponseEntity<List<MappingGraphDto>> getMappingGraph(@RequestParam("date") LocalDate date) {
+        return ResponseEntity.ok(mappingService.getMappingGraph(date));
     }
 }

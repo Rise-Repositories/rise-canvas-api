@@ -1,7 +1,6 @@
 package school.sptech.crudrisecanvas.dtos.address;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.GeneratedValue;
 import lombok.Getter;
 import lombok.Setter;
 

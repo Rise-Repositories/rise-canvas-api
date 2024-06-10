@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.utils.HeatmapGenerator;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.entities.Address;
@@ -42,19 +43,18 @@ public class MappingService {
         return mapping.get();
     }
 
-    public Mapping createMapping(Mapping mapping, Address address, String token){
+    public Mapping createMapping(Mapping mapping, Address address,String token){
         if(mapping.getQtyAdults() + mapping.getQtyChildren() == 0){
             throw new BadRequestException("É necessário que haja pelo menos 1 pessoa no local");
         }
         User user = userService.getAccount(token);
         Address savedAddress = addressService.saveByCep(address.getCep(), address.getNumber(), address.getComplement());
 
-//        mapping.setUsersMappings(List.of(userMapping));
+    //    mapping.setUsersMappings(List.of(userMapping));
         mapping.setStatus(MappingStatus.ACTIVE);
         mapping.setAddress(savedAddress);
 
         Mapping savedMapping = mappingRepository.save(mapping);
-        UserMapping userMapping = userMappingService.createRelation(user, savedMapping);
 
         return savedMapping;
     }
@@ -107,4 +107,9 @@ public class MappingService {
     public MappingKpiDto getKpisTotal() {
         return mappingRepository.getKpisTotal();
     }
+    
+    public List<MappingGraphDto> getMappingGraph(LocalDate date) {
+        return mappingRepository.getChartData(date);
+    }
+    
 }

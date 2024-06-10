@@ -4,12 +4,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.data.jpa.repository.Query;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.entities.Mapping;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MappingRepository extends JpaRepository<Mapping, Integer>{
@@ -77,4 +77,7 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
                               LEFT JOIN Mapping_Action ma on m2.id = ma.mapping_id
                       		LEFT JOIN Action a ON ma.action_id = a.id AND m2.id = m.id) LIMIT 1;""", nativeQuery = true)
     MappingKpiDto getKpisTotal();
+
+    @Query(value = "call graph(:date)", nativeQuery = true )
+    List<MappingGraphDto> getChartData(LocalDate date);
 }

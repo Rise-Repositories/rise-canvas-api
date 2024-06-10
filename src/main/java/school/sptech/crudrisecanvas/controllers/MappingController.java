@@ -1,18 +1,14 @@
 package school.sptech.crudrisecanvas.controllers;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.HashMap;
 
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.address.AddressMapper;
-import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;

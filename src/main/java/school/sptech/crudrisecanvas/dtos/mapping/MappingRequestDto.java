@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import school.sptech.crudrisecanvas.dtos.address.AddressRequestDto;
-import school.sptech.crudrisecanvas.entities.Address;
 
 @Data
 public class MappingRequestDto {

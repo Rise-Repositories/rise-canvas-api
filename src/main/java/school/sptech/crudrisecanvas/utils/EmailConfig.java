@@ -34,7 +34,7 @@ public class EmailConfig {
         return Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("", "");
+                return new PasswordAuthentication("andreylrodrigues@hotmail.com", "andrey050405");
             }
         });
     }
@@ -42,7 +42,7 @@ public class EmailConfig {
     public void sendEmail(String to, String subject, String body) {
         try {
             Message emailMessage = new MimeMessage(getSession());
-            emailMessage.setFrom(new InternetAddress(""));
+            emailMessage.setFrom(new InternetAddress("andreylrodrigues@hotmail.com"));
             emailMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             emailMessage.setSubject(subject);
 

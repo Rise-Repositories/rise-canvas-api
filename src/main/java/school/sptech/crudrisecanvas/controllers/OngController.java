@@ -3,94 +3,114 @@ package school.sptech.crudrisecanvas.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import school.sptech.crudrisecanvas.Entity.Ong;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import school.sptech.crudrisecanvas.dtos.ong.*;
+import school.sptech.crudrisecanvas.dtos.user.UserMapper;
+import school.sptech.crudrisecanvas.entities.Ong;
+import school.sptech.crudrisecanvas.entities.User;
+import school.sptech.crudrisecanvas.service.OngService;
+import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
 
 @RestController
 @RequestMapping("/ong")
+@RequiredArgsConstructor
 public class OngController {
-    List<Ong> ongs = new ArrayList<Ong>();
-    int nextId;
+    
+    private final OngService ongService;
 
     @GetMapping
-    public ResponseEntity<List<Ong>> getOngs() {
+    @Operation(summary = "Listar todas as ONGs")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Retorna a lista de ONGs"),
+            @ApiResponse(responseCode = "204", description = "Sem conteúdo - Não há ONGs cadastradas")
+    })
+    public ResponseEntity<List<OngResponseDto>> getOngs() {
+        List<Ong> ongs = ongService.getOngs();
+
         if(ongs.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
-        return ResponseEntity.status(200).body(ongs);
+
+        List<OngResponseDto> response = OngMapper.toResponse(ongs);
+
+        return ResponseEntity.status(200).body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ong> getOng(@PathVariable int id) {
-        if(!idIsValid(id)) {
-            return ResponseEntity.status(404).build();
-        }
-        return ResponseEntity.status(200).body(getOngById(id));
+    @Operation(summary = "Obter detalhes de uma ONG pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Retorna os detalhes da ONG"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado - ONG não encontrada")
+    })
+    public ResponseEntity<OngResponseDto> getOng(@PathVariable int id) {
+        Ong ong = ongService.getOngById(id);
+
+        OngResponseDto result = OngMapper.toResponse(ong);
+
+        return ResponseEntity.status(200).body(result);
     }
 
-    @PostMapping
-    public ResponseEntity<Ong> createOng(@RequestBody Ong ong) {
-        if(
-            ong.getName() == null || 
-            ong.getEmail() == null ||
-            ong.getPassword() == null ||
-            ong.getCnpj() == null
-        ) {
-            return ResponseEntity.status(400).build();
-        }
-        ong.setId(++nextId);
-        ongs.add(ong);
-        return ResponseEntity.status(201).body(ong);
+    @PostMapping("/auth")
+    @Operation(summary = "Criar uma nova ONG")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Criado - Retorna os detalhes da nova ONG"),
+            @ApiResponse(responseCode = "409", description = "Conflito - O email, CNPJ ou CPF já está em uso")
+    })
+    public ResponseEntity<OngResponseDto> createOng(@RequestBody @Valid OngRequestDto ongDto) {
+        Ong ong = OngMapper.toEntity(ongDto);
+        User user = UserMapper.toEntity(ongDto.getUser());
+
+        OngResponseDto result = OngMapper.toResponse(
+            ongService.createOng(ong, user)
+        );
+        result.setActions(new ArrayList<>());
+
+        return ResponseEntity.status(201).body(result);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Ong> updateOng(@PathVariable int id,@RequestBody Ong ong) {
-        if(!idIsValid(id) || getOngById(id) == null) {
-            return ResponseEntity.status(404).build();
-        }
-        if(
-            ong.getName() == null || 
-            ong.getEmail() == null ||
-            ong.getPassword() == null ||
-            ong.getCnpj() == null
-        ) {
-            return ResponseEntity.status(400).build();
-        }
-        ong.setId(getOngById(id).getId());
-        ongs.set(ongs.indexOf(getOngById(id)), ong);
-        return ResponseEntity.status(200).body(ong);
+    @Operation(summary = "Atualizar uma ONG existente pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Retorna os detalhes da ONG atualizada"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado - ONG não encontrada")
+    })
+    public ResponseEntity<OngResponseDto> updateOng(@PathVariable int id,@RequestBody @Valid OngRequestUpdateDto ongDto) {
+        Ong ong = OngMapper.toEntity(ongDto);
+
+        OngResponseDto result = OngMapper.toResponse(ongService.updateOng(id, ong));
+
+        return ResponseEntity.status(200).body(result);
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Ong> deleteOng(@PathVariable int id) {
-        if(!idIsValid(id) || getOngById(id) == null) {
-            return ResponseEntity.status(404).build();
-        }
-        ongs.remove(getOngById(id));
-        return ResponseEntity.status(200).build();
+    @Operation(summary = "Excluir uma ONG pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Sem conteúdo - ONG excluída com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado - ONG não encontrada")
+    })
+    public ResponseEntity<Void> deleteOng(@PathVariable int id) {
+        ongService.deleteOng(id);
+        return ResponseEntity.status(204).build();
     }
 
-    private boolean idIsValid(int id) {
-        return id >= 0 && id <= ongs.size();
+    @PatchMapping("/{id}/status")
+    @Operation(summary = "Atualizar o status de uma ONG pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Retorna os detalhes da ONG atualizada"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado - ONG não encontrada")
+    })
+    public ResponseEntity<OngResponseDto> patchStatusOng(@PathVariable int id, @RequestBody @Valid OngPatchStatusDto ongDto) {
+        OngStatus ongStatus = ongDto.getStatus();
+
+        OngResponseDto result = OngMapper.toResponse(ongService.changeStatus(id, ongStatus));
+
+        return ResponseEntity.status(200).body(result);
     }
-
-    private Ong getOngById(int id) {
-        for ( Ong ong : ongs ) {
-            if(ong.getId() == id) {
-                return ong;
-            }
-        }
-        return null;
-    }
-
-
 }

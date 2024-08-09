@@ -4,6 +4,7 @@ import java.util.List;
 
 import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryMapper;
 import school.sptech.crudrisecanvas.dtos.action.ActionMapper;
+import school.sptech.crudrisecanvas.dtos.address.AddressMapper;
 import school.sptech.crudrisecanvas.entities.Ong;
 
 public class OngMapper {
@@ -12,7 +13,7 @@ public class OngMapper {
         ong.setName(ongRequestDto.getName());
         ong.setCnpj(ongRequestDto.getCnpj());
         ong.setCep(ongRequestDto.getCep());
-        ong.setAddress(ongRequestDto.getAddress());
+        ong.setAddress(AddressMapper.toEntity(ongRequestDto.getAddress()));
         return ong;
     }
 
@@ -21,7 +22,7 @@ public class OngMapper {
         ong.setName(ongUpdateDto.getName());
         ong.setCnpj(ongUpdateDto.getCnpj());
         ong.setCep(ongUpdateDto.getCep());
-        ong.setAddress(ongUpdateDto.getAddress());
+        ong.setAddress(AddressMapper.toEntity(ongUpdateDto.getAddress()));
         return ong;
     }
     
@@ -31,7 +32,7 @@ public class OngMapper {
         dto.setName(ong.getName());
         dto.setCnpj(ong.getCnpj());
         dto.setCep(ong.getCep());
-        dto.setAddress(ong.getAddress());
+        dto.setAddress(AddressMapper.toDto(ong.getAddress()));
         dto.setStatus(ong.getStatus());
         dto.setActions(ActionMapper.toNoRelation(ong.getActions()));
         dto.setVoluntaries(VoluntaryMapper.toOngNoRelationDto(ong.getVoluntaries()));
@@ -51,7 +52,7 @@ public class OngMapper {
         dto.setName(ong.getName());
         dto.setCnpj(ong.getCnpj());
         dto.setCep(ong.getCep());
-        dto.setAddress(ong.getAddress());
+        dto.setAddress(AddressMapper.toDto(ong.getAddress()));
         dto.setStatus(ong.getStatus());
         return dto;
     }

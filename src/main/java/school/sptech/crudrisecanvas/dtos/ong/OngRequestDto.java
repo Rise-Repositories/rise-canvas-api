@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import school.sptech.crudrisecanvas.dtos.address.AddressRequestDto;
 import school.sptech.crudrisecanvas.utils.annotations.CEP;
 import school.sptech.crudrisecanvas.dtos.user.UserRequestDto;
 
@@ -24,8 +25,8 @@ public class OngRequestDto {
     @CEP
     private String cep;
     
-    @NotBlank
-    private String address;
+    @NotNull
+    private AddressRequestDto address;
 
     @NotNull
     @Valid

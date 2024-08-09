@@ -27,7 +27,7 @@ BEGIN
         WHERE NOT EXISTS (
             SELECT * FROM mapping_action ma
             JOIN action a ON ma.action_id = a.id
-            WHERE ma.mapping_id = m.id AND a.datetime_start BETWEEN DATE(new_date) AND DATE_ADD(new_date, INTERVAL 1 MONTH) AND ma.no_people 
+            WHERE ma.mapping_id = m.id AND a.datetime_start BETWEEN DATE(new_date) AND DATE_ADD(new_date, INTERVAL 1 MONTH)
         );
         select count(distinct(ma.mapping_id))
         into served

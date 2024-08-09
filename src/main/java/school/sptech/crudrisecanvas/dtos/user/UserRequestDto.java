@@ -1,11 +1,13 @@
 package school.sptech.crudrisecanvas.dtos.user;
 
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.br.CPF;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import school.sptech.crudrisecanvas.dtos.address.AddressRequestDto;
 
 @Data
 public class UserRequestDto {
@@ -24,4 +26,6 @@ public class UserRequestDto {
     @NotBlank
     @CPF
     private String cpf;
+
+    private AddressRequestDto address;
 }

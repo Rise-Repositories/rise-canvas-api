@@ -2,12 +2,7 @@ package school.sptech.crudrisecanvas.entities;
 
 import java.util.List;
 
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import school.sptech.crudrisecanvas.utils.Converters.OngStatusConvert;
 import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
@@ -22,7 +17,9 @@ public class Ong {
     private String name;
     private String cnpj;
     private String cep;
-    private String address;
+
+    @ManyToOne
+    private Address address;
 
     @Convert(converter = OngStatusConvert.class)
     private OngStatus status;

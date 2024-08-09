@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import school.sptech.crudrisecanvas.dtos.address.AddressRequestUpdateDto;
 
 @Data
 public class UserRequestUpdateDto {
@@ -18,4 +19,6 @@ public class UserRequestUpdateDto {
     @NotBlank
     @CPF
     private String cpf;
+
+    private AddressRequestUpdateDto address;
 }

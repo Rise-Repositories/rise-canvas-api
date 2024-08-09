@@ -32,6 +32,18 @@ public class AddressMapper {
         return entity;
     }
 
+    public static Address toEntity(AddressRequestUpdateDto dto) {
+        if (dto == null) return null;
+
+        Address entity = new Address();
+
+        entity.setCep(dto.getCep());
+        entity.setNumber(dto.getNumber());
+        entity.setComplement(dto.getComplement());
+
+        return entity;
+    }
+
     public static AddressResponseDto toDto(Address entity) {
         if (entity == null) return null;
 

@@ -14,6 +14,7 @@ import school.sptech.crudrisecanvas.entities.Voluntary;
 import school.sptech.crudrisecanvas.exception.ConflictException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.OngRepository;
+import school.sptech.crudrisecanvas.unittestutils.AddressMocks;
 import school.sptech.crudrisecanvas.unittestutils.OngMocks;
 import school.sptech.crudrisecanvas.unittestutils.UserMocks;
 import school.sptech.crudrisecanvas.unittestutils.VoluntaryMocks;
@@ -168,7 +169,7 @@ class OngServiceTest {
             newOng.setName("Teto");
             newOng.setCnpj("76852512000148");
             newOng.setCep("01223010");
-            newOng.setAddress("56");
+            newOng.setAddress(AddressMocks.getAddress());
 
             OngService spyService = Mockito.spy(service);
 
@@ -196,7 +197,7 @@ class OngServiceTest {
             newOng.setName("Teto");
             newOng.setCnpj("76852512000148");
             newOng.setCep("01223010");
-            newOng.setAddress("56");
+            newOng.setAddress(AddressMocks.getAddress());
 
             OngService spyService = Mockito.spy(service);
 

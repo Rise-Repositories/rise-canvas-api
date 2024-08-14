@@ -26,6 +26,7 @@ import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.integrationtests.utils.paths.OngEnum;
 import school.sptech.crudrisecanvas.integrationtests.utils.paths.UserEnum;
 import school.sptech.crudrisecanvas.service.OngService;
+import school.sptech.crudrisecanvas.unittestutils.AddressMocks;
 import school.sptech.crudrisecanvas.unittestutils.OngMocks;
 import school.sptech.crudrisecanvas.unittestutils.UserMocks;
 
@@ -130,7 +131,7 @@ class   OngControllerTest {
             ongReqDto.setName("Instituto A Corrente do Bem");
             ongReqDto.setCnpj("44.454.154/0001-29");
             ongReqDto.setCep("04446060");
-            ongReqDto.setAddress("232");
+            ongReqDto.setAddress(AddressMocks.getAddressRequestDto());
             ongReqDto.setUser(userReqDto);
 
             Ong ong = OngMocks.getOng();
@@ -525,7 +526,7 @@ class   OngControllerTest {
             ongReqDto.setName("Instituto A Corrente do Bem");
             ongReqDto.setCnpj("44.454.154/0001-29");
             ongReqDto.setCep("04446060");
-            ongReqDto.setAddress("232");
+            ongReqDto.setAddress(AddressMocks.getAddressRequestUpdateDto());
 
             Ong ong = OngMocks.getOng();
 

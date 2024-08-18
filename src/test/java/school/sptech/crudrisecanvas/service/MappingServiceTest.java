@@ -148,7 +148,7 @@ class MappingServiceTest {
             Mockito.when(mappingRepository.save(mapping)).thenReturn(mapping);
             Mockito.when(addressService.saveByCep(address.getCep(), address.getNumber(), address.getComplement())).thenReturn(address);
 
-            Mapping returnedMapping = service.createMapping(mapping, address, token);
+            Mapping returnedMapping = service.createMapping(mapping, token);
 
             assertEquals(mapping.getId(), returnedMapping.getId());
             assertEquals(mapping.getQtyAdults(), returnedMapping.getQtyAdults());
@@ -176,7 +176,7 @@ class MappingServiceTest {
 
             BadRequestException exception = assertThrows(
                     BadRequestException.class,
-                    () -> service.createMapping(mapping, address,token)
+                    () -> service.createMapping(mapping, token)
             );
 
             assertEquals("É necessário que haja pelo menos 1 pessoa no local", exception.getLocalizedMessage());

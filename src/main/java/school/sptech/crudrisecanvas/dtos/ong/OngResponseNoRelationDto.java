@@ -9,7 +9,6 @@ public class OngResponseNoRelationDto {
     private int id;
     private String name;
     private String cnpj;
-    private String cep;
     private AddressResponseDto address;
     private OngStatus status;
 }

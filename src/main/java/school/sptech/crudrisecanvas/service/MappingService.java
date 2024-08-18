@@ -43,16 +43,23 @@ public class MappingService {
         return mapping.get();
     }
 
-    public Mapping createMapping(Mapping mapping, Address address,String token){
+    public Mapping createMapping(Mapping mapping, String token){
         if(mapping.getQtyAdults() + mapping.getQtyChildren() == 0){
             throw new BadRequestException("É necessário que haja pelo menos 1 pessoa no local");
         }
         User user = userService.getAccount(token);
-        Address savedAddress = addressService.saveByCep(address.getCep(), address.getNumber(), address.getComplement());
+
+        if (mapping.getAddress() != null) {
+            Address savedAddress = addressService.saveByCep(mapping.getAddress().getCep(),
+                    mapping.getAddress().getNumber(),
+                    mapping.getAddress().getComplement());
+            mapping.setAddress(savedAddress);
+        } else {
+            mapping.setAddress(null);
+        }
 
     //    mapping.setUsersMappings(List.of(userMapping));
         mapping.setStatus(MappingStatus.ACTIVE);
-        mapping.setAddress(savedAddress);
 
         Mapping savedMapping = mappingRepository.save(mapping);
 

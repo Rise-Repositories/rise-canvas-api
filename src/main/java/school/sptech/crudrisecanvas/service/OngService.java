@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.ong.OngResponseDto;
+import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.Ong;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.entities.Voluntary;
@@ -22,6 +23,7 @@ public class OngService {
     private final OngRepository ongRepository;
     private final UserService userService;
     private final VoluntaryService voluntaryService;
+    private final AddressService addressService;
 
     public List<Ong> getOngs() {
         return ongRepository.findAll();
@@ -45,6 +47,16 @@ public class OngService {
         ong.setStatus(OngStatus.PENDING);
 
         userService.register(user);
+
+        if (ong.getAddress() != null) {
+            Address savedAddress = addressService.saveByCep(ong.getAddress().getCep(),
+                    ong.getAddress().getNumber(),
+                    ong.getAddress().getComplement());
+            ong.setAddress(savedAddress);
+        } else {
+            ong.setAddress(null);
+        }
+
         ongRepository.save(ong);
 
         voluntaryService.createVoluntary(
@@ -63,7 +75,6 @@ public class OngService {
 
         ongToUpdate.setName(ong.getName());
         ongToUpdate.setCnpj(ong.getCnpj());
-        ongToUpdate.setCep(ong.getCep());
         ongToUpdate.setAddress(ong.getAddress());
 
         return ongRepository.save(ongToUpdate);

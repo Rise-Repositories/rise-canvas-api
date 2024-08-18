@@ -13,7 +13,6 @@ public class OngResponseDto {
     private int id;
     private String name;
     private String cnpj;
-    private String cep;
     private AddressResponseDto address;
     private OngStatus status;
     private List<ActionResponseNoRelationDto> actions;

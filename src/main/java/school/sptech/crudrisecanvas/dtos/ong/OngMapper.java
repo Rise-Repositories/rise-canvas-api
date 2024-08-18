@@ -12,7 +12,6 @@ public class OngMapper {
         Ong ong = new Ong();
         ong.setName(ongRequestDto.getName());
         ong.setCnpj(ongRequestDto.getCnpj());
-        ong.setCep(ongRequestDto.getCep());
         ong.setAddress(AddressMapper.toEntity(ongRequestDto.getAddress()));
         return ong;
     }
@@ -21,7 +20,6 @@ public class OngMapper {
         Ong ong = new Ong();
         ong.setName(ongUpdateDto.getName());
         ong.setCnpj(ongUpdateDto.getCnpj());
-        ong.setCep(ongUpdateDto.getCep());
         ong.setAddress(AddressMapper.toEntity(ongUpdateDto.getAddress()));
         return ong;
     }
@@ -31,7 +29,6 @@ public class OngMapper {
         dto.setId(ong.getId());
         dto.setName(ong.getName());
         dto.setCnpj(ong.getCnpj());
-        dto.setCep(ong.getCep());
         dto.setAddress(AddressMapper.toDto(ong.getAddress()));
         dto.setStatus(ong.getStatus());
         dto.setActions(ActionMapper.toNoRelation(ong.getActions()));
@@ -51,7 +48,6 @@ public class OngMapper {
         dto.setId(ong.getId());
         dto.setName(ong.getName());
         dto.setCnpj(ong.getCnpj());
-        dto.setCep(ong.getCep());
         dto.setAddress(AddressMapper.toDto(ong.getAddress()));
         dto.setStatus(ong.getStatus());
         return dto;

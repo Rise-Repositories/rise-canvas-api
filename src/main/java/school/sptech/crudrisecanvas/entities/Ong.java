@@ -16,7 +16,6 @@ public class Ong {
 
     private String name;
     private String cnpj;
-    private String cep;
 
     @ManyToOne
     private Address address;

@@ -19,11 +19,6 @@ public class OngRequestDto {
     @NotBlank
     @CNPJ
     private String cnpj;
-
-    @NotBlank
-    @Size(min = 8, max = 9)
-    @CEP
-    private String cep;
     
     @NotNull
     private AddressRequestDto address;

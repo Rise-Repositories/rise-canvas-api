@@ -20,6 +20,7 @@ import school.sptech.crudrisecanvas.entities.UserMapping;
 import school.sptech.crudrisecanvas.exception.BadRequestException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
+import school.sptech.crudrisecanvas.utils.Coordinates;
 import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 
 @Service
@@ -32,6 +33,14 @@ public class MappingService {
 
     public List<Mapping> getMappings(){
         return mappingRepository.findAll();
+    }
+
+    public List<Mapping> getMappingsByCoordinates(Coordinates coordinates, Double radius){
+        return mappingRepository.findWhenInsideArea(
+            coordinates.getLatitude(), 
+            coordinates.getLongitude(), 
+            radius
+        );
     }
 
     public Mapping getMappingById(Integer id){

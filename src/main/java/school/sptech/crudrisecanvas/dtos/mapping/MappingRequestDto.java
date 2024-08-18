@@ -3,18 +3,17 @@ package school.sptech.crudrisecanvas.dtos.mapping;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import school.sptech.crudrisecanvas.dtos.address.AddressRequestDto;
 
 @Data
 public class MappingRequestDto {
-    @NotNull
-    @Positive
+
+    @PositiveOrZero
     private Integer qtyAdults;
 
-    @NotNull
-    @Positive
+    @PositiveOrZero
     private Integer qtyChildren;
 
     private String referencePoint;

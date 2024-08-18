@@ -12,6 +12,7 @@ import school.sptech.crudrisecanvas.api.configuration.security.jwt.JwtTokenManag
 import school.sptech.crudrisecanvas.dtos.user.UserLoginDto;
 import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
+import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.exception.ConflictException;
 import school.sptech.crudrisecanvas.exception.ForbiddenException;
@@ -29,6 +30,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenManager gerenciadorTokenJwt;
     private final AuthenticationManager authenticationManager;
+    private final AddressService addressService;
 
     public void register(User newUser) {
         if(userRepository.existsByCpf(newUser.getCpf())){
@@ -36,6 +38,15 @@ public class UserService {
         }
         if(userRepository.existsByEmail(newUser.getEmail())){
             throw new ConflictException("E-mail já cadastrado");
+        }
+
+        if (newUser.getAddress() != null) {
+            Address savedAddress = addressService.saveByCep(newUser.getAddress().getCep(),
+                    newUser.getAddress().getNumber(),
+                    newUser.getAddress().getComplement());
+            newUser.setAddress(savedAddress);
+        } else {
+            newUser.setAddress(null);
         }
 
         String passwordHash = passwordEncoder.encode(newUser.getPassword());

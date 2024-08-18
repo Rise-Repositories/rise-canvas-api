@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import school.sptech.crudrisecanvas.dtos.address.AddressMapper;
 import school.sptech.crudrisecanvas.dtos.user.UserLoginDto;
 import school.sptech.crudrisecanvas.dtos.user.UserRequestDto;
 import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.dtos.user.UserRequestUpdateDto;
 import school.sptech.crudrisecanvas.dtos.user.UserResponseDto;
 import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
+import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.service.UserService;
 
@@ -38,7 +40,6 @@ public class UserController {
     @PostMapping("/auth/register")
     public ResponseEntity<Void> register(@RequestBody @Valid UserRequestDto userDto) {
         final User newUser = UserMapper.toEntity(userDto);
-
         this.usuarioService.register(newUser);
 
         return ResponseEntity.status(201).build();

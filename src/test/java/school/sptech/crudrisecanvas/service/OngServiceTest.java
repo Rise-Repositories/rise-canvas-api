@@ -8,12 +8,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.Ong;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.entities.Voluntary;
 import school.sptech.crudrisecanvas.exception.ConflictException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.OngRepository;
+import school.sptech.crudrisecanvas.unittestutils.AddressMocks;
 import school.sptech.crudrisecanvas.unittestutils.OngMocks;
 import school.sptech.crudrisecanvas.unittestutils.UserMocks;
 import school.sptech.crudrisecanvas.unittestutils.VoluntaryMocks;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ONG Service")
@@ -37,6 +40,8 @@ class OngServiceTest {
     private UserService userService;
     @Mock
     private VoluntaryService voluntaryService;
+    @Mock
+    private AddressService addressService;
 
     @Nested
     @DisplayName("getOngs()")
@@ -56,7 +61,6 @@ class OngServiceTest {
             assertEquals(lista.get(0).getId(), ongs.get(0).getId());
             assertEquals(lista.get(0).getName(), ongs.get(0).getName());
             assertEquals(lista.get(0).getCnpj(), ongs.get(0).getCnpj());
-            assertEquals(lista.get(0).getCep(), ongs.get(0).getCep());
             assertEquals(lista.get(0).getAddress(), ongs.get(0).getAddress());
         }
 
@@ -90,7 +94,6 @@ class OngServiceTest {
             assertEquals(ong.getId(), returnedOng.getId());
             assertEquals(ong.getName(), returnedOng.getName());
             assertEquals(ong.getCnpj(), returnedOng.getCnpj());
-            assertEquals(ong.getCep(), returnedOng.getCep());
             assertEquals(ong.getAddress(), returnedOng.getAddress());
         }
 
@@ -119,22 +122,23 @@ class OngServiceTest {
         void validData() {
             Ong ong = OngMocks.getOng();
             User user = UserMocks.getUser();
+            Address address = AddressMocks.getAddress();
             Voluntary voluntary = VoluntaryMocks.getVoluntary();
             voluntary.setId(null);
 
             Mockito.when(repository.existsByCnpj(ong.getCnpj())).thenReturn(false);
-            Mockito.when(voluntaryService.createVoluntary(voluntary)).thenReturn(voluntary);
+            Mockito.when(voluntaryService.createVoluntary(any())).thenReturn(voluntary);
+            Mockito.when(addressService.saveByCep(address.getCep(), address.getNumber(), address.getComplement())).thenReturn(address);
 
             Ong returnedOng = service.createOng(ong, user);
 
             assertEquals(ong.getName(), returnedOng.getName());
             assertEquals(ong.getCnpj(), returnedOng.getCnpj());
-            assertEquals(ong.getCep(), returnedOng.getCep());
             assertEquals(ong.getAddress(), returnedOng.getAddress());
 
             Mockito.verify(repository, Mockito.times(1)).save(ong);
             Mockito.verify(userService, Mockito.times(1)).register(user);
-            Mockito.verify(voluntaryService, Mockito.times(1)).createVoluntary(voluntary);
+            Mockito.verify(voluntaryService, Mockito.times(1)).createVoluntary(any());
         }
 
         @Test
@@ -167,21 +171,19 @@ class OngServiceTest {
             Ong newOng = OngMocks.getOng();
             newOng.setName("Teto");
             newOng.setCnpj("76852512000148");
-            newOng.setCep("01223010");
-            newOng.setAddress("56");
+            newOng.setAddress(AddressMocks.getAddress());
 
             OngService spyService = Mockito.spy(service);
 
             Mockito.doReturn(currentOng).when(spyService).getOngById(id);
             Mockito.when(repository.existsByCnpjAndIdNot(newOng.getCnpj(), id)).thenReturn(false);
-            Mockito.when(repository.save(newOng)).thenReturn(newOng);
+            Mockito.when(repository.save(any())).thenReturn(newOng);
 
             Ong returnedOng = spyService.updateOng(id, newOng);
 
             assertEquals(currentOng.getId(), returnedOng.getId());
             assertEquals(newOng.getName(), returnedOng.getName());
             assertEquals(newOng.getCnpj(), returnedOng.getCnpj());
-            assertEquals(newOng.getCep(), returnedOng.getCep());
             assertEquals(newOng.getAddress(), returnedOng.getAddress());
 
             Mockito.verify(repository, Mockito.times(1)).existsByCnpjAndIdNot(newOng.getCnpj(), id);
@@ -195,8 +197,7 @@ class OngServiceTest {
             Ong newOng = OngMocks.getOng();
             newOng.setName("Teto");
             newOng.setCnpj("76852512000148");
-            newOng.setCep("01223010");
-            newOng.setAddress("56");
+            newOng.setAddress(AddressMocks.getAddress());
 
             OngService spyService = Mockito.spy(service);
 

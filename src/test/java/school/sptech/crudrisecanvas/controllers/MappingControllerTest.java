@@ -130,7 +130,7 @@ class MappingControllerTest {
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("authorization", UserMocks.getToken());
 
-            Mockito.when(service.createMapping(any(), any(), any())).thenReturn(mapping);
+            Mockito.when(service.createMapping(any(), any())).thenReturn(mapping);
 
             ResponseEntity<MappingResponseDto> response = controller.createMapping(mapReqDto, hashMap);
             MappingResponseDto returnedMapping = response.getBody();
@@ -147,7 +147,7 @@ class MappingControllerTest {
             assertEquals(mapping.getStatus().toString(), returnedMapping.getStatus());
             assertEquals(mapping.getDate().toString(), returnedMapping.getDate());
 
-            Mockito.verify(service, Mockito.times(1)).createMapping(any(), any(), any());
+            Mockito.verify(service, Mockito.times(1)).createMapping(any(), any());
         }
 
         @Nested

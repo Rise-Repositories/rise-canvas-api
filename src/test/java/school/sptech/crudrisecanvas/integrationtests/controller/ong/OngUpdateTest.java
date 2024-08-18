@@ -40,9 +40,11 @@ public class OngUpdateTest {
             String json = """
                     {
                         "name": "Instituto ACB",
-                        "cep": "03679010",
                         "cnpj": "78.349.263/0001-06",
-                        "address": "Rua Hélvio de Oliveira Albuquerque, 74"
+                        "address": {
+                            "cep": "03679010",
+                            "number": "74"
+                        }
                     }""";
 
             mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
@@ -51,9 +53,9 @@ public class OngUpdateTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value("1"))
                     .andExpect(jsonPath("$.name").value("Instituto ACB"))
-                    .andExpect(jsonPath("$.cep").value("03679010"))
                     .andExpect(jsonPath("$.cnpj").value("78.349.263/0001-06"))
-                    .andExpect(jsonPath("$.address").value("Rua Hélvio de Oliveira Albuquerque, 74"));
+                    .andExpect(jsonPath("$.address.cep").value("03679010"))
+                    .andExpect(jsonPath("$.address.number").value("74"));
         }
 
         @Test
@@ -64,9 +66,11 @@ public class OngUpdateTest {
             String json = """
                     {
                         "name": "Instituto ACB",
-                        "cep": "03679010",
                         "cnpj": "20.438.196/0001-08",
-                        "address": "Rua Hélvio de Oliveira Albuquerque, 74"
+                        "address": {
+                            "cep": "03679010",
+                            "number": "74"
+                        }
                     }""";
 
             mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
@@ -75,9 +79,9 @@ public class OngUpdateTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value("1"))
                     .andExpect(jsonPath("$.name").value("Instituto ACB"))
-                    .andExpect(jsonPath("$.cep").value("03679010"))
                     .andExpect(jsonPath("$.cnpj").value("20.438.196/0001-08"))
-                    .andExpect(jsonPath("$.address").value("Rua Hélvio de Oliveira Albuquerque, 74"));
+                    .andExpect(jsonPath("$.address.cep").value("03679010"))
+                    .andExpect(jsonPath("$.address.number").value("74"));
         }
     }
 
@@ -97,9 +101,11 @@ public class OngUpdateTest {
                     {
                         "name": "Instituto ACB",
                         "description": "Promover a integração social entre voluntários e crianças",
-                        "cep": "03679010",
                         "cnpj": "78.349.123/0001-06",
-                        "address": "Rua Hélvio de Oliveira Albuquerque, 74"
+                        "address": {
+                            "cep": "03679010",
+                            "number": "74"
+                        }
                     }""";
 
             mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")

@@ -31,6 +31,6 @@ public class CEPValidator implements ConstraintValidator<CEP, String> {
                 .retrieve()
                 .body(String.class);
 
-        return raw != null && !raw.contains("\"erro\": true");
+        return raw != null && !raw.contains("\"erro\": \"true\"");
     }
 }

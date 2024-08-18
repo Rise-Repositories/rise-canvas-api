@@ -26,6 +26,7 @@ import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.integrationtests.utils.paths.OngEnum;
 import school.sptech.crudrisecanvas.integrationtests.utils.paths.UserEnum;
 import school.sptech.crudrisecanvas.service.OngService;
+import school.sptech.crudrisecanvas.unittestutils.AddressMocks;
 import school.sptech.crudrisecanvas.unittestutils.OngMocks;
 import school.sptech.crudrisecanvas.unittestutils.UserMocks;
 
@@ -65,8 +66,7 @@ class   OngControllerTest {
             assertEquals(ongs.get(0).getId(), returnedOngs.get(0).getId());
             assertEquals(ongs.get(0).getName(), returnedOngs.get(0).getName());
             assertEquals(ongs.get(0).getCnpj(), returnedOngs.get(0).getCnpj());
-            assertEquals(ongs.get(0).getCep(), returnedOngs.get(0).getCep());
-            assertEquals(ongs.get(0).getAddress(), returnedOngs.get(0).getAddress());
+            assertEquals(ongs.get(0).getAddress().getCep(), returnedOngs.get(0).getAddress().getCep());
 
             Mockito.verify(service, Mockito.times(1)).getOngs();
         }
@@ -105,8 +105,7 @@ class   OngControllerTest {
             assertEquals(ong.getId(), response.getBody().getId());
             assertEquals(ong.getName(), response.getBody().getName());
             assertEquals(ong.getCnpj(), response.getBody().getCnpj());
-            assertEquals(ong.getCep(), response.getBody().getCep());
-            assertEquals(ong.getAddress(), response.getBody().getAddress());
+            assertEquals(ong.getAddress().getCep(), response.getBody().getAddress().getCep());
 
             Mockito.verify(service, Mockito.times(1)).getOngById(id);
         }
@@ -129,8 +128,7 @@ class   OngControllerTest {
             OngRequestDto ongReqDto = new OngRequestDto();
             ongReqDto.setName("Instituto A Corrente do Bem");
             ongReqDto.setCnpj("44.454.154/0001-29");
-            ongReqDto.setCep("04446060");
-            ongReqDto.setAddress("232");
+            ongReqDto.setAddress(AddressMocks.getAddressRequestDto());
             ongReqDto.setUser(userReqDto);
 
             Ong ong = OngMocks.getOng();
@@ -145,8 +143,7 @@ class   OngControllerTest {
             assertEquals(ong.getId(), returnedOng.getId());
             assertEquals(ong.getName(), returnedOng.getName());
             assertEquals(ong.getCnpj(), returnedOng.getCnpj());
-            assertEquals(ong.getCep(), returnedOng.getCep());
-            assertEquals(ong.getAddress(), returnedOng.getAddress());
+            assertEquals(ong.getAddress().getCep(), returnedOng.getAddress().getCep());
 
             Mockito.verify(service, Mockito.times(1)).createOng(any(), any());
         }
@@ -167,8 +164,10 @@ class   OngControllerTest {
                 String json = """
                         {
                                 "cnpj": "44.454.154/0001-29",
-                                "cep": "04446060",
-                                "address": "232",
+                                "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -191,8 +190,10 @@ class   OngControllerTest {
                         {
                                 "name": "",
                                 "cnpj": "44.454.154/0001-29",
-                                "cep": "04446060",
-                                "address": "232",
+                                "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -215,8 +216,10 @@ class   OngControllerTest {
                         {
                                 "name": "         ",
                                 "cnpj": "44.454.154/0001-29",
-                                "cep": "04446060",
-                                "address": "232",
+                                "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -238,8 +241,10 @@ class   OngControllerTest {
                 String json = """
                         {
                                 "name": "Instituto A Corrente do Bem",
-                                "cep": "04446060",
-                                "address": "232",
+                                "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -262,8 +267,10 @@ class   OngControllerTest {
                         {
                                 "name": "Instituto A Corrente do Bem",
                                 "cnpj": "",
-                                "cep": "04446060",
-                                "address": "232",
+                                "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -286,8 +293,10 @@ class   OngControllerTest {
                         {
                                 "name": "Instituto A Corrente do Bem",
                                 "cnpj": "             ",
-                                "cep": "04446060",
-                                "address": "232",
+                                "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -310,8 +319,10 @@ class   OngControllerTest {
                         {
                                 "name": "Instituto A Corrente do Bem",
                                 "cnpj": "44.454.123/0001-29",
-                                "cep": "04446060",
-                                "address": "232",
+                                "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -334,7 +345,9 @@ class   OngControllerTest {
                         {
                                 "name": "Instituto A Corrente do Bem",
                                 "cnpj": "44.454.154/0001-29",
-                                "address": "232",
+                                "address": {
+                                    "number": "232"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -357,8 +370,10 @@ class   OngControllerTest {
                         {
                                 "name": "Instituto A Corrente do Bem",
                                 "cnpj": "44.454.154/0001-29",
-                                "cep": "",
-                                "address": "232",
+                                "address": {
+                                    "cep": "",
+                                    "number": "232"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -381,8 +396,10 @@ class   OngControllerTest {
                         {
                                 "name": "Instituto A Corrente do Bem",
                                 "cnpj": "44.454.154/0001-29",
-                                "cep": "        ",
-                                "address": "232",
+                                "address": {
+                                    "cep": "        ",
+                                    "number": "232"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -405,8 +422,10 @@ class   OngControllerTest {
                         {
                                 "name": "Instituto A Corrente do Bem",
                                 "cnpj": "44.454.154/0001-29",
-                                "cep": "00000000",
-                                "address": "232",
+                                "address": {
+                                    "cep": "00000000",
+                                    "number": "232"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -429,7 +448,9 @@ class   OngControllerTest {
                         {
                                 "name": "Instituto A Corrente do Bem",
                                 "cnpj": "44.454.154/0001-29",
-                                "cep": "04446060",
+                                "address": {
+                                    "cep": "04446060"
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -452,8 +473,10 @@ class   OngControllerTest {
                         {
                                 "name": "Instituto A Corrente do Bem",
                                 "cnpj": "44.454.154/0001-29",
-                                "cep": "04446060",
-                                "address": "",
+                                "address": {
+                                    "cep": "04446060",
+                                    "number": ""
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -476,8 +499,10 @@ class   OngControllerTest {
                         {
                                 "name": "Instituto A Corrente do Bem",
                                 "cnpj": "44.454.154/0001-29",
-                                "cep": "04446060",
-                                "address": "    ",
+                                "address": {
+                                    "cep": "04446060",
+                                    "number": "   "
+                                }
                                 "user": {
                                     "name": "Marcelo Soares",
                                     "email": "marcelo.soares@email.com",
@@ -500,8 +525,10 @@ class   OngControllerTest {
                         {
                                 "name": "Instituto A Corrente do Bem",
                                 "cnpj": "44.454.154/0001-29",
-                                "cep": "04446060",
-                                "address": "232"
+                                "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                                }
                         }""";
 
                 mockMvc.perform(MockMvcRequestBuilders.post(OngEnum.BASE_URI.path + "/auth")
@@ -524,8 +551,7 @@ class   OngControllerTest {
             OngRequestUpdateDto ongReqDto = new OngRequestUpdateDto();
             ongReqDto.setName("Instituto A Corrente do Bem");
             ongReqDto.setCnpj("44.454.154/0001-29");
-            ongReqDto.setCep("04446060");
-            ongReqDto.setAddress("232");
+            ongReqDto.setAddress(AddressMocks.getAddressRequestUpdateDto());
 
             Ong ong = OngMocks.getOng();
 
@@ -538,8 +564,7 @@ class   OngControllerTest {
             assertEquals(ong.getId(), returnedOng.getId());
             assertEquals(ong.getName(), returnedOng.getName());
             assertEquals(ong.getCnpj(), returnedOng.getCnpj());
-            assertEquals(ong.getCep(), returnedOng.getCep());
-            assertEquals(ong.getAddress(), returnedOng.getAddress());
+            assertEquals(ong.getAddress().getCep(), returnedOng.getAddress().getCep());
 
             Mockito.verify(service, Mockito.times(1)).updateOng(eq(id), any());
         }
@@ -560,8 +585,10 @@ class   OngControllerTest {
                 String json = """
                         {
                             "cnpj": "44.454.154/0001-29",
-                            "cep": "04446060",
-                            "address": "232"
+                            "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                            }
                         }""";
 
                 mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
@@ -578,8 +605,10 @@ class   OngControllerTest {
                         {
                             "name": "",
                             "cnpj": "44.454.154/0001-29",
-                            "cep": "04446060",
-                            "address": "232"
+                            "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                            }
                         }""";
 
                 mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
@@ -596,8 +625,10 @@ class   OngControllerTest {
                         {
                             "name": "           ",
                             "cnpj": "44.454.154/0001-29",
-                            "cep": "04446060",
-                            "address": "232"
+                            "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                            }
                         }""";
 
                 mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
@@ -613,8 +644,10 @@ class   OngControllerTest {
                 String json = """
                         {
                             "name": "Instituto a corrente do bem",
-                            "cep": "04446060",
-                            "address": "232"
+                            "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                            }
                         }""";
 
                 mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
@@ -631,8 +664,10 @@ class   OngControllerTest {
                         {
                             "name": "Instituto a corrente do bem",
                             "cnpj": "",
-                            "cep": "04446060",
-                            "address": "232"
+                            "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                            }
                         }""";
 
                 mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
@@ -649,8 +684,10 @@ class   OngControllerTest {
                         {
                             "name": "Instituto a corrente do bem",
                             "cnpj": "                ",
-                            "cep": "04446060",
-                            "address": "232"
+                            "address": {
+                                    "cep": "04446060",
+                                    "number": "232"
+                            }
                         }""";
 
                 mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
@@ -667,7 +704,9 @@ class   OngControllerTest {
                         {
                             "name": "Instituto a corrente do bem",
                             "cnpj": "44.454.154/0001-29",
-                            "address": "232"
+                            "address": {
+                                    "number": "232"
+                            }
                         }""";
 
                 mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
@@ -684,8 +723,10 @@ class   OngControllerTest {
                         {
                             "name": "Instituto a corrente do bem",
                             "cnpj": "44.454.154/0001-29",
-                            "cep": "",
-                            "address": "232"
+                            "address": {
+                                    "cep": "",
+                                    "number": "232"
+                            }
                         }""";
 
                 mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
@@ -702,8 +743,10 @@ class   OngControllerTest {
                         {
                             "name": "Instituto a corrente do bem",
                             "cnpj": "44.454.154/0001-29",
-                            "cep": "        ",
-                            "address": "232"
+                            "address": {
+                                    "cep": "        ",
+                                    "number": "232"
+                            }
                         }""";
 
                 mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
@@ -720,61 +763,10 @@ class   OngControllerTest {
                         {
                             "name": "Instituto a corrente do bem",
                             "cnpj": "44.454.154/0001-29",
-                            "cep": "00000000",
-                            "address": "232"
-                        }""";
-
-                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
-                                .content(json)
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest());
-            }
-
-            @Test
-            @DisplayName("Endereço nulo")
-            @WithMockUser
-            void addressIsNull() throws Exception {
-                String json = """
-                        {
-                            "name": "Instituto a corrente do bem",
-                            "cnpj": "44.454.154/0001-29",
-                            "cep": "04446060"
-                        }""";
-
-                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
-                                .content(json)
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest());
-            }
-
-            @Test
-            @DisplayName("Endereço vazio")
-            @WithMockUser
-            void addressIsEmpty() throws Exception {
-                String json = """
-                        {
-                            "name": "Instituto a corrente do bem",
-                            "cnpj": "44.454.154/0001-29",
-                            "cep": "04446060",
-                            "address": ""
-                        }""";
-
-                mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")
-                                .content(json)
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest());
-            }
-
-            @Test
-            @DisplayName("Endereço em branco")
-            @WithMockUser
-            void addressIsBlank() throws Exception {
-                String json = """
-                        {
-                            "name": "Instituto a corrente do bem",
-                            "cnpj": "44.454.154/0001-29",
-                            "cep": "04446060",
-                            "address": "    "
+                            "address": {
+                                    "cep": "00000000",
+                                    "number": "232"
+                            }
                         }""";
 
                 mockMvc.perform(MockMvcRequestBuilders.put(OngEnum.BY_ID.path + "1")

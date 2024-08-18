@@ -41,9 +41,11 @@ public class OngCreateTest {
                         "name": "Instituto A Corrente do Bem",
                         "cnpj": "44.454.154/0001-29",
                         "description": "Doação de alimentos e apoio a pessoas hipossuficientes",
-                        "cep": "04446060",
-                            "address": "Av. Assaré, Jardim Sabará",
-                            "user": {
+                        "address": {
+                            "cep": "04446060",
+                            "number": "100"
+                        },
+                        "user": {
                             "name": "Carlos Sales",
                             "email": "carlos.sales@email.com",
                             "password": "senha123",
@@ -100,9 +102,11 @@ public class OngCreateTest {
                         "name": "Instituto A Corrente do Bem",
                         "cnpj": "44.454.154/0001-29",
                         "description": "Doação de alimentos e apoio a pessoas hipossuficientes",
-                        "cep": "04446060",
-                            "address": "Av. Assaré, Jardim Sabará",
-                            "user": {
+                        "address": {
+                            "cep": "04446060",
+                            "number": "100"
+                        },
+                        "user": {
                             "name": "Carlos Sales",
                             "email": "carlos.sales@email.com",
                             "password": "senha123",
@@ -120,9 +124,11 @@ public class OngCreateTest {
                         "name": "Instituto ACB",
                         "cnpj": "44.454.154/0001-29",
                         "description": "Doação de alimentos",
-                        "cep": "04446060",
-                            "address": "Av. Assaré, Jardim Sabará",
-                            "user": {
+                        "address": {
+                            "cep": "04446060",
+                            "number": "100"
+                        },
+                        "user": {
                             "name": "Marcelo Sales",
                             "email": "marcelo.sales@email.com",
                             "password": "senha123",
@@ -146,9 +152,11 @@ public class OngCreateTest {
                         "name": "Instituto A Corrente do Bem",
                         "cnpj": "44.454.154/0001-29",
                         "description": "Doação de alimentos e apoio a pessoas hipossuficientes",
-                        "cep": "11111111",
-                            "address": "Av. Assaré, Jardim Sabará",
-                            "user": {
+                        "address": {
+                            "cep": "11111111",
+                            "number": "100"
+                        },
+                        "user": {
                             "name": "Carlos Sales",
                             "email": "carlos.sales@email.com",
                             "password": "senha123",
@@ -172,9 +180,11 @@ public class OngCreateTest {
                         "name": "Instituto A Corrente do Bem",
                         "cnpj": "44.454.154/0001-29",
                         "description": "Doação de alimentos e apoio a pessoas hipossuficientes",
-                        "cep": "04446060",
-                            "address": "Av. Assaré, Jardim Sabará",
-                            "user": {
+                        "address": {
+                            "cep": "04446060",
+                            "number": "100"
+                        },
+                        "user": {
                             "name": "Carlos Sales",
                             "email": "carlos.salesemail.com",
                             "password": "senha123",
@@ -198,9 +208,11 @@ public class OngCreateTest {
                         "name": "Instituto A Corrente do Bem",
                         "cnpj": "44.454.154/0001-29",
                         "description": "Doação de alimentos e apoio a pessoas hipossuficientes",
-                        "cep": "04446060",
-                            "address": "Av. Assaré, Jardim Sabará",
-                            "user": {
+                        "address": {
+                            "cep": "04446060",
+                            "number": "100"
+                        },
+                        "user": {
                             "name": "Carlos Sales",
                             "email": "carlos.sales@email.com",
                             "password": "senha123",
@@ -218,9 +230,11 @@ public class OngCreateTest {
                         "name": "Instituto A Corrente do Bem",
                         "cnpj": "97.248.627/0001-06",
                         "description": "Doação de alimentos e apoio a pessoas hipossuficientes",
-                        "cep": "04446060",
-                            "address": "Av. Assaré, Jardim Sabará",
-                            "user": {
+                        "address": {
+                            "cep": "04446060",
+                            "number": "100"
+                        },
+                        "user": {
                             "name": "Marcelo Sales",
                             "email": "carlos.sales@email.com",
                             "password": "senha123",
@@ -244,9 +258,11 @@ public class OngCreateTest {
                         "name": "Instituto A Corrente do Bem",
                         "cnpj": "44.454.154/0001-29",
                         "description": "Doação de alimentos e apoio a pessoas hipossuficientes",
-                        "cep": "04446060",
-                            "address": "Av. Assaré, Jardim Sabará",
-                            "user": {
+                        "address": {
+                            "cep": "04446060",
+                            "number": "100"
+                        },
+                        "user": {
                             "name": "Carlos Sales",
                             "email": "carlos.sales@email.com",
                             "password": "senha123",
@@ -270,9 +286,11 @@ public class OngCreateTest {
                         "name": "Instituto A Corrente do Bem",
                         "cnpj": "44.454.154/0001-29",
                         "description": "Doação de alimentos e apoio a pessoas hipossuficientes",
-                        "cep": "04446060",
-                            "address": "Av. Assaré, Jardim Sabará",
-                            "user": {
+                        "address": {
+                            "cep": "04446060",
+                            "number": "100"
+                        },
+                        "user": {
                             "name": "Carlos Sales",
                             "email": "carlos.sales@email.com",
                             "password": "senha123",
@@ -290,9 +308,11 @@ public class OngCreateTest {
                         "name": "Instituto A Corrente do Bem",
                         "cnpj": "97.248.627/0001-06",
                         "description": "Doação de alimentos e apoio a pessoas hipossuficientes",
-                        "cep": "04446060",
-                            "address": "Av. Assaré, Jardim Sabará",
-                            "user": {
+                        "address": {
+                            "cep": "04446060",
+                            "number": "100"
+                        },
+                        "user": {
                             "name": "Marcelo Sales",
                             "email": "marcelo.sales@email.com",
                             "password": "senha123",

@@ -17,6 +17,7 @@ public class MappingMapper {
         mapping.setDescription(mappingRequestDto.getDescription());
         mapping.setLatitude(mappingRequestDto.getLatitude());
         mapping.setLongitude(mappingRequestDto.getLongitude());
+        mapping.setAddress(AddressMapper.toEntity(mappingRequestDto.getAddress()));
         return mapping;
     }
 

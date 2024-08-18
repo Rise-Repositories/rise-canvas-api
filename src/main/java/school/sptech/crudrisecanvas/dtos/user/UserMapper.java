@@ -3,6 +3,7 @@ package school.sptech.crudrisecanvas.dtos.user;
 import java.util.List;
 
 import school.sptech.crudrisecanvas.dtos.Voluntary.VoluntaryMapper;
+import school.sptech.crudrisecanvas.dtos.address.AddressMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.entities.User;
 
@@ -13,6 +14,7 @@ public class UserMapper {
         user.setEmail(userRequestDto.getEmail());
         user.setPassword(userRequestDto.getPassword());
         user.setCpf(userRequestDto.getCpf());
+        user.setAddress(AddressMapper.toEntity(userRequestDto.getAddress()));
         return user;
     }
 
@@ -21,6 +23,7 @@ public class UserMapper {
         user.setName(userRequestUpdateDto.getName());
         user.setEmail(userRequestUpdateDto.getEmail());
         user.setCpf(userRequestUpdateDto.getCpf());
+        user.setAddress(AddressMapper.toEntity(userRequestUpdateDto.getAddress()));
         return user;
     }
 
@@ -32,6 +35,7 @@ public class UserMapper {
         userResponseDto.setCpf(user.getCpf());
         userResponseDto.setMapping(MappingMapper.toUserNoRelationDto(user.getMapping()));
         userResponseDto.setVoluntary(VoluntaryMapper.toUserNoRelationDto(user.getVoluntary()));
+        userResponseDto.setAddress(AddressMapper.toDto(user.getAddress()));
         return userResponseDto;
     }
 
@@ -49,6 +53,7 @@ public class UserMapper {
         userResponseNoRelationDto.setName(user.getName());
         userResponseNoRelationDto.setEmail(user.getEmail());
         userResponseNoRelationDto.setCpf(user.getCpf());
+        userResponseNoRelationDto.setAddress(AddressMapper.toDto(user.getAddress()));
         return userResponseNoRelationDto;
     }
 

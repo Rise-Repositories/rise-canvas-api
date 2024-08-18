@@ -19,6 +19,12 @@ public class AddressService {
     private final AddressRepository repository;
 
     public Address saveByCep(String cep, Integer number, String complement) {
+
+        Optional<Address> fromDatabase = repository.findByCepAndNumberAndComplement(cep, number, complement);
+        if (fromDatabase.isPresent()) {
+            return fromDatabase.get();
+        }
+
         RestClient client = RestClient.builder()
                 .baseUrl("https://viacep.com.br/ws/")
                 .messageConverters(httpMessageConverters -> httpMessageConverters.add(new MappingJackson2HttpMessageConverter()))

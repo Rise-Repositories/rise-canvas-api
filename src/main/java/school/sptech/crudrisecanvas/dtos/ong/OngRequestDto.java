@@ -21,6 +21,7 @@ public class OngRequestDto {
     private String cnpj;
     
     @NotNull
+    @Valid
     private AddressRequestDto address;
 
     @NotNull

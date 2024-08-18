@@ -12,4 +12,8 @@ public interface AddressRepository extends JpaRepository<Address, Integer> {
     Optional<Integer> findIdByCepAndNumber(String cep, Integer number);
 
     Optional<Address> findByCepAndNumber(String cep, Integer number);
+
+    Optional<Integer> findIdByCepAndNumberAndComplement(String cep, Integer number, String complement);
+
+    Optional<Address> findByCepAndNumberAndComplement(String cep, Integer number, String complement);
 }

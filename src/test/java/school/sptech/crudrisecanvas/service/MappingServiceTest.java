@@ -146,7 +146,6 @@ class MappingServiceTest {
 
             Mockito.when(userService.getAccount(token)).thenReturn(user);
             Mockito.when(mappingRepository.save(mapping)).thenReturn(mapping);
-            Mockito.when(addressService.saveByCep(address.getCep(), address.getNumber(), address.getComplement())).thenReturn(address);
 
             Mapping returnedMapping = service.createMapping(mapping, token);
 

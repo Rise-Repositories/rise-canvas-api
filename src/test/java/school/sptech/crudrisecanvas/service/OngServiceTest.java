@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.Ong;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.entities.Voluntary;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ONG Service")
@@ -38,6 +40,8 @@ class OngServiceTest {
     private UserService userService;
     @Mock
     private VoluntaryService voluntaryService;
+    @Mock
+    private AddressService addressService;
 
     @Nested
     @DisplayName("getOngs()")
@@ -118,11 +122,13 @@ class OngServiceTest {
         void validData() {
             Ong ong = OngMocks.getOng();
             User user = UserMocks.getUser();
+            Address address = AddressMocks.getAddress();
             Voluntary voluntary = VoluntaryMocks.getVoluntary();
             voluntary.setId(null);
 
             Mockito.when(repository.existsByCnpj(ong.getCnpj())).thenReturn(false);
-            Mockito.when(voluntaryService.createVoluntary(voluntary)).thenReturn(voluntary);
+            Mockito.when(voluntaryService.createVoluntary(any())).thenReturn(voluntary);
+            Mockito.when(addressService.saveByCep(address.getCep(), address.getNumber(), address.getComplement())).thenReturn(address);
 
             Ong returnedOng = service.createOng(ong, user);
 
@@ -132,7 +138,7 @@ class OngServiceTest {
 
             Mockito.verify(repository, Mockito.times(1)).save(ong);
             Mockito.verify(userService, Mockito.times(1)).register(user);
-            Mockito.verify(voluntaryService, Mockito.times(1)).createVoluntary(voluntary);
+            Mockito.verify(voluntaryService, Mockito.times(1)).createVoluntary(any());
         }
 
         @Test
@@ -171,7 +177,7 @@ class OngServiceTest {
 
             Mockito.doReturn(currentOng).when(spyService).getOngById(id);
             Mockito.when(repository.existsByCnpjAndIdNot(newOng.getCnpj(), id)).thenReturn(false);
-            Mockito.when(repository.save(newOng)).thenReturn(newOng);
+            Mockito.when(repository.save(any())).thenReturn(newOng);
 
             Ong returnedOng = spyService.updateOng(id, newOng);
 

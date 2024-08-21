@@ -50,5 +50,23 @@ public class MappingActionMapper {
                 ? null
                 : mappingAction.stream().map(MappingActionMapper::toNoRelationDto).toList();
     }
+
+    public static MappingActionResponseNoMappingRelationDto toNoMappingRelationDto(MappingAction mappingAction) {
+        MappingActionResponseNoMappingRelationDto dto = new MappingActionResponseNoMappingRelationDto();
+        dto.setId(mappingAction.getId());
+        dto.setAction(ActionMapper.toNoRelation(mappingAction.getAction()));
+        dto.setQtyServedAdults(mappingAction.getQtyServedAdults());
+        dto.setQtyServedChildren(mappingAction.getQtyServedChildren());
+        dto.setNoDonation(mappingAction.getNoDonation());
+        dto.setNoPeople(mappingAction.getNoPeople());
+        dto.setDescription(mappingAction.getDescription());
+        return dto;
+    }
+
+    public static List<MappingActionResponseNoMappingRelationDto> toNoMappingRelationDto(List<MappingAction> mappingAction) {
+        return mappingAction == null
+                ? null
+                : mappingAction.stream().map(MappingActionMapper::toNoMappingRelationDto).toList();
+    }
     
 }

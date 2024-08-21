@@ -36,6 +36,7 @@ public class MappingMapper {
         mappingResponse.setDate(mapping.getDate().toString());
         mappingResponse.setUserMappings(UserMappingMapper.toMapping(mapping.getUsersMappings()));
         mappingResponse.setAddress(AddressMapper.toDto(mapping.getAddress()));
+        mappingResponse.setMappingActions(MappingActionMapper.toNoMappingRelationDto(mapping.getMappingActions()));
         return mappingResponse;
     }
 

@@ -57,4 +57,24 @@ public class ActionMapper {
             ? null 
             : actions.stream().map(ActionMapper::toNoRelation).toList();
     }
+
+    public static ActionResponseNoMappingRelationDto toNoMappingRelation(Action action){
+        ActionResponseNoMappingRelationDto result = new ActionResponseNoMappingRelationDto();
+        result.setId(action.getId());
+        result.setName(action.getName());
+        result.setDescription(action.getDescription());
+        result.setDatetimeStart(action.getDatetimeStart());
+        result.setDatetimeEnd(action.getDatetimeEnd());
+        result.setLatitude(action.getLatitude());
+        result.setLongitude(action.getLongitude());
+        result.setOng(OngMapper.toNoRelationDto(action.getOng()));
+
+        return result;
+    }
+
+    public static List<ActionResponseNoMappingRelationDto> toNoMappingRelation(List<Action> actions){
+        return actions == null
+                ? null
+                : actions.stream().map(ActionMapper::toNoMappingRelation).toList();
+    }
 }

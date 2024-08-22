@@ -54,7 +54,7 @@ public class MappingActionMapper {
     public static MappingActionResponseNoMappingRelationDto toNoMappingRelationDto(MappingAction mappingAction) {
         MappingActionResponseNoMappingRelationDto dto = new MappingActionResponseNoMappingRelationDto();
         dto.setId(mappingAction.getId());
-        dto.setAction(ActionMapper.toNoRelation(mappingAction.getAction()));
+        dto.setAction(ActionMapper.toNoMappingRelation(mappingAction.getAction()));
         dto.setQtyServedAdults(mappingAction.getQtyServedAdults());
         dto.setQtyServedChildren(mappingAction.getQtyServedChildren());
         dto.setNoDonation(mappingAction.getNoDonation());

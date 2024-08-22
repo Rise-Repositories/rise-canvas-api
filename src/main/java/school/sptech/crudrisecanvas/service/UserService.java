@@ -14,6 +14,7 @@ import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
 import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.User;
+import school.sptech.crudrisecanvas.exception.BadRequestException;
 import school.sptech.crudrisecanvas.exception.ConflictException;
 import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
@@ -126,6 +127,8 @@ public class UserService {
     }
 
     public List<User> getUsersByEmail(String email) {
+        if(email.isBlank()) throw new BadRequestException("Email nao informado");
+
         return userRepository.findAllByEmailContainingIgnoreCase(email);
     }
 

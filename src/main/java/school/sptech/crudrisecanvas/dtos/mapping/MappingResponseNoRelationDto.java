@@ -1,6 +1,7 @@
 package school.sptech.crudrisecanvas.dtos.mapping;
 
 import lombok.Data;
+import school.sptech.crudrisecanvas.dtos.address.AddressResponseDto;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseNoMappingRelationDto;
 
 import java.util.List;
@@ -17,5 +18,6 @@ public class MappingResponseNoRelationDto {
     private Double longitude;
     private String status;
     private String date;
+    private AddressResponseDto address;
     private List<MappingActionResponseNoMappingRelationDto> mappingActions;
 }

@@ -21,6 +21,7 @@ import school.sptech.crudrisecanvas.repositories.UserRepositary;
 import school.sptech.crudrisecanvas.utils.adpters.MailValue;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -122,6 +123,10 @@ public class UserService {
 
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+    }
+
+    public List<User> getUsersByEmail(String email) {
+        return userRepository.findAllByEmailContainingIgnoreCase(email);
     }
 
     public User updateUser(int id, User user, String token) {

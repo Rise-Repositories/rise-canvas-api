@@ -1,6 +1,7 @@
 package school.sptech.crudrisecanvas.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -80,6 +81,19 @@ public class UserController {
         User user = usuarioService.getUserById(id);
 
         UserResponseDto userDto = UserMapper.toResponse(user);
+
+        return ResponseEntity.status(200).body(userDto);
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<UserResponseDto>> getUsers(@RequestParam("email") String email) {
+        List<User> user = usuarioService.getUsersByEmail(email);
+
+        List<UserResponseDto> userDto = UserMapper.toResponse(user);
+
+        if(userDto.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
 
         return ResponseEntity.status(200).body(userDto);
     }

@@ -14,6 +14,7 @@ import school.sptech.crudrisecanvas.dtos.user.UserMapper;
 import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
 import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.User;
+import school.sptech.crudrisecanvas.exception.BadRequestException;
 import school.sptech.crudrisecanvas.exception.ConflictException;
 import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
@@ -21,6 +22,7 @@ import school.sptech.crudrisecanvas.repositories.UserRepositary;
 import school.sptech.crudrisecanvas.utils.adpters.MailValue;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -122,6 +124,12 @@ public class UserService {
 
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+    }
+
+    public List<User> getUsersByEmail(String email) {
+        if(email.isBlank()) throw new BadRequestException("Email nao informado");
+
+        return userRepository.findAllByEmailContainingIgnoreCase(email);
     }
 
     public User updateUser(int id, User user, String token) {

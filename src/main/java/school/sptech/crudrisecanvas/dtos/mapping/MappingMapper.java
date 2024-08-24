@@ -58,6 +58,7 @@ public class MappingMapper {
         mappingResponse.setLongitude(mapping.getLongitude());
         mappingResponse.setStatus(mapping.getStatus().toString());
         mappingResponse.setDate(mapping.getDate().toString());
+        mappingResponse.setAddress(AddressMapper.toDto(mapping.getAddress()));
         mappingResponse.setMappingActions(MappingActionMapper.toNoMappingRelationDto(mapping.getMappingActions()));
         return mappingResponse;
     }

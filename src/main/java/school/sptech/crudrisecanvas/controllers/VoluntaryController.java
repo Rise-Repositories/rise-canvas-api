@@ -35,7 +35,7 @@ public class VoluntaryController {
         @PathVariable Integer ongId,
         @RequestHeader HashMap<String, String> headers
     ){
-        String token = headers.get("Authorization").substring(7);
+        String token = headers.get("authorization").substring(7);
 
         List<VoluntaryOngResponseDto> response = 
             VoluntaryMapper.toOngNoRelationDto(voluntaryService.getVoluntary(ongId, token));
@@ -53,7 +53,7 @@ public class VoluntaryController {
         @RequestHeader HashMap<String, String> headers,
         @PathVariable Integer ongId
     ){
-        String token = headers.get("Authorization").substring(7);
+        String token = headers.get("authorization").substring(7);
 
         Voluntary voluntary = VoluntaryMapper.toEntity(voluntaryDto);
 
@@ -71,7 +71,7 @@ public class VoluntaryController {
         @PathVariable Integer ongId,
         @PathVariable Integer userId
     ){
-        String token = headers.get("Authorization").substring(7);
+        String token = headers.get("authorization").substring(7);
 
 
         VoluntaryOngResponseDto response = 
@@ -86,7 +86,7 @@ public class VoluntaryController {
         @RequestHeader HashMap<String, String> headers,
         @PathVariable Integer id
     ){
-        String token = headers.get("Authorization").substring(7);
+        String token = headers.get("authorization").substring(7);
 
         VoluntaryOngResponseDto response = 
             VoluntaryMapper.toOngNoRelationDto(voluntaryService.updateRole(roleDto.getRole(), id, token));
@@ -99,7 +99,7 @@ public class VoluntaryController {
         @RequestHeader HashMap<String, String> headers,
         @PathVariable Integer id
     ){
-        String token = headers.get("Authorization").substring(7);
+        String token = headers.get("authorization").substring(7);
 
         voluntaryService.deleteVoluntary(id, token);
 

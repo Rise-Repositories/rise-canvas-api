@@ -34,7 +34,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final AddressService addressService;
 
-    public void register(User newUser) {
+    public User register(User newUser) {
         if(userRepository.existsByCpf(newUser.getCpf())){
             throw new ConflictException("CPF já cadastrado");
         }
@@ -54,7 +54,7 @@ public class UserService {
         String passwordHash = passwordEncoder.encode(newUser.getPassword());
         newUser.setPassword(passwordHash);
 
-        this.userRepository.save(newUser);
+        return this.userRepository.save(newUser);
     }
 
     public UserTokenDto autenticar(UserLoginDto UserLoginDto) {

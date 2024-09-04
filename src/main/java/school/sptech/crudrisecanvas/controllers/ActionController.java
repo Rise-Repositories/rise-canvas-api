@@ -3,6 +3,9 @@ package school.sptech.crudrisecanvas.controllers;
 import java.util.HashMap;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,11 +33,16 @@ import school.sptech.crudrisecanvas.service.ActionService;
 @RestController
 @RequestMapping("/actions")
 @RequiredArgsConstructor
+@Tag(name = "Ações", description = "Endpoints para gerenciamento de ações")
 public class ActionController {
 
     private final ActionService actionService;
 
     @GetMapping
+    @Operation(summary = "Obter todas as ações", responses = {
+            @ApiResponse(responseCode = "200", description = "Lista de ações"),
+            @ApiResponse(responseCode = "204", description = "Nenhuma ação encontrada")
+    })
     public ResponseEntity<List<ActionResponseDto>> getActions(){
         List<Action> actions = actionService.getAll();
 
@@ -46,6 +54,10 @@ public class ActionController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obter uma ação por ID", responses = {
+            @ApiResponse(responseCode = "200", description = "Ação encontrada"),
+            @ApiResponse(responseCode = "404", description = "Ação não encontrada")
+    })
     public ResponseEntity<ActionResponseDto> getActionById(@PathVariable Integer id){
         Action action = actionService.getById(id);
 
@@ -54,6 +66,9 @@ public class ActionController {
     }   
 
     @PostMapping("/{ongId}")
+    @Operation(summary = "Criar uma nova ação", responses = {
+            @ApiResponse(responseCode = "201", description = "Ação criada")
+    })
     public ResponseEntity<ActionResponseDto> createAction(
         @RequestBody @Valid ActionRequestDto actionDto,
         @PathVariable Integer ongId,
@@ -68,6 +83,10 @@ public class ActionController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar uma ação existente", responses = {
+            @ApiResponse(responseCode = "200", description = "Ação atualizada"),
+            @ApiResponse(responseCode = "404", description = "Ação não encontrada")
+    })
     public ResponseEntity<ActionResponseDto> updateAction(@PathVariable Integer id, @RequestBody ActionRequestDto actionDto){
         Action action = ActionMapper.toEntity(actionDto);
 
@@ -77,12 +96,20 @@ public class ActionController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir uma ação por ID", responses = {
+            @ApiResponse(responseCode = "204", description = "Ação excluída"),
+            @ApiResponse(responseCode = "404", description = "Ação não encontrada")
+    })
     public ResponseEntity<Void> deleteAction(@PathVariable Integer id){
         actionService.delete(id);
         return ResponseEntity.status(204).build();
     }
 
     @PatchMapping("/{id}/add-mapping/{mappingId}")
+    @Operation(summary = "Adicionar um mapeamento a uma ação", responses = {
+            @ApiResponse(responseCode = "200", description = "Mapeamento adicionado"),
+            @ApiResponse(responseCode = "404", description = "Ação ou mapeamento não encontrado")
+    })
     public ResponseEntity<MappingActionResponseDto> addMapping(
         @PathVariable("id") Integer id,
         @PathVariable("mappingId") Integer mappingId,

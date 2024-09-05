@@ -128,4 +128,9 @@ public class UserController {
 
         return ResponseEntity.status(204).build();
     }
+
+    @GetMapping("/total-count")
+    public ResponseEntity<Long> getUserCount() {
+        return ResponseEntity.status(200).body(usuarioService.getUserCount());
+    }
 }

@@ -160,4 +160,8 @@ public class UserService {
         User user = this.getUserById(id);
         this.userRepository.delete(user);
     }
+
+    public Long getUserCount() {
+        return this.userRepository.count();
+    }
 }

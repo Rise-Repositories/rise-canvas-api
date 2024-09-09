@@ -1,5 +1,8 @@
 package school.sptech.crudrisecanvas.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +23,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/data")
 @RequiredArgsConstructor
+@Tag(name = "Dados", description = "Endpoints para gerenciamento de dados de mapeamento")
 public class DataController {
 
     private final MappingService mappingService;
     private final UserMappingService userMappingService;
 
     @GetMapping("/mapping/alerts")
+    @Operation(
+            summary = "Obter alertas de mapeamento",
+            description = "Retorna uma lista de alertas de mapeamento antes da data fornecida.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Lista de alertas de mapeamento retornada com sucesso"),
+                    @ApiResponse(responseCode = "204", description = "Nenhum alerta de mapeamento encontrado")
+            }
+    )
     public ResponseEntity<List<MappingAlertDto>> getMappingAlerts(@RequestParam(required = false) LocalDate beforeDate
     ) {
         if (beforeDate == null) {
@@ -42,6 +54,14 @@ public class DataController {
     }
 
     @GetMapping("/heatmap")
+    @Operation(
+            summary = "Obter pontos de heatmap",
+            description = "Retorna pontos de heatmap baseados no raio de agrupamento e data fornecidos.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Pontos de heatmap retornados com sucesso"),
+                    @ApiResponse(responseCode = "204", description = "Nenhum ponto de heatmap encontrado")
+            }
+    )
     public ResponseEntity<Double[][]> getHeatmapPoints(
             @RequestParam double radiusToGroup,
             @RequestParam LocalDateTime olderThan
@@ -55,6 +75,13 @@ public class DataController {
     }
 
     @GetMapping("/kpi")
+    @Operation(
+            summary = "Obter KPIs",
+            description = "Retorna os KPIs totais ou KPIs após a data fornecida.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "KPIs retornados com sucesso")
+            }
+    )
     public ResponseEntity<MappingKpiDto> getKpis(@RequestParam(required = false) LocalDate afterDate) {
         if (afterDate == null) {
             return ResponseEntity.ok(mappingService.getKpisTotal());
@@ -65,11 +92,25 @@ public class DataController {
     }
 
     @GetMapping("/mapping-count")
+    @Operation(
+            summary = "Obter contagem de mapeamentos por usuário",
+            description = "Retorna a contagem de mapeamentos agrupados por usuário.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Contagem de mapeamentos retornada com sucesso")
+            }
+    )
     public ResponseEntity<UserMappingCountResponseDto> getMappingCountByUser() {
         return ResponseEntity.status(200).body(userMappingService.getMappingCountByUser());
     }
 
     @GetMapping("/mapping/graph")
+    @Operation(
+            summary = "Obter gráfico de mapeamento",
+            description = "Retorna dados para o gráfico de mapeamento para a data fornecida.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Dados do gráfico de mapeamento retornados com sucesso")
+            }
+    )
     public ResponseEntity<List<MappingGraphDto>> getMappingGraph(@RequestParam("date") LocalDate date) {
         return ResponseEntity.ok(mappingService.getMappingGraph(date));
     }

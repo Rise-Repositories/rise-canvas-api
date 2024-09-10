@@ -58,13 +58,14 @@ public class UserService {
     }
 
     public UserTokenDto autenticar(UserLoginDto UserLoginDto) {
+        User UserAutenticado = userRepository.findByEmail(UserLoginDto.getEmail())
+                .orElseThrow(() -> new NotFoundException("Email do usuário não cadastrado"));
+
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
-                UserLoginDto.getEmail(), UserLoginDto.getPassword()
+                UserAutenticado.getId(), UserLoginDto.getPassword()
         );
         final Authentication authentication = this.authenticationManager.authenticate(credentials);
 
-        User UserAutenticado = userRepository.findByEmail(UserLoginDto.getEmail())
-                .orElseThrow(() -> new NotFoundException("Email do usuário não cadastrado"));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = gerenciadorTokenJwt.generateToken(authentication);
@@ -87,7 +88,7 @@ public class UserService {
                 "Recuperação de senha",
                 String.format("""
                     <h1>Olá, deseja alterar sua senha?</h1>
-                    <a href="http://localhost:8080/recover/%s">Alterar</a>
+                    <a href="http://localhost:3000/change-password/%s">Alterar</a>
                 """, user.getId())
             )
         );

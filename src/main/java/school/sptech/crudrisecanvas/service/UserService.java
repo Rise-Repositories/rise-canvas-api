@@ -62,10 +62,9 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Email do usuário não cadastrado"));
 
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
-                UserAutenticado.getId(), UserLoginDto.getPassword()
+                UserAutenticado.getId().toString(), UserLoginDto.getPassword()
         );
         final Authentication authentication = this.authenticationManager.authenticate(credentials);
-
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = gerenciadorTokenJwt.generateToken(authentication);
@@ -123,7 +122,7 @@ public class UserService {
     public User getAccount(String token) {
         String username = gerenciadorTokenJwt.getUsernameFromToken(token);
 
-        return userRepository.findByEmail(username)
+        return userRepository.findById(Integer.parseInt(username))
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
     }
 

@@ -29,7 +29,7 @@ public class AuthProvider implements AuthenticationProvider {
         UserDetails userDetails = this.usuarioAutorizacaoService.loadUserByUsername(username);
 
         if (this.passwordEncoder.matches(password, userDetails.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            return new UsernamePasswordAuthenticationToken(username, null, userDetails.getAuthorities());
         } else {
             throw new BadCredentialsException("Usuário ou senha inválidos");
         }

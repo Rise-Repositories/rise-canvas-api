@@ -107,6 +107,7 @@ public class UserController {
             }
     )
     public ResponseEntity<UserResponseDto> account(@RequestHeader HashMap<String,String> headers) {
+        System.out.println(headers.get("authorization"));
         User user = usuarioService.getAccount(headers.get("authorization").substring(7));
         
         UserResponseDto response = UserMapper.toResponse(user);

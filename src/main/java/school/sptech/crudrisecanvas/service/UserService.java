@@ -150,6 +150,13 @@ public class UserService {
             throw new ConflictException("Já existe um usuário com este e-mail");
         }
 
+        if (user.getAddress() != null) {
+            Address savedAddress = addressService.saveByCep(user.getAddress().getCep(),
+                    user.getAddress().getNumber(),
+                    user.getAddress().getComplement());
+            userToUpdate.setAddress(savedAddress);
+        }
+
         userToUpdate.setName(user.getName());
         userToUpdate.setEmail(user.getEmail());
         userToUpdate.setCpf(user.getCpf());

@@ -62,7 +62,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Email do usuário não cadastrado"));
 
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
-                UserLoginDto.getEmail(), UserLoginDto.getPassword()
+                UserAutenticado.getId(), UserLoginDto.getPassword()
         );
         final Authentication authentication = this.authenticationManager.authenticate(credentials);
 

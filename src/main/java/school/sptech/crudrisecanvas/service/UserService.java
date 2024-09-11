@@ -62,7 +62,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Email do usuário não cadastrado"));
 
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
-                UserAutenticado.getId(), UserLoginDto.getPassword()
+                UserLoginDto.getEmail(), UserLoginDto.getPassword()
         );
         final Authentication authentication = this.authenticationManager.authenticate(credentials);
 
@@ -148,6 +148,13 @@ public class UserService {
         }
         if (this.userRepository.existsByEmailAndIdNot(user.getEmail(), id)) {
             throw new ConflictException("Já existe um usuário com este e-mail");
+        }
+
+        if (user.getAddress() != null) {
+            Address savedAddress = addressService.saveByCep(user.getAddress().getCep(),
+                    user.getAddress().getNumber(),
+                    user.getAddress().getComplement());
+            userToUpdate.setAddress(savedAddress);
         }
 
         userToUpdate.setName(user.getName());

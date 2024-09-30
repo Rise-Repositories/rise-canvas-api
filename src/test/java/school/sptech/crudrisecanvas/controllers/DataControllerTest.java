@@ -162,9 +162,9 @@ class DataControllerTest {
                 }
             };
 
-            Mockito.when(mappingService.getKpisTotal()).thenReturn(dto);
+            Mockito.when(mappingService.getKpisByDates(null, null)).thenReturn(dto);
 
-            ResponseEntity<MappingKpiDto> response = controller.getKpis(null);
+            ResponseEntity<MappingKpiDto> response = controller.getKpis(null, null);
             MappingKpiDto body = response.getBody();
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -173,7 +173,7 @@ class DataControllerTest {
             assertEquals(dto.getQtyNotServed(), body.getQtyNotServed());
             assertEquals(dto.getQtyNoPeople(), body.getQtyNoPeople());
 
-            Mockito.verify(mappingService, Mockito.times(1)).getKpisTotal();
+            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(null, null);
         }
 
         @Test
@@ -200,9 +200,9 @@ class DataControllerTest {
 
             LocalDate agora = LocalDate.now();
 
-            Mockito.when(mappingService.getKpisAfterDate(agora)).thenReturn(dto);
+            Mockito.when(mappingService.getKpisByDates(agora, null)).thenReturn(dto);
 
-            ResponseEntity<MappingKpiDto> response = controller.getKpis(agora);
+            ResponseEntity<MappingKpiDto> response = controller.getKpis(agora, null);
             MappingKpiDto body = response.getBody();
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -211,7 +211,7 @@ class DataControllerTest {
             assertEquals(dto.getQtyNotServed(), body.getQtyNotServed());
             assertEquals(dto.getQtyNoPeople(), body.getQtyNoPeople());
 
-            Mockito.verify(mappingService, Mockito.times(1)).getKpisAfterDate(agora);
+            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(agora, null);
         }
     }
 

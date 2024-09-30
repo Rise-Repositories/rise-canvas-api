@@ -77,18 +77,23 @@ public class DataController {
     @GetMapping("/kpi")
     @Operation(
             summary = "Obter KPIs",
-            description = "Retorna os KPIs totais ou KPIs após a data fornecida.",
+            description = "Retorna os KPIs totais ou KPIs entre as datas fornecidas.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "KPIs retornados com sucesso")
             }
     )
-    public ResponseEntity<MappingKpiDto> getKpis(@RequestParam(required = false) LocalDate afterDate) {
-        if (afterDate == null) {
-            return ResponseEntity.ok(mappingService.getKpisTotal());
-
-        } else {
-            return ResponseEntity.ok(mappingService.getKpisAfterDate(afterDate));
+    public ResponseEntity<MappingKpiDto> getKpis(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate
+    ) {
+        if (startDate == null) {
+            startDate = LocalDate.of(1000, 1,1);
         }
+        if (endDate == null) {
+            endDate = LocalDate.now().plusMonths(1);
+        }
+
+        return ResponseEntity.ok(mappingService.getKpisByDates(startDate, endDate));
     }
 
     @GetMapping("/mapping-count")

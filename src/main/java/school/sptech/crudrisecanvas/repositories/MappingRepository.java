@@ -2,6 +2,7 @@ package school.sptech.crudrisecanvas.repositories;
 
 import java.util.List;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -66,8 +67,8 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
                             LEFT JOIN Action a ON ma.action_id = a.id AND m2.id = m.id) LIMIT 1;""", nativeQuery = true)
     MappingKpiDto getKpisByDates(LocalDate startDate, LocalDate endDate);
 
-    @Query(value = "call graph(:date)", nativeQuery = true )
-    List<MappingGraphDto> getChartData(LocalDate date);
+    @Query(value = "call graph(:startDate, :endDate)", nativeQuery = true )
+    List<MappingGraphDto> getChartData(LocalDate startDate, LocalDate endDate);
 
     @Query(value = """
         select * from mapping m

@@ -92,6 +92,9 @@ public class DataController {
         if (endDate == null) {
             endDate = LocalDate.now().plusMonths(1);
         }
+        if (startDate.isAfter(endDate)) {
+            return ResponseEntity.badRequest().build();
+        }
 
         return ResponseEntity.ok(mappingService.getKpisByDates(startDate, endDate));
     }
@@ -111,12 +114,18 @@ public class DataController {
     @GetMapping("/mapping/graph")
     @Operation(
             summary = "Obter gráfico de mapeamento",
-            description = "Retorna dados para o gráfico de mapeamento para a data fornecida.",
+            description = "Retorna dados para o gráfico de mapeamento entre as datas fornecidas.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Dados do gráfico de mapeamento retornados com sucesso")
             }
     )
-    public ResponseEntity<List<MappingGraphDto>> getMappingGraph(@RequestParam("date") LocalDate date) {
-        return ResponseEntity.ok(mappingService.getMappingGraph(date));
+    public ResponseEntity<List<MappingGraphDto>> getMappingGraph(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate
+    ) {
+        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(mappingService.getMappingGraph(startDate, endDate));
     }
 }

@@ -120,8 +120,8 @@ public class MappingService {
         return mappingRepository.getKpisByDates(startDate, endDate);
     }
     
-    public List<MappingGraphDto> getMappingGraph(LocalDate date) {
-        return mappingRepository.getChartData(date);
+    public List<MappingGraphDto> getMappingGraph(LocalDate startDate, LocalDate endDate) {
+        return mappingRepository.getChartData(startDate, endDate);
     }
     
 }

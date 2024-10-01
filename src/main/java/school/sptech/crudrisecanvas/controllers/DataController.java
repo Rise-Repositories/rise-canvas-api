@@ -77,18 +77,26 @@ public class DataController {
     @GetMapping("/kpi")
     @Operation(
             summary = "Obter KPIs",
-            description = "Retorna os KPIs totais ou KPIs após a data fornecida.",
+            description = "Retorna os KPIs totais ou KPIs entre as datas fornecidas.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "KPIs retornados com sucesso")
             }
     )
-    public ResponseEntity<MappingKpiDto> getKpis(@RequestParam(required = false) LocalDate afterDate) {
-        if (afterDate == null) {
-            return ResponseEntity.ok(mappingService.getKpisTotal());
-
-        } else {
-            return ResponseEntity.ok(mappingService.getKpisAfterDate(afterDate));
+    public ResponseEntity<MappingKpiDto> getKpis(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate
+    ) {
+        if (startDate == null) {
+            startDate = LocalDate.of(1000, 1,1);
         }
+        if (endDate == null) {
+            endDate = LocalDate.now().plusMonths(1);
+        }
+        if (startDate.isAfter(endDate)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(mappingService.getKpisByDates(startDate, endDate));
     }
 
     @GetMapping("/mapping-count")
@@ -106,12 +114,18 @@ public class DataController {
     @GetMapping("/mapping/graph")
     @Operation(
             summary = "Obter gráfico de mapeamento",
-            description = "Retorna dados para o gráfico de mapeamento para a data fornecida.",
+            description = "Retorna dados para o gráfico de mapeamento entre as datas fornecidas.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Dados do gráfico de mapeamento retornados com sucesso")
             }
     )
-    public ResponseEntity<List<MappingGraphDto>> getMappingGraph(@RequestParam("date") LocalDate date) {
-        return ResponseEntity.ok(mappingService.getMappingGraph(date));
+    public ResponseEntity<List<MappingGraphDto>> getMappingGraph(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate
+    ) {
+        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(mappingService.getMappingGraph(startDate, endDate));
     }
 }

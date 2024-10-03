@@ -1,6 +1,5 @@
-drop procedure if exists graph;
+drop procedure if exists graph$$
 
-DELIMITER $$
 CREATE PROCEDURE graph(start_date DATE, end_date DATE)
 BEGIN
     DECLARE h INT DEFAULT 1;
@@ -63,4 +62,3 @@ BEGIN
 
     select * from response order by year, month;
 END $$
-DELIMITER ;

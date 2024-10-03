@@ -95,15 +95,16 @@ public class MappingService {
         mappingRepository.delete(mapping);
     }
 
-    public Mapping addUser(Integer id, Integer userId){
+    public Mapping addUser(Integer id, String token){
+
+        User user = userService.getAccount(token);
         Mapping mapping = this.getMappingById(id);
-        User user = userService.getUserById(userId);
 
-        Mapping response = mappingRepository.save(mapping);
+//        Mapping response = mappingRepository.save(mapping);
 
-        userMappingService.createRelation(user, response);
+        userMappingService.createRelation(user, mapping);
 
-        return response;
+        return mapping;
     }
 
     public List<MappingAlertDto> getMappingAlerts(LocalDate beforeDate) {

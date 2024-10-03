@@ -171,6 +171,24 @@ public class UserController {
         return ResponseEntity.status(200).body(response);
     }
 
+    @PatchMapping("/{id}")
+    @Operation(summary = "Atualizar um usuário sem sobrescrever dados não passados ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - Retorna os detalhes do usuário atualizado"),
+            @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado"),
+            @ApiResponse(responseCode = "409", description = "Conflito - O email ou CPF já está em uso")
+    })
+    public ResponseEntity<UserResponseDto> patchUser(
+            @PathVariable int id,
+            @RequestBody UserRequestUpdateDto userDto,
+            @RequestHeader HashMap<String,String> headers
+    ) {
+        User user = UserMapper.toEntity(userDto);
+
+        UserResponseDto response = UserMapper.toResponse(usuarioService.patchUser(id, user, headers.get("authorization").substring(7)));
+
+        return ResponseEntity.status(200).body(response);
+    }
     @DeleteMapping("/{id}")
     @Operation(summary = "Excluir um usuário pelo ID")
     @ApiResponses(value = {

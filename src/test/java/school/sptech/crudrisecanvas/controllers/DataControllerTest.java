@@ -162,7 +162,10 @@ class DataControllerTest {
                 }
             };
 
-            Mockito.when(mappingService.getKpisByDates(null, null)).thenReturn(dto);
+            LocalDate dataInicial = LocalDate.of(1000,1,1);
+            LocalDate dataFinal = LocalDate.now().plusMonths(1);
+
+            Mockito.when(mappingService.getKpisByDates(dataInicial, dataFinal)).thenReturn(dto);
 
             ResponseEntity<MappingKpiDto> response = controller.getKpis(null, null);
             MappingKpiDto body = response.getBody();
@@ -173,7 +176,7 @@ class DataControllerTest {
             assertEquals(dto.getQtyNotServed(), body.getQtyNotServed());
             assertEquals(dto.getQtyNoPeople(), body.getQtyNoPeople());
 
-            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(null, null);
+            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(dataInicial, dataFinal);
         }
 
         @Test
@@ -198,11 +201,12 @@ class DataControllerTest {
                 }
             };
 
-            LocalDate agora = LocalDate.now();
+            LocalDate dataInicial = LocalDate.now().minusMonths(1);
+            LocalDate dataFinal = LocalDate.now();
 
-            Mockito.when(mappingService.getKpisByDates(agora, null)).thenReturn(dto);
+            Mockito.when(mappingService.getKpisByDates(dataInicial, dataFinal)).thenReturn(dto);
 
-            ResponseEntity<MappingKpiDto> response = controller.getKpis(agora, null);
+            ResponseEntity<MappingKpiDto> response = controller.getKpis(dataInicial, dataFinal);
             MappingKpiDto body = response.getBody();
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -211,7 +215,7 @@ class DataControllerTest {
             assertEquals(dto.getQtyNotServed(), body.getQtyNotServed());
             assertEquals(dto.getQtyNoPeople(), body.getQtyNoPeople());
 
-            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(agora, null);
+            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(dataInicial, dataFinal);
         }
     }
 

@@ -35,6 +35,10 @@ public class MappingService {
         return mappingRepository.findAll();
     }
 
+    public List<Mapping> getMappingsByDate(LocalDate startDate, LocalDate endDate){
+        return mappingRepository.getMappingsByDate(startDate, endDate);
+    }
+
     public List<Mapping> getMappingsByCoordinates(Coordinates coordinates, Double radius){
         return mappingRepository.findWhenInsideArea(
             coordinates.getLatitude(), 

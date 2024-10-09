@@ -82,7 +82,10 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
     """, nativeQuery = true)
     List<Mapping> findWhenInsideArea(Double latitude, Double longitude, Double radius);
 
-    @Query("SELECT m FROM Mapping m WHERE m.date BETWEEN :startDate AND :endDate")
-    List<Mapping> getMappingsByDate(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    @Query(value = """
+        SELECT * FROM mapping m
+        WHERE m.date BETWEEN ?1 AND ?2
+        """, nativeQuery = true)
+    List<Mapping> getMappingsByDate(LocalDate startDate, LocalDate endDate);
 
 }

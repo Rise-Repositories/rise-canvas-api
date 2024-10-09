@@ -30,7 +30,7 @@ public class DataService {
     private final MappingService mappingService;
 
     public byte[] getMappingArchiveTxt(LocalDate startDate, LocalDate endDate) {
-        List<MappingResponseDto> mappings = MappingMapper.toResponse(mappingService.getMappings());
+        List<MappingResponseDto> mappings = MappingMapper.toResponse(mappingService.getMappingsByDate(startDate, endDate));
 
         String nomeArquivo = "mappingArchive.txt";
         int registroDeDados = 0;
@@ -68,12 +68,16 @@ public class DataService {
         gravaRegistro(nomeArquivo, trailer);
         gravaRegistro(nomeArquivo, String.valueOf(mappings.size()));
 
+        String ultimoRegistro = startDate.toString() + ";" + endDate.toString();
+        gravaRegistro(nomeArquivo, ultimoRegistro);
         try {
             Path path = Paths.get(nomeArquivo);
             return Files.readAllBytes(path);
         } catch (IOException e) {
             System.out.println("Erro ao ler o arquivo para array de bytes: " + e.getMessage());
         }
+
+
 
         return null;
     }

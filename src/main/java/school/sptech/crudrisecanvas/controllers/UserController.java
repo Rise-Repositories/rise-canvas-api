@@ -23,12 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.address.AddressMapper;
-import school.sptech.crudrisecanvas.dtos.user.UserLoginDto;
-import school.sptech.crudrisecanvas.dtos.user.UserRequestDto;
-import school.sptech.crudrisecanvas.dtos.user.UserMapper;
-import school.sptech.crudrisecanvas.dtos.user.UserRequestUpdateDto;
-import school.sptech.crudrisecanvas.dtos.user.UserResponseDto;
-import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
+import school.sptech.crudrisecanvas.dtos.user.*;
 import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.service.UserService;
@@ -94,6 +89,23 @@ public class UserController {
     )
     public ResponseEntity<String> changePassword(@PathVariable int id, @RequestBody HashMap<String,String> body) {
         this.usuarioService.changePassword(id, body.get("password"));
+        return ResponseEntity.status(204).build();
+    }
+
+    @PatchMapping("/password")
+    @Operation(
+            summary = "Alterar senha do usuário",
+            description = "Altera a senha de um usuário identificado pelo ID fornecido.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Sem conteúdo - Senha alterada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Solicitação inválida - Senha não fornecida")
+            }
+    )
+    public ResponseEntity<Void> patchPassword(
+            @RequestBody @Valid UserRequestPatchPasswordDto request,
+            @RequestHeader HashMap<String,String> header
+    ) {
+        this.usuarioService.patchPassword(request, header.get("authorization").substring(7));
         return ResponseEntity.status(204).build();
     }
 

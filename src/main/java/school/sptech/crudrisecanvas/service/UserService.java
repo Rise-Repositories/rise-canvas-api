@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.api.configuration.security.jwt.JwtTokenManager;
-import school.sptech.crudrisecanvas.dtos.user.UserLoginDto;
-import school.sptech.crudrisecanvas.dtos.user.UserMapper;
-import school.sptech.crudrisecanvas.dtos.user.UserRequestPatchDto;
-import school.sptech.crudrisecanvas.dtos.user.UserTokenDto;
+import school.sptech.crudrisecanvas.dtos.user.*;
 import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.exception.BadRequestException;
@@ -113,6 +110,19 @@ public class UserService {
         }
 
         user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    public void patchPassword(UserRequestPatchPasswordDto request, String token) {
+        User user = getAccount(token);
+
+
+        final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
+                user.getId().toString(), request.getCurPassword()
+        );
+        final Authentication authentication = this.authenticationManager.authenticate(credentials);
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
 

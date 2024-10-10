@@ -88,4 +88,5 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
         """, nativeQuery = true)
     List<Mapping> getMappingsByDate(LocalDate startDate, LocalDate endDate);
 
+
 }

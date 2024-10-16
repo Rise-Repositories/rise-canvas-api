@@ -167,6 +167,15 @@ public class DataController {
     }
 
     @GetMapping("/export-csv")
+    @Operation(
+            summary = "Exportar dados para CSV",
+            description = "Exporta os dados entre as datas especificadas no formato CSV.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Arquivos de mapeamento em CSV retornados com sucesso"),
+                    @ApiResponse(responseCode = "204", description = "Não há conteúdo para exportar"),
+                    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+            }
+    )
     public ResponseEntity<Void> exportCsv(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,

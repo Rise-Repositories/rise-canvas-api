@@ -3,7 +3,9 @@ package school.sptech.crudrisecanvas.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,8 @@ import school.sptech.crudrisecanvas.service.DataService;
 import school.sptech.crudrisecanvas.service.MappingService;
 import school.sptech.crudrisecanvas.service.UserMappingService;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -162,6 +166,30 @@ public class DataController {
                 .body(arquivoTxt);
     }
 
+    @GetMapping("/export-csv")
+    public ResponseEntity<Void> exportCsv(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            HttpServletResponse response) {
 
+        try {
+            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate);
+
+            if (dataList.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+
+            response.setContentType("text/csv");
+            response.setHeader("Content-Disposition", "attachment; filename=\"mapping_graph.csv\"");
+
+            dataService.exportMappingGraphDtoToCsv(dataList, response.getWriter());
+
+            return ResponseEntity.ok().build();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }

@@ -42,6 +42,16 @@ public class MappingService {
             radius
         );
     }
+    public List<Mapping> getMappingsByCoordinates(Coordinates coordinates, Double radius, String token){
+        Integer id = userService.getAccount(token).getId();
+
+        return mappingRepository.findWhenInsideAreaByUser(
+            coordinates.getLatitude(), 
+            coordinates.getLongitude(), 
+            radius,
+            id
+        );
+    }
 
     public Mapping getMappingById(Integer id){
         Optional<Mapping> mapping = mappingRepository.findById(id);
@@ -67,10 +77,11 @@ public class MappingService {
             mapping.setAddress(null);
         }
 
-    //    mapping.setUsersMappings(List.of(userMapping));
         mapping.setStatus(MappingStatus.ACTIVE);
 
         Mapping savedMapping = mappingRepository.save(mapping);
+
+        userMappingService.createRelation(user, savedMapping);
 
         return savedMapping;
     }

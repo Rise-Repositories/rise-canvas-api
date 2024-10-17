@@ -53,6 +53,32 @@ public class MappingController {
 
         return ResponseEntity.status(200).body(mappings);
     }
+    @GetMapping("/user/by-coordinates")
+    @Operation(
+            summary = "Obter mapeamentos por coordenadas",
+            description = "Retorna uma lista de mapeamentos baseados nas coordenadas e raio fornecidos.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Lista de mapeamentos retornada com sucesso"),
+                    @ApiResponse(responseCode = "204", description = "Nenhum mapeamento encontrado")
+            }
+    )
+    public ResponseEntity<List<MappingResponseDto>> getUserMappingsByCoordinates(
+        @RequestParam("coordinates") String coordinates,
+  		@RequestParam("radius") Double radius,
+		@RequestHeader HashMap<String,String> headers
+    ){
+        Coordinates coords = new Coordinates(coordinates);
+
+        List<MappingResponseDto> mappings = MappingMapper.toResponse(
+			mappingService.getMappingsByCoordinates(coords, radius, headers.get("authorization").substring(7))
+		);
+
+        if(mappings.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+
+        return ResponseEntity.status(200).body(mappings);
+    }
 
     @GetMapping("/by-coordinates")
     @Operation(

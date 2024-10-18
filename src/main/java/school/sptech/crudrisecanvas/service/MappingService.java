@@ -79,6 +79,26 @@ public class MappingService {
         return savedMapping;
     }
 
+    public Mapping createMappingWithoutCepValidation(Mapping mapping, String token){
+        if(mapping.getQtyAdults() + mapping.getQtyChildren() == 0){
+            throw new BadRequestException("É necessário que haja pelo menos 1 pessoa no local");
+        }
+        User user = userService.getAccount(token);
+
+        if (mapping.getAddress() != null) {
+            Address savedAddress = addressService.save(mapping.getAddress());
+            mapping.setAddress(savedAddress);
+        } else {
+            mapping.setAddress(null);
+        }
+
+        mapping.setStatus(MappingStatus.ACTIVE);
+
+        Mapping savedMapping = mappingRepository.save(mapping);
+
+        return savedMapping;
+    }
+
     public Mapping updateMapping(Integer id, Mapping mapping){
         Mapping mappingToUpdate = this.getMappingById(id);
 

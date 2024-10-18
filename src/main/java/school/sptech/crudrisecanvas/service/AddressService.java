@@ -52,4 +52,8 @@ public class AddressService {
             return repository.save(address);
         }
     }
+
+    public Address save(Address address) {
+        return repository.save(address);
+    }
 }

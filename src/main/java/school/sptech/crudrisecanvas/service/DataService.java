@@ -154,7 +154,8 @@ public class DataService {
                     if (contaRegistros != qtdGravados) {
                         throw new BadRequestException("Quantidade de registros inconsistente");
                     }
-                } else {
+                }
+                if (!tipoRegistro.equals("01") && !tipoRegistro.equals("02") && !tipoRegistro.equals("03") && !tipoRegistro.equals("00")) {
                     throw new BadRequestException("Registro inválido");
                 }
 

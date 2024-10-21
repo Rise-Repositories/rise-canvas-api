@@ -1,11 +1,9 @@
 package school.sptech.crudrisecanvas.dtos.action;
 
 import lombok.Data;
-import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseDto;
 import school.sptech.crudrisecanvas.dtos.ong.OngResponseNoRelationDto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 public class ActionResponseNoMappingRelationDto {
@@ -16,5 +14,6 @@ public class ActionResponseNoMappingRelationDto {
     private LocalDateTime datetimeEnd;
     private Double longitude;
     private Double latitude;
+    private String status;
     private OngResponseNoRelationDto ong;
 }

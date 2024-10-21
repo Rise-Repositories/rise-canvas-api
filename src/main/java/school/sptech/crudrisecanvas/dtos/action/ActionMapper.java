@@ -15,6 +15,7 @@ public class ActionMapper {
         action.setDatetimeEnd(actionRequestDto.getDateTimeEnd());
         action.setLatitude(actionRequestDto.getLatitude());
         action.setLongitude(actionRequestDto.getLongitude());
+        action.setStatus(actionRequestDto.getStatus());
         return action;
     }
     
@@ -29,6 +30,7 @@ public class ActionMapper {
         result.setLongitude(action.getLongitude());
         result.setMappingAction(MappingActionMapper.toNoRelationDto(action.getMappingActions()));
         result.setOng(OngMapper.toNoRelationDto(action.getOng()));
+        result.setStatus(action.getStatus());
 
         return result;
     }
@@ -48,6 +50,7 @@ public class ActionMapper {
         result.setDatetimeEnd(action.getDatetimeEnd());
         result.setLatitude(action.getLatitude());
         result.setLongitude(action.getLongitude());
+        result.setStatus(action.getStatus());
 
         return result;
     }
@@ -68,6 +71,7 @@ public class ActionMapper {
         result.setLatitude(action.getLatitude());
         result.setLongitude(action.getLongitude());
         result.setOng(OngMapper.toNoRelationDto(action.getOng()));
+        result.setStatus(action.getStatus());
 
         return result;
     }

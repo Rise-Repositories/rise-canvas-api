@@ -16,6 +16,7 @@ public class ActionResponseDto{
     private LocalDateTime datetimeEnd;
     private Double longitude;
     private Double latitude;
+    private String status;
     private List<MappingActionResponseDto> mappingAction;
     private OngResponseNoRelationDto ong;
 }

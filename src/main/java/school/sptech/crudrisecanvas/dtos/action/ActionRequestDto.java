@@ -21,4 +21,6 @@ public class ActionRequestDto {
 
     private Double longitude;
     private Double latitude;
+
+    private String status;
 }

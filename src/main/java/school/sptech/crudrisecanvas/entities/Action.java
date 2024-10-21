@@ -31,6 +31,8 @@ public class Action {
 
     private Double longitude;
 
+    private String status;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Ong ong;
 

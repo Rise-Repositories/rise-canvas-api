@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -29,6 +30,7 @@ import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionMapper;
 import school.sptech.crudrisecanvas.entities.Action;
 import school.sptech.crudrisecanvas.entities.MappingAction;
 import school.sptech.crudrisecanvas.service.ActionService;
+import school.sptech.crudrisecanvas.utils.Coordinates;
 
 @RestController
 @RequestMapping("/actions")
@@ -45,6 +47,44 @@ public class ActionController {
     })
     public ResponseEntity<List<ActionResponseDto>> getActions(){
         List<Action> actions = actionService.getAll();
+
+        if(actions.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+        List<ActionResponseDto> actionsResponse = ActionMapper.toResponse(actions);
+        return ResponseEntity.status(200).body(actionsResponse);
+    }
+
+    @GetMapping("/by-coordinates")
+    @Operation(summary = "Obter todas as ações por coordenadas", responses = {
+            @ApiResponse(responseCode = "200", description = "Lista de ações"),
+            @ApiResponse(responseCode = "204", description = "Nenhuma ação encontrada")
+    })
+    public ResponseEntity<List<ActionResponseDto>> getActionsByCoordinates(
+        @RequestParam("coordinates") String coordinates,
+        @RequestParam("radius") Double radius
+    ){
+        Coordinates coords = new Coordinates(coordinates);
+
+        List<Action> actions = actionService.getByCoordinates(coords.getLatitude(), coords.getLongitude(), radius);
+
+        if(actions.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+        List<ActionResponseDto> actionsResponse = ActionMapper.toResponse(actions);
+        return ResponseEntity.status(200).body(actionsResponse);
+    }
+
+    @GetMapping("/ong/{ongId}")
+    @Operation(summary = "Obter todas as ações de uma ONG", responses = {
+            @ApiResponse(responseCode = "200", description = "Lista de ações"),
+            @ApiResponse(responseCode = "204", description = "Nenhuma ação encontrada")
+    })
+    public ResponseEntity<List<ActionResponseDto>> getActionsByOng(
+        @PathVariable Integer ongId,
+        @RequestHeader HashMap<String, String> header
+    ){
+        List<Action> actions = actionService.getByOng(ongId, header.get("authorization").substring(7));
 
         if(actions.isEmpty()){
             return ResponseEntity.status(204).build();
@@ -103,6 +143,20 @@ public class ActionController {
     public ResponseEntity<Void> deleteAction(@PathVariable Integer id){
         actionService.delete(id);
         return ResponseEntity.status(204).build();
+    }
+
+    @PatchMapping("/{ongId}/{actionId}")
+    public ResponseEntity<ActionResponseDto> updateActionStatus(
+        @PathVariable("ongId") Integer id,
+        @PathVariable("actionId") Integer ongId,
+        @RequestParam("status") String status,
+        @RequestHeader HashMap<String, String> header
+    ){
+        ActionResponseDto actionResponse = ActionMapper.toResponse(
+            actionService.updateStatus(status, id, ongId, header.get("authorization").substring(7))
+        );
+
+        return ResponseEntity.status(200).body(actionResponse);
     }
 
     @PatchMapping("/{id}/add-mapping/{mappingId}")

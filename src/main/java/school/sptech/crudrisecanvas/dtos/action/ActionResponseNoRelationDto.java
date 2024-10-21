@@ -13,4 +13,5 @@ public class ActionResponseNoRelationDto{
     private LocalDateTime datetimeEnd;
     private Double longitude;
     private Double latitude;
+    private String status;
 }

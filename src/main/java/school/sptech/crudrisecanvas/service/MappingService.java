@@ -35,6 +35,10 @@ public class MappingService {
         return mappingRepository.findAll();
     }
 
+    public List<Mapping> getMappingsByDate(LocalDate startDate, LocalDate endDate){
+        return mappingRepository.getMappingsByDate(startDate, endDate);
+    }
+
     public List<Mapping> getMappingsByCoordinates(Coordinates coordinates, Double radius){
         return mappingRepository.findWhenInsideArea(
             coordinates.getLatitude(), 
@@ -82,6 +86,26 @@ public class MappingService {
         Mapping savedMapping = mappingRepository.save(mapping);
 
         userMappingService.createRelation(user, savedMapping);
+
+        return savedMapping;
+    }
+
+    public Mapping createMappingWithoutCepValidation(Mapping mapping, String token){
+        if(mapping.getQtyAdults() + mapping.getQtyChildren() == 0){
+            throw new BadRequestException("É necessário que haja pelo menos 1 pessoa no local");
+        }
+        User user = userService.getAccount(token);
+
+        if (mapping.getAddress() != null) {
+            Address savedAddress = addressService.save(mapping.getAddress());
+            mapping.setAddress(savedAddress);
+        } else {
+            mapping.setAddress(null);
+        }
+
+        mapping.setStatus(MappingStatus.ACTIVE);
+
+        Mapping savedMapping = mappingRepository.save(mapping);
 
         return savedMapping;
     }

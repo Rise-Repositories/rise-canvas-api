@@ -4,20 +4,23 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingCountResponseDto;
+import school.sptech.crudrisecanvas.service.DataService;
 import school.sptech.crudrisecanvas.service.MappingService;
 import school.sptech.crudrisecanvas.service.UserMappingService;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -28,6 +31,7 @@ public class DataController {
 
     private final MappingService mappingService;
     private final UserMappingService userMappingService;
+    private final DataService dataService;
 
     @GetMapping("/mapping/alerts")
     @Operation(
@@ -128,4 +132,67 @@ public class DataController {
         }
         return ResponseEntity.ok(mappingService.getMappingGraph(startDate, endDate));
     }
+
+    @GetMapping(value = "/mapping/archive/txt", produces = "text/plain")
+    @Operation(
+            summary = "Obter arquivos de mapeamento em txt",
+            description = "Retorna arquivos de mapeamento em txt entre as datas fornecidas.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Arquivos de mapeamento em txt retornados com sucesso")
+            }
+    )
+    public ResponseEntity<byte[]> getMappingArchiveTxt(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate
+    ) {
+        if (startDate == null) {
+            startDate = LocalDate.of(1000, 1, 1);
+        }
+        if (endDate == null) {
+            endDate = LocalDate.now().plusMonths(1);
+        }
+        if (startDate.isAfter(endDate)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        // Obtenha o conteúdo do arquivo em bytes
+        byte[] arquivoTxt = dataService.getMappingArchiveTxt(startDate, endDate);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=mappingArchive.txt")
+                .body(arquivoTxt);
+    }
+
+    @PostMapping(value = "/mapping/archive/txt", consumes = "text/plain")
+    @Operation(
+            summary = "Upload de arquivo de mapeamento em txt",
+            description = "Recebe um arquivo de mapeamento em formato de texto.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Arquivo de mapeamento recebido com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Falha no upload do arquivo")
+            }
+    )
+    public ResponseEntity<String> uploadMappingArchiveTxt(
+            @RequestBody String fileContent,
+            @RequestHeader HashMap<String, String> headers
+    ) {
+        if (fileContent.isEmpty()) {
+            return ResponseEntity.badRequest().body("O arquivo está vazio.");
+        }
+        if (!headers.containsKey("authorization") || headers.get("authorization").length() < 8) {
+            return ResponseEntity.badRequest().body("Cabeçalho de autorização inválido.");
+        }
+
+        try {
+            String token = headers.get("authorization").substring(7);
+            dataService.processMappingArchiveTxt(fileContent, token);
+            return ResponseEntity.ok("Arquivo recebido e processado com sucesso.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao processar o arquivo: " + e.getMessage());
+        }
+    }
+
+
 }

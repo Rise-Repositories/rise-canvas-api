@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
@@ -80,6 +81,12 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
         )
     """, nativeQuery = true)
     List<Mapping> findWhenInsideArea(Double latitude, Double longitude, Double radius);
+
+    @Query(value = """
+        SELECT * FROM mapping m
+        WHERE m.date BETWEEN ?1 AND ?2
+        """, nativeQuery = true)
+    List<Mapping> getMappingsByDate(LocalDate startDate, LocalDate endDate);
     
     @Query(value = """
         select m.* from mapping m
@@ -93,4 +100,5 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
         ) AND u.id = :id
     """, nativeQuery = true)
     List<Mapping> findWhenInsideAreaByUser(Double latitude, Double longitude, Double radius, Integer id);
+
 }

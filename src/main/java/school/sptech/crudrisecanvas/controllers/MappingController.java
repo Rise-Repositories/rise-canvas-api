@@ -53,6 +53,32 @@ public class MappingController {
 
         return ResponseEntity.status(200).body(mappings);
     }
+    @GetMapping("/user/by-coordinates")
+    @Operation(
+            summary = "Obter mapeamentos por coordenadas",
+            description = "Retorna uma lista de mapeamentos baseados nas coordenadas e raio fornecidos.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Lista de mapeamentos retornada com sucesso"),
+                    @ApiResponse(responseCode = "204", description = "Nenhum mapeamento encontrado")
+            }
+    )
+    public ResponseEntity<List<MappingResponseDto>> getUserMappingsByCoordinates(
+        @RequestParam("coordinates") String coordinates,
+  		@RequestParam("radius") Double radius,
+		@RequestHeader HashMap<String,String> headers
+    ){
+        Coordinates coords = new Coordinates(coordinates);
+
+        List<MappingResponseDto> mappings = MappingMapper.toResponse(
+			mappingService.getMappingsByCoordinates(coords, radius, headers.get("authorization").substring(7))
+		);
+
+        if(mappings.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+
+        return ResponseEntity.status(200).body(mappings);
+    }
 
     @GetMapping("/by-coordinates")
     @Operation(
@@ -143,18 +169,21 @@ public class MappingController {
         return ResponseEntity.status(204).build();
     }
 
-    @PostMapping("/{id}/add-user/{userId}")
+    @PostMapping("/{id}/add-user")
     @Operation(
             summary = "Adicionar um usuário a um mapeamento",
-            description = "Adiciona um usuário específico a um mapeamento baseado no ID do mapeamento e ID do usuário.",
+            description = "Adiciona um usuário específico a um mapeamento baseado no ID do mapeamento e token do usuário.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Usuário adicionado ao mapeamento com sucesso"),
                     @ApiResponse(responseCode = "404", description = "Mapeamento ou usuário não encontrado")
             }
     )
-    public ResponseEntity<MappingResponseDto> addUser(@PathVariable("id") Integer id,@PathVariable("userId") Integer userId){
+    public ResponseEntity<MappingResponseDto> addUser(
+            @PathVariable("id") Integer id,
+            @RequestHeader HashMap<String,String> headers
+    ){
         MappingResponseDto response = MappingMapper.toResponse(
-            mappingService.addUser(id, userId)
+            mappingService.addUser(id, headers.get("authorization").substring(7))
         );
 
         return ResponseEntity.status(200).body(response);

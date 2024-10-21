@@ -34,7 +34,7 @@ public class UserMappingMapper {
         if(userMapping == null) return null;
         UserMappingMappingResponsDto result = new UserMappingMappingResponsDto();
         result.setId(userMapping.getId());
-        result.setUser(UserMapper.toResponse(userMapping.getUser()));
+        result.setUser(UserMapper.toNoRelationDto(userMapping.getUser()));
 
         return result;
     }

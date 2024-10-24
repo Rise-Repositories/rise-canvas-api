@@ -91,6 +91,20 @@ public class DataService {
     }
 
 
+    public void exportMappingGraphDtoToCsv(List<MappingGraphDto> mappingGraphData, PrintWriter writer) {
+        writer.println("No_Served;Served;No_People;Year;Month");
+
+        for (MappingGraphDto data : mappingGraphData) {
+            writer.printf("%d;%d;%d;%d;%d%n",
+                    data.getNo_Served(),
+                    data.getServed(),
+                    data.getNo_People(),
+                    data.getYear(),
+                    data.getMonth());
+        }
+    }
+
+
     public void processMappingArchiveTxt(String fileContent, String authorizationToken) {
         BufferedReader reader = new BufferedReader(new StringReader(fileContent));
         String registro;

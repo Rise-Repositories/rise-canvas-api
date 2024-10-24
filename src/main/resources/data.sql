@@ -53,7 +53,9 @@ BEGIN
         from mapping_action ma
 		join action a on ma.action_id = a.id
 		where month(a.datetime_start) = month(new_date) and year(a.datetime_start) = year(new_date) and ma.no_people = 1;
-		SET no_served = total - served - no_people;
+		SET total = total - no_people;
+
+		SET no_served = total - served;
         INSERT INTO response (total, no_served, served, no_people, month, year) VALUES (total, no_served, served, no_people, MONTH(new_date), YEAR(new_date));
 
         SET new_date = DATE_ADD(new_date, INTERVAL 1 MONTH);

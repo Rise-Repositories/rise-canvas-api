@@ -18,8 +18,8 @@ import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingCountResponseDto
 import school.sptech.crudrisecanvas.service.DataService;
 import school.sptech.crudrisecanvas.service.MappingService;
 import school.sptech.crudrisecanvas.service.UserMappingService;
-
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -165,6 +165,41 @@ public class DataController {
                 .body(arquivoTxt);
     }
 
+    @GetMapping("/export-csv")
+    @Operation(
+            summary = "Exportar dados para CSV",
+            description = "Exporta os dados entre as datas especificadas no formato CSV.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Arquivos de mapeamento em CSV retornados com sucesso"),
+                    @ApiResponse(responseCode = "204", description = "Não há conteúdo para exportar"),
+                    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+            }
+    )
+    public ResponseEntity<Void> exportCsv(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            HttpServletResponse response) {
+
+        try {
+            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate);
+
+            if (dataList.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+
+            response.setContentType("text/csv");
+            response.setHeader("Content-Disposition", "attachment; filename=\"mapping_graph.csv\"");
+
+            dataService.exportMappingGraphDtoToCsv(dataList, response.getWriter());
+          
+             return ResponseEntity.ok().build();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
+        }
+    }
+  
     @PostMapping(value = "/mapping/archive/txt", consumes = "text/plain")
     @Operation(
             summary = "Upload de arquivo de mapeamento em txt",
@@ -230,5 +265,7 @@ public class DataController {
             return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
 
 }

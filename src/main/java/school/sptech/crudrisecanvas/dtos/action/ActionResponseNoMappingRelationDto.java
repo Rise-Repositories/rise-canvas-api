@@ -14,6 +14,7 @@ public class ActionResponseNoMappingRelationDto {
     private LocalDateTime datetimeEnd;
     private Double longitude;
     private Double latitude;
+    private Double radius;
     private String status;
     private OngResponseNoRelationDto ong;
 }

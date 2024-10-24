@@ -107,16 +107,16 @@ public class ActionService {
         return mappingActionRepository.save(mappingActionBody);
     }
 
-    public Action updateStatus(String requestStatus, Integer id, Integer ongId, String token){
+    public Action updateStatus(String requestStatus, Integer actionId, Integer ongId, String token){
         User user = userService.getAccount(token);
 
         user.getVoluntary()
                 .stream()
                 .filter(v -> v.getRole() != VoluntaryRoles.VOLUNTARY && v.getOng().getId() == ongId)
                 .findFirst()
-                .orElseThrow(() -> new ForbiddenException("Você não tem permissão para criar essa ação"));
+                .orElseThrow(() -> new ForbiddenException("Você não tem permissão para alterar o status dessa ação"));
 
-        Action action = this.getById(id);
+        Action action = this.getById(actionId);
         try{
             ActionStatus status = ActionStatus.valueOf(requestStatus);
 

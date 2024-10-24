@@ -147,13 +147,13 @@ public class ActionController {
 
     @PatchMapping("/{ongId}/{actionId}")
     public ResponseEntity<ActionResponseDto> updateActionStatus(
-        @PathVariable("ongId") Integer id,
-        @PathVariable("actionId") Integer ongId,
+        @PathVariable("ongId") Integer ongId,
+        @PathVariable("actionId") Integer actionId,
         @RequestParam("status") String status,
         @RequestHeader HashMap<String, String> header
     ){
         ActionResponseDto actionResponse = ActionMapper.toResponse(
-            actionService.updateStatus(status, id, ongId, header.get("authorization").substring(7))
+            actionService.updateStatus(status, actionId, ongId, header.get("authorization").substring(7))
         );
 
         return ResponseEntity.status(200).body(actionResponse);

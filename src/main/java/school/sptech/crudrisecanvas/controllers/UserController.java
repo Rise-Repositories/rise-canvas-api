@@ -214,6 +214,14 @@ public class UserController {
     }
 
     @GetMapping("/total-count")
+    @Operation(
+            summary = "Obter contagem total de usuários",
+            description = "Retorna o número total de usuários cadastrados no sistema.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Contagem total de usuários retornada com sucesso"),
+                    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+            }
+    )
     public ResponseEntity<Long> getUserCount() {
         return ResponseEntity.status(200).body(usuarioService.getUserCount());
     }

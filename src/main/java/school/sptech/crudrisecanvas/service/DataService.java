@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.crudrisecanvas.dtos.address.AddressResponseDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseNoMappingRelationDto;
@@ -89,6 +90,20 @@ public class DataService {
     }
 
 
+    public void exportMappingGraphDtoToCsv(List<MappingGraphDto> mappingGraphData, PrintWriter writer) {
+        writer.println("No_Served;Served;No_People;Year;Month");
+
+        for (MappingGraphDto data : mappingGraphData) {
+            writer.printf("%d;%d;%d;%d;%d%n",
+                    data.getNo_Served(),
+                    data.getServed(),
+                    data.getNo_People(),
+                    data.getYear(),
+                    data.getMonth());
+        }
+    }
+
+
     public void processMappingArchiveTxt(String fileContent, String authorizationToken) {
         BufferedReader reader = new BufferedReader(new StringReader(fileContent));
         String registro;
@@ -165,7 +180,4 @@ public class DataService {
             System.out.println("Erro ao ler o registro: " + erro.getMessage());
         }
     }
-
-
-
 }

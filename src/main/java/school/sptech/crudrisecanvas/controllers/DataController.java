@@ -3,7 +3,9 @@ package school.sptech.crudrisecanvas.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -194,5 +196,39 @@ public class DataController {
         }
     }
 
+    @GetMapping("/export-json")
+    @Operation(
+            summary = "Exportar dados para JSON",
+            description = "Exporta os dados entre as datas especificadas no formato JSON.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Arquivos de mapeamento em JSON retornados com sucesso"),
+                    @ApiResponse(responseCode = "204", description = "Não há conteúdo para exportar"),
+                    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+            }
+    )
+    public ResponseEntity<Void> exportJson(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            HttpServletResponse response) {
+
+        try {
+            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate);
+
+            if (dataList.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+
+            response.setContentType("application/json");
+            response.setHeader("Content-Disposition", "attachment; filename=\"mapping_graph.json\"");
+
+            dataService.exportMappingGraphDtoToJson(dataList, response.getWriter());
+
+            return ResponseEntity.ok().build();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }

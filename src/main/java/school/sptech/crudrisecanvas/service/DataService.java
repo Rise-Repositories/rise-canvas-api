@@ -1,9 +1,11 @@
 package school.sptech.crudrisecanvas.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.crudrisecanvas.dtos.address.AddressResponseDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseNoMappingRelationDto;
@@ -166,6 +168,16 @@ public class DataService {
         }
     }
 
+    public void exportMappingGraphDtoToJson(List<MappingGraphDto> mappingGraphData, PrintWriter writer) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+
+            objectMapper.writeValue(writer, mappingGraphData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

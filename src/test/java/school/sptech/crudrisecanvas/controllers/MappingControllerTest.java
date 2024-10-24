@@ -443,12 +443,15 @@ class MappingControllerTest {
         @DisplayName("Quando ids existirem, deve retornar 200")
         void addUser() {
             Integer mappingId = 1;
-            Integer userId = 1;
             Mapping mapping = MappingMocks.getMapping2();
 
-            Mockito.when(service.addUser(mappingId, userId)).thenReturn(mapping);
+            String token = UserMocks.getToken();
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("authorization", "Bearer " + UserMocks.getToken());
 
-            ResponseEntity<MappingResponseDto> response = controller.addUser(mappingId, userId);
+            Mockito.when(service.addUser(mappingId, token)).thenReturn(mapping);
+
+            ResponseEntity<MappingResponseDto> response = controller.addUser(mappingId, hashMap);
             MappingResponseDto returnedMapping = response.getBody();
 
             assertEquals(HttpStatus.OK, response.getStatusCode());

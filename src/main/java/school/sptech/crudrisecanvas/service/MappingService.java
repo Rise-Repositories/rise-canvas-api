@@ -46,6 +46,16 @@ public class MappingService {
             radius
         );
     }
+    public List<Mapping> getMappingsByCoordinates(Coordinates coordinates, Double radius, String token){
+        Integer id = userService.getAccount(token).getId();
+
+        return mappingRepository.findWhenInsideAreaByUser(
+            coordinates.getLatitude(), 
+            coordinates.getLongitude(), 
+            radius,
+            id
+        );
+    }
 
     public Mapping getMappingById(Integer id){
         Optional<Mapping> mapping = mappingRepository.findById(id);
@@ -71,7 +81,28 @@ public class MappingService {
             mapping.setAddress(null);
         }
 
-    //    mapping.setUsersMappings(List.of(userMapping));
+        mapping.setStatus(MappingStatus.ACTIVE);
+
+        Mapping savedMapping = mappingRepository.save(mapping);
+
+        userMappingService.createRelation(user, savedMapping);
+
+        return savedMapping;
+    }
+
+    public Mapping createMappingWithoutCepValidation(Mapping mapping, String token){
+        if(mapping.getQtyAdults() + mapping.getQtyChildren() == 0){
+            throw new BadRequestException("É necessário que haja pelo menos 1 pessoa no local");
+        }
+        User user = userService.getAccount(token);
+
+        if (mapping.getAddress() != null) {
+            Address savedAddress = addressService.save(mapping.getAddress());
+            mapping.setAddress(savedAddress);
+        } else {
+            mapping.setAddress(null);
+        }
+
         mapping.setStatus(MappingStatus.ACTIVE);
 
         Mapping savedMapping = mappingRepository.save(mapping);
@@ -99,15 +130,16 @@ public class MappingService {
         mappingRepository.delete(mapping);
     }
 
-    public Mapping addUser(Integer id, Integer userId){
+    public Mapping addUser(Integer id, String token){
+
+        User user = userService.getAccount(token);
         Mapping mapping = this.getMappingById(id);
-        User user = userService.getUserById(userId);
 
-        Mapping response = mappingRepository.save(mapping);
+//        Mapping response = mappingRepository.save(mapping);
 
-        userMappingService.createRelation(user, response);
+        userMappingService.createRelation(user, mapping);
 
-        return response;
+        return mapping;
     }
 
     public List<MappingAlertDto> getMappingAlerts(LocalDate beforeDate) {

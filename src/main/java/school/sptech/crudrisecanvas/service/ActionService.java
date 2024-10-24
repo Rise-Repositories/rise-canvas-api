@@ -15,6 +15,7 @@ import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.ActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
+import school.sptech.crudrisecanvas.utils.Enums.ActionStatus;
 import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 import school.sptech.crudrisecanvas.utils.adpters.MailValue;
 
@@ -41,6 +42,11 @@ public class ActionService {
         return action.get();
     }   
 
+    public List<Action> getByCoordinates(Double latitude, Double longitude, Double radius){
+        List<Action> actions = actionRepository.findByCordinates(latitude, longitude, radius);
+        return actions;
+    }
+
     public Action create(Action action, Integer ongId, String token){
         User user = userService.getAccount(token);
 
@@ -51,6 +57,7 @@ public class ActionService {
                 .orElseThrow(() -> new ForbiddenException("Você não tem permissão para criar essa ação"))
                 .getOng();
 
+        action.setStatus(ActionStatus.PENDING.toString());
         action.setOng(ong);
 
         return actionRepository.save(action);
@@ -98,5 +105,39 @@ public class ActionService {
         });
 
         return mappingActionRepository.save(mappingActionBody);
+    }
+
+    public Action updateStatus(String requestStatus, Integer actionId, Integer ongId, String token){
+        User user = userService.getAccount(token);
+
+        user.getVoluntary()
+                .stream()
+                .filter(v -> v.getRole() != VoluntaryRoles.VOLUNTARY && v.getOng().getId() == ongId)
+                .findFirst()
+                .orElseThrow(() -> new ForbiddenException("Você não tem permissão para alterar o status dessa ação"));
+
+        Action action = this.getById(actionId);
+        try{
+            ActionStatus status = ActionStatus.valueOf(requestStatus);
+
+            action.setStatus(status.toString());
+        }
+        catch(IllegalArgumentException e){
+            throw new NotFoundException("Status não encontrado");
+        }
+        
+        return actionRepository.save(action);
+    }
+
+    public List<Action> getByOng(Integer ongId, String token){
+        User user = userService.getAccount(token);
+
+        user.getVoluntary()
+                .stream()
+                .filter(v -> v.getRole() != VoluntaryRoles.VOLUNTARY && v.getOng().getId() == ongId)
+                .findFirst()
+                .orElseThrow(() -> new ForbiddenException("Você não tem permissão para criar essa ação"));
+
+        return actionRepository.findAllByOngId(ongId);
     }
 }

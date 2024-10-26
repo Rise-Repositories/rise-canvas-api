@@ -1,10 +1,12 @@
 package school.sptech.crudrisecanvas.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import jakarta.validation.constraints.Email;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.server.ResponseStatusException;
 import school.sptech.crudrisecanvas.api.configuration.security.jwt.JwtTokenManager;
 import school.sptech.crudrisecanvas.dtos.user.*;
 import school.sptech.crudrisecanvas.entities.Address;
@@ -22,12 +25,20 @@ import school.sptech.crudrisecanvas.exception.ConflictException;
 import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.UserRepositary;
+import school.sptech.crudrisecanvas.utils.ResponseLambda;
 import school.sptech.crudrisecanvas.utils.adpters.MailValue;
+import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.lambda.LambdaClient;
+import software.amazon.awssdk.services.lambda.model.InvokeRequest;
+import software.amazon.awssdk.services.lambda.model.InvokeResponse;
+import software.amazon.awssdk.services.lambda.model.LambdaException;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -238,5 +249,105 @@ public class UserService {
 
     public Long getUserCount() {
         return this.userRepository.count();
+    }
+
+
+    private S3Client criarClienteS3() {
+        Region region = Region.US_EAST_1;
+        S3Client s3 = S3Client.builder().region(region).build();
+        return s3;
+    }
+
+    public byte[] getFile(int id, String token) {
+
+        String s3Id = null;
+
+        if (id == -1) {
+            s3Id = "layout.pdf";
+        } else {
+            User user = getAccount(token);
+
+            if (user.getId() != id) {
+                throw new ForbiddenException("Você não tem permissão para fazer esta ação");
+            }
+            s3Id = user.getPhotoId();
+        }
+
+        byte[] arquivo = null;
+
+        if (s3Id != null) {
+
+            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket("s3-02231066")
+                .key(s3Id)
+                .build();
+
+            S3Client s3 = criarClienteS3();
+            arquivo = s3.getObjectAsBytes(getObjectRequest).asByteArray();
+        }
+        return arquivo;
+    }
+
+    public void postFile(int id, String token, String fileBase64) {
+        User user = getAccount(token);
+        if (user.getId() != id) {
+            throw new ForbiddenException("Você não tem permissão para fazer esta ação");
+        }
+
+        String s3Id = user.getPhotoId();
+
+        if (s3Id != null) {
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket("s3-02231066")
+                    .key(s3Id)
+                    .build();
+
+            S3Client s3 = criarClienteS3();
+            s3.deleteObject(deleteObjectRequest);
+        }
+
+        s3Id = UUID.randomUUID().toString();
+
+        String funcao = "rise-lambda";
+        Region region = Region.US_EAST_1;
+
+        LambdaClient awsLambda = LambdaClient.builder()
+                .region(region)
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        InvokeResponse res = null;
+
+        try {
+            Map<String, String> parametros = Map.of("userId", s3Id, "file", fileBase64);
+
+            SdkBytes payload = SdkBytes.fromUtf8String(objectMapper.writeValueAsString(parametros));
+
+            InvokeRequest request = InvokeRequest.builder()
+                    .functionName(funcao)
+                    .payload(payload)
+                    .build();
+
+            res = awsLambda.invoke(request);
+
+            String value = res.payload().asUtf8String();
+
+            ResponseLambda respostaLambda =
+                    objectMapper.readValue(value, ResponseLambda.class);
+
+            if (respostaLambda.getStatusCode() != 200) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Erro ao salvar a imagem");
+            } else {
+                String format = fileBase64.split(";")[0].split("/")[1];
+                s3Id += '.' + format;
+                userRepository.updatePhotoId(user.getId(), s3Id);
+            }
+
+        } catch (LambdaException | JsonProcessingException e) {
+            System.err.println(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        awsLambda.close();
     }
 }

@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,9 @@ import school.sptech.crudrisecanvas.dtos.user.*;
 import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.service.UserService;
+import school.sptech.crudrisecanvas.utils.RequestLambda;
+
+import javax.print.attribute.standard.Media;
 
 @RestController
 @RequestMapping("/user")
@@ -224,5 +229,37 @@ public class UserController {
     )
     public ResponseEntity<Long> getUserCount() {
         return ResponseEntity.status(200).body(usuarioService.getUserCount());
+    }
+
+    @GetMapping("/file/{id}")
+    public ResponseEntity<byte[]> getS3File(
+            @PathVariable int id,
+            @RequestHeader HashMap<String,String> headers
+    ) {
+        byte[] arquivo = usuarioService.getFile(id, headers.get("authorization").substring(7));
+
+        if (arquivo == null) {
+            return ResponseEntity.noContent().build();
+        } else {
+            final HttpHeaders httpHeaders = new HttpHeaders();
+            final MediaType mediaType;
+            if (id < 0) {
+                mediaType = MediaType.APPLICATION_PDF;
+            } else {
+                mediaType = MediaType.IMAGE_PNG;
+            }
+            httpHeaders.setContentType(mediaType);
+            return ResponseEntity.status(200).headers(httpHeaders).body(arquivo);
+        }
+    }
+
+    @PostMapping("/file/{id}")
+    public ResponseEntity<Void> postS3File(
+            @PathVariable int id,
+            @RequestHeader HashMap<String,String> headers,
+            @RequestBody RequestLambda file
+    ) {
+        usuarioService.postFile(id, headers.get("authorization").substring(7), file.getFileBase64());
+        return ResponseEntity.created(null).build();
     }
 }

@@ -8,15 +8,12 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import school.sptech.crudrisecanvas.entities.*;
 import school.sptech.crudrisecanvas.utils.HeatmapGenerator;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
-import school.sptech.crudrisecanvas.entities.Address;
-import school.sptech.crudrisecanvas.entities.Mapping;
-import school.sptech.crudrisecanvas.entities.User;
-import school.sptech.crudrisecanvas.entities.UserMapping;
 import school.sptech.crudrisecanvas.exception.BadRequestException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
@@ -46,6 +43,16 @@ public class MappingService {
             radius
         );
     }
+
+    public List<Mapping> getDonatedMappingsByCoordinates(Coordinates coordinates, Double radius, Integer actionId){
+        return mappingRepository.findWhenInsideAreaDonated(
+                coordinates.getLatitude(),
+                coordinates.getLongitude(),
+                radius,
+                actionId
+        );
+    }
+
     public List<Mapping> getMappingsByCoordinates(Coordinates coordinates, Double radius, String token){
         Integer id = userService.getAccount(token).getId();
 

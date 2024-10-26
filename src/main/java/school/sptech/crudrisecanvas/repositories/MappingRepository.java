@@ -83,6 +83,19 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
     List<Mapping> findWhenInsideArea(Double latitude, Double longitude, Double radius);
 
     @Query(value = """
+        select m.* from mapping m INNER JOIN mapping_action ma
+        ON m.id = ma.mapping_id
+        where ma.action_id = :actionId AND 
+        :radius >
+        6371 * ACOS(
+            COS(RADIANS(m.latitude)) * COS(RADIANS(:latitude)) *
+            COS(RADIANS(:longitude) - RADIANS(m.longitude)) +
+            SIN(RADIANS(m.latitude)) * SIN(RADIANS(:latitude))
+        )
+    """, nativeQuery = true)
+    List<Mapping> findWhenInsideAreaDonated(Double latitude, Double longitude, Double radius, Integer actionId);
+
+    @Query(value = """
         SELECT * FROM mapping m
         WHERE m.date BETWEEN ?1 AND ?2
         """, nativeQuery = true)

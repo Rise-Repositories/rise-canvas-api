@@ -15,6 +15,7 @@ import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.ActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
+import school.sptech.crudrisecanvas.utils.Coordinates;
 import school.sptech.crudrisecanvas.utils.Enums.ActionStatus;
 import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 import school.sptech.crudrisecanvas.utils.adpters.MailValue;
@@ -139,5 +140,23 @@ public class ActionService {
                 .orElseThrow(() -> new ForbiddenException("Você não tem permissão para criar essa ação"));
 
         return actionRepository.findAllByOngId(ongId);
+    }
+
+    public List<Mapping> getActionMappingsByCoordinates(Integer actionId){
+        Action action = getById(actionId);
+        Coordinates coordinates = new Coordinates(action.getLatitude(), action.getLongitude());
+        if (action.getStatus().equals("PENDING") || action.getStatus().equals("IN_PROGRESS")) {
+
+            return mappingService.getMappingsByCoordinates(
+                    coordinates,
+                    action.getRadius()
+            );
+        } else {
+            return mappingService.getDonatedMappingsByCoordinates(
+                    coordinates,
+                    action.getRadius(),
+                    action.getId()
+            );
+        }
     }
 }

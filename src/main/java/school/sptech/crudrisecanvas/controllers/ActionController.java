@@ -24,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 import school.sptech.crudrisecanvas.dtos.action.ActionRequestDto;
 import school.sptech.crudrisecanvas.dtos.action.ActionMapper;
 import school.sptech.crudrisecanvas.dtos.action.ActionResponseDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionRequestDto;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseDto;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionMapper;
@@ -176,5 +178,26 @@ public class ActionController {
         );
 
         return ResponseEntity.status(200).body(response);
+    }
+
+    @GetMapping("/{id}/mapping")
+    @Operation(
+            summary = "Obter mapeamentos de uma ação por coordenadas",
+            description = "Retorna uma lista de mapeamentos baseados no status da ação, coordenadas e raio fornecidos.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Lista de mapeamentos retornada com sucesso"),
+                    @ApiResponse(responseCode = "204", description = "Nenhum mapeamento encontrado")
+            }
+    )
+    public ResponseEntity<List<MappingResponseDto>> getActionMappingsByCoordinates(
+            @PathVariable Integer id
+    ){
+        List<MappingResponseDto> mappings = MappingMapper.toResponse(actionService.getActionMappingsByCoordinates(id));
+
+        if(mappings.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+
+        return ResponseEntity.status(200).body(mappings);
     }
 }

@@ -19,7 +19,7 @@ public interface ActionRepository extends JpaRepository<Action, Integer>{
                 COS(RADIANS(a.latitude)) * COS(RADIANS(:latitude)) *
                 COS(RADIANS(:longitude) - RADIANS(a.longitude)) +
                 SIN(RADIANS(a.latitude)) * SIN(RADIANS(:latitude))
-            )
+            ) AND  a.status IN ('IN_PROGRESS', 'PENDING')
     """, nativeQuery = true)
     List<Action> findByCordinates(Double latitude, Double longitude, Double radius);
 }

@@ -324,15 +324,12 @@ public class DataController {
                 return ResponseEntity.noContent().build();
             }
 
-            response.setContentType("application/octet-stream");
-            response.setHeader("Content-Disposition", "attachment; filename=\"mapping_graph.parquet\"");
-
-            var a = dataService.exportMappingGraphDtoToParquet(dataList);
+            var parquetfile = dataService.exportMappingGraphDtoToParquet(dataList);
 
             return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=data.parquet")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=mapping_graph.parquet")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(a);
+                .body(parquetfile);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();

@@ -5,12 +5,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
@@ -19,7 +21,6 @@ import school.sptech.crudrisecanvas.service.DataService;
 import school.sptech.crudrisecanvas.service.MappingService;
 import school.sptech.crudrisecanvas.service.UserMappingService;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -236,11 +237,12 @@ public class DataController {
             summary = "Exportar dados para JSON",
             description = "Exporta os dados entre as datas especificadas no formato JSON.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Arquivos de mapeamento em JSON retornados com sucesso"),
-                    @ApiResponse(responseCode = "204", description = "Não há conteúdo para exportar"),
-                    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+                @ApiResponse(responseCode = "200", description = "Arquivos de mapeamento em JSON retornados com sucesso"),
+                @ApiResponse(responseCode = "204", description = "Não há conteúdo para exportar"),
+                @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
             }
     )
+
     public ResponseEntity<Void> exportJson(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
@@ -265,7 +267,77 @@ public class DataController {
             return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
         }
     }
+    @GetMapping("/export-xml")
+    @Operation(
+            summary = "Exportar dados para XML",
+            description = "Exporta os dados entre as datas especificadas no formato XML.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Arquivos de mapeamento em XML retornados com sucesso"),
+                    @ApiResponse(responseCode = "204", description = "Não há conteúdo para exportar"),
+                    @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+            }
+    )
+    public ResponseEntity<Void> exportXml(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            HttpServletResponse response) {
+        try {
+            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate);
 
+            if (dataList.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+
+            response.setContentType("text/xml");
+            response.setHeader("Content-Disposition", "attachment; filename=\"mapping_graph.xml\"");
+
+            dataService.exportMappingGraphDtoToXml(dataList, response.getWriter());
+
+            return ResponseEntity.ok().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @GetMapping("/export-parquet")
+    @Operation(
+    summary = "Exportar dados para Parquet",
+        description = "Exporta os dados entre as datas especificadas no formato Parquet.",
+        responses = {
+                @ApiResponse(responseCode = "200", description = "Arquivos de mapeamento em Parquet retornados com sucesso"),
+                @ApiResponse(responseCode = "204", description = "Não há conteúdo para exportar"),
+                @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        }
+    )
+
+    public ResponseEntity<InputStreamResource> exportParquet(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            HttpServletResponse response
+    ) {
+        try {
+            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate);
+
+            if (dataList.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment; filename=\"mapping_graph.parquet\"");
+
+            var a = dataService.exportMappingGraphDtoToParquet(dataList);
+
+            return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=data.parquet")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(a);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 
 }

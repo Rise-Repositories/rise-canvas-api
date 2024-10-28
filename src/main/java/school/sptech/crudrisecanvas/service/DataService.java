@@ -2,35 +2,39 @@ package school.sptech.crudrisecanvas.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.avro.Schema;
+import org.apache.avro.Schema.Parser;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.parquet.avro.AvroParquetWriter;
+import org.apache.parquet.hadoop.ParquetWriter;
+import org.apache.parquet.hadoop.metadata.CompressionCodecName;
+import org.apache.parquet.hadoop.util.HadoopOutputFile;
+import org.apache.parquet.io.OutputFile;
+import org.apache.parquet.io.PositionOutputStream;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import school.sptech.crudrisecanvas.dtos.address.AddressResponseDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingMapper;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
-import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseNoMappingRelationDto;
 import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.Mapping;
-import school.sptech.crudrisecanvas.entities.MappingAction;
 import school.sptech.crudrisecanvas.exception.BadRequestException;
-import school.sptech.crudrisecanvas.repositories.MappingRepository;
 import school.sptech.crudrisecanvas.utils.Enums.MappingStatus;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class DataService {
-    private final MappingRepository mappingRepository;
     private final MappingService mappingService;
 
     public byte[] getMappingArchiveTxt(LocalDate startDate, LocalDate endDate) {
@@ -194,4 +198,82 @@ public class DataService {
     }
 
 
+    public void exportMappingGraphDtoToXml(List<MappingGraphDto> mappingGraphData, PrintWriter writer) {
+        writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        writer.println("<mappingGraphData>");
+
+        for (MappingGraphDto data : mappingGraphData) {
+            writer.println("  <mappingGraph>");
+            writer.println("    <noServed>" + data.getNo_Served() + "</noServed>");
+            writer.println("    <served>" + data.getServed() + "</served>");
+            writer.println("    <noPeople>" + data.getNo_People() + "</noPeople>");
+            writer.println("    <year>" + data.getYear() + "</year>");
+            writer.println("    <month>" + data.getMonth() + "</month>");
+            writer.println("  </mappingGraph>");
+        }
+
+        writer.println("</mappingGraphData>");
+    }
+    public InputStreamResource exportMappingGraphDtoToParquet(List<MappingGraphDto> mappingGraphData) throws IOException {
+        String schemaString = "{\"type\":\"record\",\"name\":\"DataRecord\",\"fields\":["
+            + "{\"name\":\"noServed\",\"type\":\"string\"},"
+            + "{\"name\":\"served\",\"type\":\"string\"},"
+            + "{\"name\":\"noPeople\",\"type\":\"int\"},"
+            + "{\"name\":\"year\",\"type\":\"int\"},"
+            + "{\"name\":\"month\",\"type\":\"int\"}"
+            + "]}";
+        Schema schema = new Schema.Parser().parse(schemaString);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try (ParquetWriter<GenericRecord> writer = AvroParquetWriter.<GenericRecord>builder(new org.apache.parquet.io.OutputFile() {
+            @Override
+            public PositionOutputStream create(long blockSizeHint) throws IOException {
+                return new PositionOutputStream() {
+                    @Override
+                    public long getPos() throws IOException {
+                        return outputStream.size();
+                    }
+
+                    @Override
+                    public void write(int b) throws IOException {
+                        outputStream.write(b);
+                    }
+                };
+            }
+
+            @Override
+            public PositionOutputStream createOrOverwrite(long blockSizeHint) throws IOException {
+                return create(blockSizeHint);
+            }
+
+            @Override
+            public boolean supportsBlockSize() {
+                return false;
+            }
+
+            @Override
+            public long defaultBlockSize() {
+                return 0;
+            }
+        })
+                .withSchema(schema)
+                .withCompressionCodec(CompressionCodecName.SNAPPY)
+                .build()) {
+            
+            for (MappingGraphDto e : mappingGraphData) {
+                GenericRecord record = new GenericData.Record(schema);
+                record.put("noServed", e.getNo_Served());
+                record.put("served", e.getServed());
+                record.put("noPeople", e.getNo_People());
+                record.put("year", e.getYear());
+                record.put("month", e.getMonth());
+                writer.write(record);
+            }
+        }
+
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        InputStreamResource resource = new InputStreamResource(inputStream);
+
+        return resource;
+    }
 }

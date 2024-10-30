@@ -65,7 +65,8 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
                     a.datetime_start = (
                             SELECT MAX(a.datetime_start) FROM mapping m2
                             LEFT JOIN Mapping_Action ma on m2.id = ma.mapping_id
-                            LEFT JOIN Action a ON ma.action_id = a.id AND m2.id = m.id) LIMIT 1;""", nativeQuery = true)
+                            LEFT JOIN Action a ON ma.action_id = a.id AND m2.id = m.id
+                            WHERE a.datetime_start < ?2 AND a.datetime_end > ?1) LIMIT 1;""", nativeQuery = true)
     MappingKpiDto getKpisByDates(LocalDate startDate, LocalDate endDate);
 
     @Query(value = "call graph(:startDate, :endDate)", nativeQuery = true )

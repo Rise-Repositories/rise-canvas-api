@@ -278,7 +278,7 @@ public class UserService {
         if (s3Id != null) {
 
             GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket("s3-02231066")
+                .bucket("s3-rise-iacb")
                 .key(s3Id)
                 .build();
 
@@ -298,7 +298,7 @@ public class UserService {
 
         if (s3Id != null) {
             DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-                    .bucket("s3-02231066")
+                    .bucket("s3-rise-iacb")
                     .key(s3Id)
                     .build();
 

@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.Data;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseDto;
 import school.sptech.crudrisecanvas.dtos.ong.OngResponseNoRelationDto;
+import school.sptech.crudrisecanvas.dtos.tags.TagsResponseDto;
 
 @Data
 public class ActionResponseDto{
@@ -20,4 +21,5 @@ public class ActionResponseDto{
     private String status;
     private List<MappingActionResponseDto> mappingAction;
     private OngResponseNoRelationDto ong;
+    private List<TagsResponseDto> tags;
 }

@@ -1,11 +1,13 @@
 package school.sptech.crudrisecanvas.dtos.action;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import school.sptech.crudrisecanvas.dtos.tags.TagsRequestDto;
 
 @Data
 public class ActionRequestDto {
@@ -24,4 +26,5 @@ public class ActionRequestDto {
     private Double radius;
 
     private String status;
+    private List<TagsRequestDto> tags;
 }

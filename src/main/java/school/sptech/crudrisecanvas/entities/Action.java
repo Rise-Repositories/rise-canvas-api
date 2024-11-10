@@ -43,4 +43,7 @@ public class Action {
 
     @OneToMany(mappedBy = "action")
     private List<MappingAction> mappingActions;
+
+    @OneToMany
+    private List<Tags> tags;
 }

@@ -39,4 +39,7 @@ public class Mapping {
 
     @ManyToOne
     private Address address;
+
+    @OneToMany
+    private List<Tags> tags;
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import school.sptech.crudrisecanvas.dtos.address.AddressMapper;
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionMapper;
+import school.sptech.crudrisecanvas.dtos.tags.TagsMapper;
 import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingMapper;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.UserMapping;
@@ -19,6 +20,7 @@ public class MappingMapper {
         mapping.setLatitude(mappingRequestDto.getLatitude());
         mapping.setLongitude(mappingRequestDto.getLongitude());
         mapping.setAddress(AddressMapper.toEntity(mappingRequestDto.getAddress()));
+        mapping.setTags(TagsMapper.toEntity(mappingRequestDto.getTags()));
         return mapping;
     }
 
@@ -37,6 +39,7 @@ public class MappingMapper {
         mappingResponse.setUserMappings(UserMappingMapper.toMapping(mapping.getUsersMappings()));
         mappingResponse.setAddress(AddressMapper.toDto(mapping.getAddress()));
         mappingResponse.setMappingActions(MappingActionMapper.toNoMappingRelationDto(mapping.getMappingActions()));
+        mappingResponse.setTags(TagsMapper.toResponse(mapping.getTags()));
         return mappingResponse;
     }
 
@@ -60,6 +63,7 @@ public class MappingMapper {
         mappingResponse.setDate(mapping.getDate().toString());
         mappingResponse.setAddress(AddressMapper.toDto(mapping.getAddress()));
         mappingResponse.setMappingActions(MappingActionMapper.toNoMappingRelationDto(mapping.getMappingActions()));
+        mappingResponse.setTags(TagsMapper.toResponse(mapping.getTags()));
         return mappingResponse;
     }
 

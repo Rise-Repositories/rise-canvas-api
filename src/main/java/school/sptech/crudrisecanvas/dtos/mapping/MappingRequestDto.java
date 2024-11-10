@@ -1,11 +1,15 @@
 package school.sptech.crudrisecanvas.dtos.mapping;
 
+import java.util.List;
+
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import school.sptech.crudrisecanvas.dtos.address.AddressRequestDto;
+import school.sptech.crudrisecanvas.dtos.tags.TagsRequestDto;
+import school.sptech.crudrisecanvas.dtos.tags.TagsResponseDto;
 
 @Data
 public class MappingRequestDto {
@@ -35,4 +39,6 @@ public class MappingRequestDto {
 
     @NotNull
     private AddressRequestDto address;
+
+    private List<TagsRequestDto> tags;
 }

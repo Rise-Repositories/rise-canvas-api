@@ -40,6 +40,6 @@ public class Mapping {
     @ManyToOne
     private Address address;
 
-    @OneToMany
+    @ManyToMany
     private List<Tags> tags;
 }

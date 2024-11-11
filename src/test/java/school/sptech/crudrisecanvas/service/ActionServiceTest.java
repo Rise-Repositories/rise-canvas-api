@@ -131,7 +131,7 @@ class ActionServiceTest {
             Mockito.when(userService.getAccount(token)).thenReturn(user);
             Mockito.when(repository.save(action)).thenReturn(action);
 
-            Action returnedAction = service.create(action, ongId, token);
+            Action returnedAction = service.create(action, ongId,List.of(), token);
 
             assertEquals(action.getName(), returnedAction.getName());
             assertEquals(action.getDatetimeStart(), returnedAction.getDatetimeStart());
@@ -158,7 +158,7 @@ class ActionServiceTest {
 
             ForbiddenException exception = assertThrows(
                     ForbiddenException.class,
-                    () -> service.create(action, ongId, token)
+                    () -> service.create(action, ongId, List.of(),token)
             );
 
             assertEquals("Você não tem permissão para criar essa ação", exception.getLocalizedMessage());

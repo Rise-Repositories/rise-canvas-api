@@ -26,5 +26,5 @@ public class ActionRequestDto {
     private Double radius;
 
     private String status;
-    private List<TagsRequestDto> tags;
+    private List<Integer> tags;
 }

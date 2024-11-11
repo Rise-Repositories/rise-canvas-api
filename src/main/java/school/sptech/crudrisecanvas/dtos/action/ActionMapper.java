@@ -18,7 +18,6 @@ public class ActionMapper {
         action.setLongitude(actionRequestDto.getLongitude());
         action.setRadius(actionRequestDto.getRadius());
         action.setStatus(actionRequestDto.getStatus());
-        action.setTags(TagsMapper.toEntity(actionRequestDto.getTags()));
         return action;
     }
     

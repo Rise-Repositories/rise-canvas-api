@@ -118,7 +118,7 @@ public class ActionController {
     ){
         Action action = ActionMapper.toEntity(actionDto);
 
-        Action createdAction = actionService.create(action, ongId, header.get("authorization").substring(7));
+        Action createdAction = actionService.create(action, ongId, actionDto.getTags(), header.get("authorization").substring(7));
 
         ActionResponseDto actionResponse = ActionMapper.toResponse(createdAction);
         return ResponseEntity.status(201).body(actionResponse);

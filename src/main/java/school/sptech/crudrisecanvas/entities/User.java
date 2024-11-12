@@ -21,10 +21,10 @@ public class User {
     private Address address;
     private LocalDateTime allowedToUpdate;
     
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Voluntary> voluntary;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<UserMapping> mapping;
 
     private String photoId;

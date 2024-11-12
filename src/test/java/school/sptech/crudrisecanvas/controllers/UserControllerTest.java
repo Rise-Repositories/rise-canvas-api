@@ -24,6 +24,8 @@ import school.sptech.crudrisecanvas.integrationtests.utils.paths.UserEnum;
 import school.sptech.crudrisecanvas.service.UserService;
 import school.sptech.crudrisecanvas.unittestutils.UserMocks;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -861,13 +863,18 @@ class UserControllerTest {
         @DisplayName("Quando id existir, deve retornar 204")
         void deleteUser() {
             Integer id = 1;
+            User user = UserMocks.getUser();
+            String token = UserMocks.getToken();
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("authorization", "Bearer " + token);
 
-            Mockito.doNothing().when(service).deleteUser(id);
+            Mockito.doNothing().when(service).deleteUser(id, token);
+            Mockito.doReturn(user).when(service).getAccount(token);
 
-            ResponseEntity<Void> response = controller.deleteUser(id);
+            ResponseEntity<Void> response = controller.deleteUser(id, headers);
 
             assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-            Mockito.verify(service, Mockito.times(1)).deleteUser(id);
+            Mockito.verify(service, Mockito.times(1)).deleteUser(id, token);
         }
     }
 }

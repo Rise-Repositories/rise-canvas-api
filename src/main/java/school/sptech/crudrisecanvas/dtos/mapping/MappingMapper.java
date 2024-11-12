@@ -20,7 +20,6 @@ public class MappingMapper {
         mapping.setLatitude(mappingRequestDto.getLatitude());
         mapping.setLongitude(mappingRequestDto.getLongitude());
         mapping.setAddress(AddressMapper.toEntity(mappingRequestDto.getAddress()));
-        mapping.setTags(TagsMapper.toEntity(mappingRequestDto.getTags()));
         return mapping;
     }
 

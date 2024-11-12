@@ -41,5 +41,6 @@ public class Mapping {
     private Address address;
 
     @ManyToMany
+    @JoinTable(name = "mapping_tags",uniqueConstraints = @UniqueConstraint(columnNames = {"mapping_id", "tags_id"}))
     private List<Tags> tags;
 }

@@ -64,3 +64,36 @@ BEGIN
 
     select * from response order by year, month;
 END $$
+
+drop procedure if exists create_tags$$
+
+CREATE PROCEDURE create_tags()
+BEGIN
+    DECLARE total INT;
+    select count(*) into total from tags;
+    IF(total = 0) THEN
+        INSERT INTO tags (name) VALUES 
+        ("Comidas"),
+        ("Roupas"),
+        ("Remedios"),
+        ("Cobertores"),
+        ("Higiene"),
+        ("Agasalhos"),
+        ("Calçados"),
+        ("Atendimento Médico"),
+        ("Apoio Psicológico"),
+        ("Abrigos Temporários"),
+        ("Apoio Jurídico"),
+        ("Transporte"),
+        ("Documentação"),
+        ("Emprego"),
+        ("Educação"),
+        ("Serviços Sociais"),
+        ("Acessibilidade"),
+        ("Doações"),
+        ("Atividades Recreativas"),
+        ("Voluntariado");
+    END IF;
+END $$
+
+call create_tags();

@@ -242,7 +242,13 @@ public class UserService {
         return userRepository.save(userToUpdate);
     }
 
-    public void deleteUser(int id) {
+    public void deleteUser(int id, String token) {
+        User userLogged = this.getAccount(token);
+
+        if(userLogged.getId() != id){
+            throw new ForbiddenException("Você não tem permissão para fazer esta ação");
+        }
+
         User user = this.getUserById(id);
         this.userRepository.delete(user);
     }

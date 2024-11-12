@@ -1,6 +1,5 @@
 package school.sptech.crudrisecanvas.dtos.user;
 
-import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.br.CPF;
 
 import jakarta.validation.constraints.Email;

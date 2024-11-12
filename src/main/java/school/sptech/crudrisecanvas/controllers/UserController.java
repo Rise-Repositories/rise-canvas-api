@@ -24,14 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import school.sptech.crudrisecanvas.dtos.address.AddressMapper;
 import school.sptech.crudrisecanvas.dtos.user.*;
-import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.service.UserService;
 import school.sptech.crudrisecanvas.utils.RequestLambda;
-
-import javax.print.attribute.standard.Media;
 
 @RestController
 @RequestMapping("/user")

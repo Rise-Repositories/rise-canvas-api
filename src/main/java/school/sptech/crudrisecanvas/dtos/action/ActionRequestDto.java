@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import school.sptech.crudrisecanvas.dtos.tags.TagsRequestDto;
 
 @Data
 public class ActionRequestDto {

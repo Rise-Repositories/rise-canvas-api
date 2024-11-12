@@ -2,8 +2,10 @@ package school.sptech.crudrisecanvas.dtos.action;
 
 import lombok.Data;
 import school.sptech.crudrisecanvas.dtos.ong.OngResponseNoRelationDto;
+import school.sptech.crudrisecanvas.dtos.tags.TagsResponseDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class ActionResponseNoMappingRelationDto {
@@ -17,4 +19,5 @@ public class ActionResponseNoMappingRelationDto {
     private Double radius;
     private String status;
     private OngResponseNoRelationDto ong;
+    private List<TagsResponseDto> tags;
 }

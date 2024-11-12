@@ -1,6 +1,7 @@
 package school.sptech.crudrisecanvas.dtos.action;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -24,4 +25,5 @@ public class ActionRequestDto {
     private Double radius;
 
     private String status;
+    private List<Integer> tags;
 }

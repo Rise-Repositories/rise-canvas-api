@@ -27,6 +27,7 @@ public class MappingService {
     private final MappingRepository mappingRepository;
     private final UserService userService;
     private final AddressService addressService;
+    private final TagsService tagsService;
 
     public List<Mapping> getMappings(){
         return mappingRepository.findAll();
@@ -73,7 +74,7 @@ public class MappingService {
         return mapping.get();
     }
 
-    public Mapping createMapping(Mapping mapping, String token){
+    public Mapping createMapping(Mapping mapping, List<Integer> tagsId, String token){
         if(mapping.getQtyAdults() + mapping.getQtyChildren() == 0){
             throw new BadRequestException("É necessário que haja pelo menos 1 pessoa no local");
         }
@@ -88,7 +89,10 @@ public class MappingService {
             mapping.setAddress(null);
         }
 
+        List<Tags> tags = this.tagsService.getManyByIds(tagsId);
+
         mapping.setStatus(MappingStatus.ACTIVE);
+        mapping.setTags(tags);
 
         Mapping savedMapping = mappingRepository.save(mapping);
 
@@ -101,8 +105,6 @@ public class MappingService {
         if(mapping.getQtyAdults() + mapping.getQtyChildren() == 0){
             throw new BadRequestException("É necessário que haja pelo menos 1 pessoa no local");
         }
-        User user = userService.getAccount(token);
-
         if (mapping.getAddress() != null) {
             Address savedAddress = addressService.save(mapping.getAddress());
             mapping.setAddress(savedAddress);

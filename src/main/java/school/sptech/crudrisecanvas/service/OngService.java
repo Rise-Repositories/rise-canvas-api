@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import school.sptech.crudrisecanvas.dtos.ong.OngResponseDto;
 import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.entities.Ong;
 import school.sptech.crudrisecanvas.entities.User;

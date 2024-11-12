@@ -127,12 +127,6 @@ public class UserService {
     public void patchPassword(UserRequestPatchPasswordDto request, String token) {
         User user = getAccount(token);
 
-
-        final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
-                user.getId().toString(), request.getCurPassword()
-        );
-        final Authentication authentication = this.authenticationManager.authenticate(credentials);
-
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }

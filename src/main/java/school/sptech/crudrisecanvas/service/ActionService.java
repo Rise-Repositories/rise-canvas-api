@@ -10,6 +10,7 @@ import school.sptech.crudrisecanvas.entities.Action;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.MappingAction;
 import school.sptech.crudrisecanvas.entities.Ong;
+import school.sptech.crudrisecanvas.entities.Tags;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
@@ -27,6 +28,7 @@ public class ActionService {
     private final MappingService mappingService;
     private final ActionRepository actionRepository;
     private final MappingActionRepository mappingActionRepository;
+    private final TagsService tagsService;
     
     public List<Action> getAll(){
         List<Action> actions = actionRepository.findAll();
@@ -48,7 +50,7 @@ public class ActionService {
         return actions;
     }
 
-    public Action create(Action action, Integer ongId, String token){
+    public Action create(Action action, Integer ongId, List<Integer> ids, String token){
         User user = userService.getAccount(token);
 
         Ong ong = user.getVoluntary()
@@ -58,8 +60,11 @@ public class ActionService {
                 .orElseThrow(() -> new ForbiddenException("Você não tem permissão para criar essa ação"))
                 .getOng();
 
+        List<Tags> tags = tagsService.getManyByIds(ids);
+
         action.setStatus(ActionStatus.PENDING.toString());
         action.setOng(ong);
+        action.setTags(tags);
 
         return actionRepository.save(action);
     }

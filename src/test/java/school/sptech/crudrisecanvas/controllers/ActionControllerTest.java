@@ -139,7 +139,7 @@ class ActionControllerTest {
 
             hashMap.put("authorization", "Bearer " + UserMocks.getToken());
 
-            Mockito.when(service.create(any(), any(), any())).thenReturn(action);
+            Mockito.when(service.create(any(), any(), any(), any())).thenReturn(action);
 
             ResponseEntity<ActionResponseDto> response = controller.createAction(actionReqDto, ongId, hashMap);
             ActionResponseDto returnedAction = response.getBody();
@@ -153,7 +153,7 @@ class ActionControllerTest {
             assertEquals(action.getLatitude(), returnedAction.getLatitude());
             assertEquals(action.getLongitude(), returnedAction.getLongitude());
 
-            Mockito.verify(service, Mockito.times(1)).create(any(), any(), any());
+            Mockito.verify(service, Mockito.times(1)).create(any(), any(), any(), any());
         }
 
         @Nested

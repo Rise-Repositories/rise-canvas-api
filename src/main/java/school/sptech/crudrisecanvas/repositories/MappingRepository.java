@@ -2,12 +2,9 @@ package school.sptech.crudrisecanvas.repositories;
 
 import java.util.List;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
@@ -15,7 +12,6 @@ import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.entities.Mapping;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface MappingRepository extends JpaRepository<Mapping, Integer>{
 

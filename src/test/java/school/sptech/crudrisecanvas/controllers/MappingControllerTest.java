@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
 import school.sptech.crudrisecanvas.entities.Mapping;
-import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.integrationtests.utils.paths.MappingEnum;
 import school.sptech.crudrisecanvas.service.MappingService;
 import school.sptech.crudrisecanvas.unittestutils.MappingMocks;
@@ -130,7 +128,7 @@ class MappingControllerTest {
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("authorization", UserMocks.getToken());
 
-            Mockito.when(service.createMapping(any(), any())).thenReturn(mapping);
+            Mockito.when(service.createMapping(any(), any(), any())).thenReturn(mapping);
 
             ResponseEntity<MappingResponseDto> response = controller.createMapping(mapReqDto, hashMap);
             MappingResponseDto returnedMapping = response.getBody();
@@ -147,7 +145,7 @@ class MappingControllerTest {
             assertEquals(mapping.getStatus().toString(), returnedMapping.getStatus());
             assertEquals(mapping.getDate().toString(), returnedMapping.getDate());
 
-            Mockito.verify(service, Mockito.times(1)).createMapping(any(), any());
+            Mockito.verify(service, Mockito.times(1)).createMapping(any(), any(), any());
         }
 
         @Nested

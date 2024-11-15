@@ -164,4 +164,19 @@ public class ActionService {
             );
         }
     }
+
+    public Action patchTags(Integer actionId, List<Integer> tagIds, String token){
+        User user = userService.getAccount(token);
+        Action curAction = this.getById(actionId);
+
+        user.getVoluntary()
+                .stream()
+                .filter(v -> v.getOng().getId().equals(curAction.getOng().getId()))
+                .findFirst()
+                .orElseThrow(() -> new ForbiddenException("Você não tem permissão para alterar esta ação"));
+
+        curAction.setTags(tagsService.getManyByIds(tagIds));
+
+        return actionRepository.save(curAction);
+    }
 }

@@ -200,4 +200,21 @@ public class ActionController {
 
         return ResponseEntity.status(200).body(mappings);
     }
+
+    @PatchMapping("/{actionId}/tags")
+    @Operation(summary = "Alterar as tags da ação", responses = {
+            @ApiResponse(responseCode = "200", description = "Tags alteradas com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Ação não encontrada")
+    })
+    public ResponseEntity<ActionResponseDto> patchActionTags(
+            @PathVariable("actionId") Integer actionId,
+            @RequestBody List<Integer> tags,
+            @RequestHeader HashMap<String, String> header
+    ){
+        ActionResponseDto actionResponse = ActionMapper.toResponse(
+                actionService.patchTags(actionId, tags, header.get("authorization").substring(7))
+        );
+
+        return ResponseEntity.status(200).body(actionResponse);
+    }
 }

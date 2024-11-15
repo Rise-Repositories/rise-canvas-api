@@ -10,11 +10,14 @@ import school.sptech.crudrisecanvas.entities.Action;
 import school.sptech.crudrisecanvas.entities.Mapping;
 import school.sptech.crudrisecanvas.entities.MappingAction;
 import school.sptech.crudrisecanvas.entities.Ong;
+import school.sptech.crudrisecanvas.entities.Tags;
 import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.exception.ForbiddenException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.ActionRepository;
 import school.sptech.crudrisecanvas.repositories.MappingActionRepository;
+import school.sptech.crudrisecanvas.utils.Coordinates;
+import school.sptech.crudrisecanvas.utils.Enums.ActionStatus;
 import school.sptech.crudrisecanvas.utils.Enums.VoluntaryRoles;
 import school.sptech.crudrisecanvas.utils.adpters.MailValue;
 
@@ -25,6 +28,7 @@ public class ActionService {
     private final MappingService mappingService;
     private final ActionRepository actionRepository;
     private final MappingActionRepository mappingActionRepository;
+    private final TagsService tagsService;
     
     public List<Action> getAll(){
         List<Action> actions = actionRepository.findAll();
@@ -41,7 +45,12 @@ public class ActionService {
         return action.get();
     }   
 
-    public Action create(Action action, Integer ongId, String token){
+    public List<Action> getByCoordinates(Double latitude, Double longitude, Double radius){
+        List<Action> actions = actionRepository.findByCordinates(latitude, longitude, radius);
+        return actions;
+    }
+
+    public Action create(Action action, Integer ongId, List<Integer> ids, String token){
         User user = userService.getAccount(token);
 
         Ong ong = user.getVoluntary()
@@ -51,7 +60,11 @@ public class ActionService {
                 .orElseThrow(() -> new ForbiddenException("Você não tem permissão para criar essa ação"))
                 .getOng();
 
+        List<Tags> tags = tagsService.getManyByIds(ids);
+
+        action.setStatus(ActionStatus.PENDING.toString());
         action.setOng(ong);
+        action.setTags(tags);
 
         return actionRepository.save(action);
     }
@@ -98,5 +111,57 @@ public class ActionService {
         });
 
         return mappingActionRepository.save(mappingActionBody);
+    }
+
+    public Action updateStatus(String requestStatus, Integer actionId, Integer ongId, String token){
+        User user = userService.getAccount(token);
+
+        user.getVoluntary()
+                .stream()
+                .filter(v -> v.getRole() != VoluntaryRoles.VOLUNTARY && v.getOng().getId() == ongId)
+                .findFirst()
+                .orElseThrow(() -> new ForbiddenException("Você não tem permissão para alterar o status dessa ação"));
+
+        Action action = this.getById(actionId);
+        try{
+            ActionStatus status = ActionStatus.valueOf(requestStatus);
+
+            action.setStatus(status.toString());
+        }
+        catch(IllegalArgumentException e){
+            throw new NotFoundException("Status não encontrado");
+        }
+        
+        return actionRepository.save(action);
+    }
+
+    public List<Action> getByOng(Integer ongId, String token){
+        User user = userService.getAccount(token);
+
+        user.getVoluntary()
+                .stream()
+                .filter(v -> v.getOng().getId() == ongId)
+                .findFirst()
+                .orElseThrow(() -> new ForbiddenException("Você não tem permissão para criar essa ação"));
+
+        return actionRepository.findAllByOngId(ongId);
+    }
+
+    public List<Mapping> getActionMappingsByCoordinates(Integer actionId){
+        Action action = getById(actionId);
+        Coordinates coordinates = new Coordinates(action.getLatitude(), action.getLongitude());
+        if (action.getStatus().equals("PENDING") || action.getStatus().equals("IN_PROGRESS")) {
+
+            return mappingService.getMappingsByCoordinates(
+                    coordinates,
+                    action.getRadius()
+            );
+        } else {
+            return mappingService.getDonatedMappingsByCoordinates(
+                    coordinates,
+                    action.getRadius(),
+                    action.getId()
+            );
+        }
     }
 }

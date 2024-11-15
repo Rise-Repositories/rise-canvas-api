@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Action Service")
@@ -130,7 +131,7 @@ class ActionServiceTest {
             Mockito.when(userService.getAccount(token)).thenReturn(user);
             Mockito.when(repository.save(action)).thenReturn(action);
 
-            Action returnedAction = service.create(action, ongId, token);
+            Action returnedAction = service.create(action, ongId,List.of(), token);
 
             assertEquals(action.getName(), returnedAction.getName());
             assertEquals(action.getDatetimeStart(), returnedAction.getDatetimeStart());
@@ -157,7 +158,7 @@ class ActionServiceTest {
 
             ForbiddenException exception = assertThrows(
                     ForbiddenException.class,
-                    () -> service.create(action, ongId, token)
+                    () -> service.create(action, ongId, List.of(),token)
             );
 
             assertEquals("Você não tem permissão para criar essa ação", exception.getLocalizedMessage());
@@ -184,7 +185,7 @@ class ActionServiceTest {
             ActionService spyService = Mockito.spy(service);
 
             Mockito.doReturn(currentAction).when(spyService).getById(id);
-            Mockito.when(repository.save(newAction)).thenReturn(newAction);
+            Mockito.when(repository.save(any())).thenReturn(newAction);
 
             Action returnedAction = spyService.update(newAction, id);
 
@@ -196,7 +197,7 @@ class ActionServiceTest {
             assertEquals(newAction.getLatitude(), returnedAction.getLatitude());
             assertEquals(newAction.getLongitude(), returnedAction.getLongitude());
 
-            Mockito.verify(repository, Mockito.times(1)).save(newAction);
+            Mockito.verify(repository, Mockito.times(1)).save(any());
         }
 
     }

@@ -67,7 +67,11 @@ public class VoluntaryService {
                 () -> new ForbiddenException("Você não tem permissão para acessar essa ONG")
             ).getOng();
 
+
+        User userVoluntary = userService.register(voluntary.getUser());
+
         voluntary.setOng(ong);
+        voluntary.setUser(userVoluntary);
 
         return voluntaryRepository.save(voluntary);
     }

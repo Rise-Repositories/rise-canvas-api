@@ -3,11 +3,7 @@ package school.sptech.crudrisecanvas.entities;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -20,13 +16,16 @@ public class User {
     private String email;
     private String password;
     private String cpf;
-    private String address;
+
+    @ManyToOne
+    private Address address;
     private LocalDateTime allowedToUpdate;
     
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Voluntary> voluntary;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<UserMapping> mapping;
 
+    private String photoId;
 }

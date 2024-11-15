@@ -23,6 +23,7 @@ import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.UserRepositary;
 import school.sptech.crudrisecanvas.unittestutils.UserMocks;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -369,34 +370,36 @@ class UserServiceTest {
         void validId() {
             Integer id = 1;
             User user = UserMocks.getUser();
+            String token = UserMocks.getToken();
 
             UserService spyService = Mockito.spy(service);
 
             Mockito.doReturn(user).when(spyService).getUserById(id);
+            Mockito.doReturn(user).when(spyService).getAccount(token);
 
-            spyService.deleteUser(id);
+            spyService.deleteUser(id, token);
 
             Mockito.verify(repository, Mockito.times(1)).delete(user);
             Mockito.verify(spyService, Mockito.times(1)).getUserById(id);
         }
 
         @Test
-        @DisplayName("F. Quando id não existe, deve lançar NotFoundException")
+        @DisplayName("F. Quando id não for do usuário do token, deve lançar NotFoundException")
         void invalidId() {
             Integer id = 10;
+            String token = UserMocks.getToken();
+            User user = UserMocks.getUser();
 
             UserService spyService = Mockito.spy(service);
 
-            Mockito.doThrow(new NotFoundException("Usuário não encontrado"))
-                    .when(spyService).getUserById(id);
+            Mockito.doReturn(user).when(spyService).getAccount(token);
 
-            NotFoundException exception = assertThrows(
-                    NotFoundException.class,
-                    () -> spyService.deleteUser(id)
+            ForbiddenException exception = assertThrows(
+                    ForbiddenException.class,
+                    () -> spyService.deleteUser(id, token)
             );
 
-            assertEquals("Usuário não encontrado", exception.getLocalizedMessage());
-            Mockito.verify(spyService, Mockito.times(1)).getUserById(id);
+            assertEquals("Você não tem permissão para fazer esta ação", exception.getLocalizedMessage());
         }
     }
 }

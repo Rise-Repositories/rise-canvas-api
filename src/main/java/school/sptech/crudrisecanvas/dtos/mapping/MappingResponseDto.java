@@ -4,6 +4,8 @@ import java.util.List;
 
 import lombok.Data;
 import school.sptech.crudrisecanvas.dtos.address.AddressResponseDto;
+import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionResponseNoMappingRelationDto;
+import school.sptech.crudrisecanvas.dtos.tags.TagsResponseDto;
 import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingMappingResponsDto;
 
 @Data
@@ -19,5 +21,7 @@ public class MappingResponseDto {
     private String status;
     private String date;
     private List<UserMappingMappingResponsDto> userMappings;
+    private List<MappingActionResponseNoMappingRelationDto> mappingActions;
     private AddressResponseDto address;
+    private List<TagsResponseDto> tags;
 }

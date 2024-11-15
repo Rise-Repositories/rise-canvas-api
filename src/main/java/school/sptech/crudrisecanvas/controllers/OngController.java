@@ -6,6 +6,7 @@ import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ import school.sptech.crudrisecanvas.utils.Enums.OngStatus;
 @RestController
 @RequestMapping("/ong")
 @RequiredArgsConstructor
+@Tag(name = "ONG", description = "Endpoints para gerenciamento das ONGs")
 public class OngController {
     
     private final OngService ongService;

@@ -41,8 +41,8 @@ public class OngGetTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value("1"))
-                    .andExpect(jsonPath("$.address").value("R. Claudino Barbosa, 248, Macedo"))
-                    .andExpect(jsonPath("$.cep").value("07113040"))
+                    .andExpect(jsonPath("$.address.cep").value("04446060"))
+                    .andExpect(jsonPath("$.address.number").value("100"))
                     .andExpect(jsonPath("$.cnpj").value("20.438.196/0001-08"))
                     .andExpect(jsonPath("$.name").value("Hamburgada do Bem"))
                     .andExpect(jsonPath("$.status").value("PENDING"));

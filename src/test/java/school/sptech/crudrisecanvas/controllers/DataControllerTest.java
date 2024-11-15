@@ -8,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
@@ -162,9 +161,12 @@ class DataControllerTest {
                 }
             };
 
-            Mockito.when(mappingService.getKpisTotal()).thenReturn(dto);
+            LocalDate dataInicial = LocalDate.of(1000,1,1);
+            LocalDate dataFinal = LocalDate.now().plusMonths(1);
 
-            ResponseEntity<MappingKpiDto> response = controller.getKpis(null);
+            Mockito.when(mappingService.getKpisByDates(dataInicial, dataFinal)).thenReturn(dto);
+
+            ResponseEntity<MappingKpiDto> response = controller.getKpis(null, null);
             MappingKpiDto body = response.getBody();
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -173,7 +175,7 @@ class DataControllerTest {
             assertEquals(dto.getQtyNotServed(), body.getQtyNotServed());
             assertEquals(dto.getQtyNoPeople(), body.getQtyNoPeople());
 
-            Mockito.verify(mappingService, Mockito.times(1)).getKpisTotal();
+            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(dataInicial, dataFinal);
         }
 
         @Test
@@ -198,11 +200,12 @@ class DataControllerTest {
                 }
             };
 
-            LocalDate agora = LocalDate.now();
+            LocalDate dataInicial = LocalDate.now().minusMonths(1);
+            LocalDate dataFinal = LocalDate.now();
 
-            Mockito.when(mappingService.getKpisAfterDate(agora)).thenReturn(dto);
+            Mockito.when(mappingService.getKpisByDates(dataInicial, dataFinal)).thenReturn(dto);
 
-            ResponseEntity<MappingKpiDto> response = controller.getKpis(agora);
+            ResponseEntity<MappingKpiDto> response = controller.getKpis(dataInicial, dataFinal);
             MappingKpiDto body = response.getBody();
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -211,7 +214,7 @@ class DataControllerTest {
             assertEquals(dto.getQtyNotServed(), body.getQtyNotServed());
             assertEquals(dto.getQtyNoPeople(), body.getQtyNoPeople());
 
-            Mockito.verify(mappingService, Mockito.times(1)).getKpisAfterDate(agora);
+            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(dataInicial, dataFinal);
         }
     }
 

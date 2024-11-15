@@ -4,6 +4,7 @@ import java.util.List;
 
 import school.sptech.crudrisecanvas.dtos.mappingAction.MappingActionMapper;
 import school.sptech.crudrisecanvas.dtos.ong.OngMapper;
+import school.sptech.crudrisecanvas.dtos.tags.TagsMapper;
 import school.sptech.crudrisecanvas.entities.Action;
 
 public class ActionMapper {
@@ -15,6 +16,8 @@ public class ActionMapper {
         action.setDatetimeEnd(actionRequestDto.getDateTimeEnd());
         action.setLatitude(actionRequestDto.getLatitude());
         action.setLongitude(actionRequestDto.getLongitude());
+        action.setRadius(actionRequestDto.getRadius());
+        action.setStatus(actionRequestDto.getStatus());
         return action;
     }
     
@@ -27,8 +30,11 @@ public class ActionMapper {
         result.setDatetimeEnd(action.getDatetimeEnd());
         result.setLatitude(action.getLatitude());
         result.setLongitude(action.getLongitude());
+        result.setRadius(action.getRadius());
         result.setMappingAction(MappingActionMapper.toNoRelationDto(action.getMappingActions()));
         result.setOng(OngMapper.toNoRelationDto(action.getOng()));
+        result.setStatus(action.getStatus());
+        result.setTags(TagsMapper.toResponse(action.getTags()));
 
         return result;
     }
@@ -48,6 +54,9 @@ public class ActionMapper {
         result.setDatetimeEnd(action.getDatetimeEnd());
         result.setLatitude(action.getLatitude());
         result.setLongitude(action.getLongitude());
+        result.setRadius(action.getRadius());
+        result.setStatus(action.getStatus());
+        result.setTags(TagsMapper.toResponse(action.getTags()));
 
         return result;
     }
@@ -56,5 +65,28 @@ public class ActionMapper {
         return actions == null 
             ? null 
             : actions.stream().map(ActionMapper::toNoRelation).toList();
+    }
+
+    public static ActionResponseNoMappingRelationDto toNoMappingRelation(Action action){
+        ActionResponseNoMappingRelationDto result = new ActionResponseNoMappingRelationDto();
+        result.setId(action.getId());
+        result.setName(action.getName());
+        result.setDescription(action.getDescription());
+        result.setDatetimeStart(action.getDatetimeStart());
+        result.setDatetimeEnd(action.getDatetimeEnd());
+        result.setLatitude(action.getLatitude());
+        result.setLongitude(action.getLongitude());
+        result.setRadius(action.getRadius());
+        result.setOng(OngMapper.toNoRelationDto(action.getOng()));
+        result.setStatus(action.getStatus());
+        result.setTags(TagsMapper.toResponse(action.getTags()));
+
+        return result;
+    }
+
+    public static List<ActionResponseNoMappingRelationDto> toNoMappingRelation(List<Action> actions){
+        return actions == null
+                ? null
+                : actions.stream().map(ActionMapper::toNoMappingRelation).toList();
     }
 }

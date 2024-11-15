@@ -19,7 +19,7 @@ public class UserDetailsDto implements UserDetails {
 
     public UserDetailsDto(User usuario) {
         this.name = usuario.getName();
-        this.email = usuario.getEmail();
+        this.email = usuario.getId().toString();
         this.password = usuario.getPassword();
         this.cpf = usuario.getCpf();
     }

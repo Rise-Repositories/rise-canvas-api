@@ -57,7 +57,7 @@ class VoluntaryControllerTest {
             List<Voluntary> voluntaries = VoluntaryMocks.getVoluntaryList();
             String token = UserMocks.getToken();
             HashMap<String, String> headers = new HashMap<>();
-            headers.put("Authorization", "Bearer " + token);
+            headers.put("authorization", "Bearer " + token);
 
             Mockito.when(service.getVoluntary(ongId, token)).thenReturn(voluntaries);
 
@@ -78,7 +78,7 @@ class VoluntaryControllerTest {
             List<Voluntary> voluntaries = Collections.emptyList();
             String token = UserMocks.getToken();
             HashMap<String, String> headers = new HashMap<>();
-            headers.put("Authorization", "Bearer " + token);
+            headers.put("authorization", "Bearer " + token);
 
             Mockito.when(service.getVoluntary(ongId, token)).thenReturn(voluntaries);
 
@@ -101,7 +101,7 @@ class VoluntaryControllerTest {
             String token = UserMocks.getToken();
             VoluntaryRequestDto voluntaryReqDto = VoluntaryMocks.getVoluntaryRequestDto();
             HashMap<String, String> headers = new HashMap<>();
-            headers.put("Authorization", "Bearer " + token);
+            headers.put("authorization", "Bearer " + token);
             Voluntary voluntary = VoluntaryMocks.getVoluntary();
 
             Mockito.when(service.createVoluntary(any(), any(), any())).thenReturn(voluntary);
@@ -205,7 +205,7 @@ class VoluntaryControllerTest {
             VoluntaryRoleRequestDto voluntaryReqDto = new VoluntaryRoleRequestDto();
             voluntaryReqDto.setRole(VoluntaryRoles.OWNER);
             HashMap<String, String> headers = new HashMap<>();
-            headers.put("Authorization", "Bearer " + token);
+            headers.put("authorization", "Bearer " + token);
             Voluntary voluntary = VoluntaryMocks.getVoluntary();
 
             Mockito.when(service.createVoluntary(any(), any(), any(), any())).thenReturn(voluntary);
@@ -294,7 +294,7 @@ class VoluntaryControllerTest {
             Integer id = 1;
             String token = UserMocks.getToken();
             HashMap<String, String> headers = new HashMap<>();
-            headers.put("Authorization", "Bearer " + token);
+            headers.put("authorization", "Bearer " + token);
             Voluntary voluntary = VoluntaryMocks.getVoluntary();
 
             Mockito.when(service.updateRole(VoluntaryRoles.OWNER, id, token)).thenReturn(voluntary);
@@ -321,7 +321,7 @@ class VoluntaryControllerTest {
             Integer id = 1;
             String token = UserMocks.getToken();
             HashMap<String, String> headers = new HashMap<>();
-            headers.put("Authorization", "Bearer " + token);
+            headers.put("authorization", "Bearer " + token);
 
             Mockito.doNothing().when(service).deleteVoluntary(id, token);
 

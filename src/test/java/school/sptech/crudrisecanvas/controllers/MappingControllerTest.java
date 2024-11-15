@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingRequestDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingResponseDto;
 import school.sptech.crudrisecanvas.entities.Mapping;
-import school.sptech.crudrisecanvas.entities.User;
 import school.sptech.crudrisecanvas.integrationtests.utils.paths.MappingEnum;
 import school.sptech.crudrisecanvas.service.MappingService;
 import school.sptech.crudrisecanvas.unittestutils.MappingMocks;
@@ -443,12 +441,15 @@ class MappingControllerTest {
         @DisplayName("Quando ids existirem, deve retornar 200")
         void addUser() {
             Integer mappingId = 1;
-            Integer userId = 1;
             Mapping mapping = MappingMocks.getMapping2();
 
-            Mockito.when(service.addUser(mappingId, userId)).thenReturn(mapping);
+            String token = UserMocks.getToken();
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("authorization", "Bearer " + UserMocks.getToken());
 
-            ResponseEntity<MappingResponseDto> response = controller.addUser(mappingId, userId);
+            Mockito.when(service.addUser(mappingId, token)).thenReturn(mapping);
+
+            ResponseEntity<MappingResponseDto> response = controller.addUser(mappingId, hashMap);
             MappingResponseDto returnedMapping = response.getBody();
 
             assertEquals(HttpStatus.OK, response.getStatusCode());

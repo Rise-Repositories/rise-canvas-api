@@ -10,12 +10,9 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import school.sptech.crudrisecanvas.dtos.mapping.*;
 import school.sptech.crudrisecanvas.entities.*;
 import school.sptech.crudrisecanvas.utils.HeatmapGenerator;
-import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
-import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
-import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
-import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.exception.BadRequestException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
@@ -153,8 +150,15 @@ public class MappingService {
         return mapping;
     }
 
-    public List<MappingAlertDto> getMappingAlerts(LocalDate beforeDate) {
-        return mappingRepository.getMappingAlerts(beforeDate);
+    public List<MappingAlertResponseDto> getMappingAlerts(LocalDate beforeDate) {
+        List<MappingAlertDto> interfaceAlerts = mappingRepository.getMappingAlerts(beforeDate);
+
+        List<MappingAlertResponseDto> responseAlerts = MappingMapper.toDto(interfaceAlerts);
+
+        return responseAlerts.stream().map(ra -> {
+            ra.setTags(tagsService.getAllTagsForMappingId(ra.getMappingId()));
+            return ra;
+        }).toList();
     }
 
     public Double[][] getHeatmapPoints(double radiusToGroup, LocalDateTime olderThan, List<Integer> tagIds) {

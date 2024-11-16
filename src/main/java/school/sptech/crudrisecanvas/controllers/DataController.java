@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertResponseDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingCountResponseDto;
@@ -45,12 +46,12 @@ public class DataController {
                     @ApiResponse(responseCode = "204", description = "Nenhum alerta de mapeamento encontrado")
             }
     )
-    public ResponseEntity<List<MappingAlertDto>> getMappingAlerts(@RequestParam(required = false) LocalDate beforeDate
+    public ResponseEntity<List<MappingAlertResponseDto>> getMappingAlerts(@RequestParam(required = false) LocalDate beforeDate
     ) {
         if (beforeDate == null) {
             beforeDate = LocalDate.now();
         }
-        List<MappingAlertDto> mappingAlerts = mappingService.getMappingAlerts(beforeDate);
+        List<MappingAlertResponseDto> mappingAlerts = mappingService.getMappingAlerts(beforeDate);
 
         if (mappingAlerts.isEmpty()) {
             return ResponseEntity.noContent().build();

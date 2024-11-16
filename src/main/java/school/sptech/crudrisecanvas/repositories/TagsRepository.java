@@ -10,5 +10,8 @@ import java.util.List;
 public interface TagsRepository extends JpaRepository<Tags, Integer> {
 
     @Query("select t.id from Tags t")
-    public List<Integer> getAllIds();
+    List<Integer> getAllIds();
+
+    @Query(value = "select t.id AS Id, t.name AS Name from tags t JOIN mapping_tags mt ON t.id = mt.tags_id WHERE mt.mapping_id = ?1", nativeQuery = true)
+    List<Tags> getAllTagsByMappingId(Integer mappingId);
 }

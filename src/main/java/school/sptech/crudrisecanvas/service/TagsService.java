@@ -26,4 +26,8 @@ public class TagsService {
     public List<Integer> getAllIds(){
         return tagsRepository.getAllIds();
     }
+
+    public List<Tags> getAllTagsForMappingId(Integer mappingId){
+        return tagsRepository.getAllTagsByMappingId(mappingId);
+    }
 }

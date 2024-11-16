@@ -83,4 +83,23 @@ public class MappingMapper {
                 : userMappings.stream().map(MappingMapper::toUserNoRelationDto).toList();
     }
 
+
+    public static MappingAlertResponseDto toDto(MappingAlertDto interfaceDto) {
+        if (interfaceDto == null)
+            return null;
+
+        MappingAlertResponseDto responseDto = new MappingAlertResponseDto();
+        responseDto.setMappingId(interfaceDto.getMappingId());
+        responseDto.setAddress(interfaceDto.getAddress());
+        responseDto.setDate(interfaceDto.getDate());
+        responseDto.setLastServed(interfaceDto.getLastServed());
+
+        return responseDto;
+    }
+
+    public static List<MappingAlertResponseDto> toDto(List<MappingAlertDto> interfaceDtos) {
+        return interfaceDtos == null
+                ? null
+                : interfaceDtos.stream().map(MappingMapper::toDto).toList();
+    }
 }

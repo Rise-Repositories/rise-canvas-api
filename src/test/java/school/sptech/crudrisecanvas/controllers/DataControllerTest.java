@@ -11,8 +11,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
+import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertResponseDto;
 import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.dtos.userMapping.UserMappingCountResponseDto;
+import school.sptech.crudrisecanvas.entities.Tags;
 import school.sptech.crudrisecanvas.service.MappingService;
 import school.sptech.crudrisecanvas.service.UserMappingService;
 
@@ -41,11 +43,11 @@ class DataControllerTest {
         @Test
         @DisplayName("V. Caso não haja alertas, deve retornar 204")
         void noData() {
-            List<MappingAlertDto> lista = Collections.emptyList();
+            List<MappingAlertResponseDto> lista = Collections.emptyList();
 
             Mockito.when(mappingService.getMappingAlerts(LocalDate.now())).thenReturn(lista);
 
-            ResponseEntity<List<MappingAlertDto>> response = controller.getMappingAlerts(null);
+            ResponseEntity<List<MappingAlertResponseDto>> response = controller.getMappingAlerts(null);
 
             assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 
@@ -57,30 +59,24 @@ class DataControllerTest {
         void tableHasData() {
             LocalDate agora = LocalDate.now();
             LocalDateTime agoraTime = LocalDateTime.now();
-            MappingAlertDto mapAlert = new MappingAlertDto() {
-                @Override
-                public Integer getMappingId() {
-                    return 1;
-                }
-                @Override
-                public String getAddress() {
-                    return "Rua 1";
-                }
-                @Override
-                public LocalDate getDate() {
-                    return agora;
-                }
-                @Override
-                public LocalDateTime getLastServed() {
-                    return agoraTime;
-                }
-            };
-            List<MappingAlertDto> lista = List.of(mapAlert);
+            MappingAlertResponseDto mapAlert = new MappingAlertResponseDto();
+
+            Tags tag = new Tags();
+            tag.setId(1);
+            tag.setName("Comida");
+
+            mapAlert.setMappingId(1);
+            mapAlert.setDate(LocalDate.now());
+            mapAlert.setLastServed(LocalDateTime.now());
+            mapAlert.setAddress("Rua teste, 123");
+            mapAlert.setTags(List.of(tag));
+
+            List<MappingAlertResponseDto> lista = List.of(mapAlert);
 
             Mockito.when(mappingService.getMappingAlerts(LocalDate.now())).thenReturn(lista);
 
-            ResponseEntity<List<MappingAlertDto>> response = controller.getMappingAlerts(null);
-            List<MappingAlertDto> body = response.getBody();
+            ResponseEntity<List<MappingAlertResponseDto>> response = controller.getMappingAlerts(null);
+            List<MappingAlertResponseDto> body = response.getBody();
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
             assertEquals(mapAlert.getMappingId(), body.get(0).getMappingId());

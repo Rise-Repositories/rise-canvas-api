@@ -103,13 +103,13 @@ class DataControllerTest {
             Double radius = 100.;
             LocalDateTime agora = LocalDateTime.now();
 
-            Mockito.when(mappingService.getHeatmapPoints(radius, agora)).thenReturn(array);
+            Mockito.when(mappingService.getHeatmapPoints(radius, agora, null)).thenReturn(array);
 
-            ResponseEntity<Double[][]> response = controller.getHeatmapPoints(radius, agora);
+            ResponseEntity<Double[][]> response = controller.getHeatmapPoints(radius, agora, null);
 
             assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 
-            Mockito.verify(mappingService, Mockito.times(1)).getHeatmapPoints(radius, agora);
+            Mockito.verify(mappingService, Mockito.times(1)).getHeatmapPoints(radius, agora, null);
         }
 
         @Test
@@ -119,9 +119,9 @@ class DataControllerTest {
             Double radius = 100.;
             LocalDateTime agora = LocalDateTime.now();
 
-            Mockito.when(mappingService.getHeatmapPoints(radius, agora)).thenReturn(array);
+            Mockito.when(mappingService.getHeatmapPoints(radius, agora, null)).thenReturn(array);
 
-            ResponseEntity<Double[][]> response = controller.getHeatmapPoints(radius, agora);
+            ResponseEntity<Double[][]> response = controller.getHeatmapPoints(radius, agora, null);
 
             Double[][] body = response.getBody();
 
@@ -131,7 +131,7 @@ class DataControllerTest {
             assertEquals(array[1][0], body[1][0]);
             assertEquals(array[1][1], body[1][1]);
 
-            Mockito.verify(mappingService, Mockito.times(1)).getHeatmapPoints(radius, agora);
+            Mockito.verify(mappingService, Mockito.times(1)).getHeatmapPoints(radius, agora, null);
         }
     }
 
@@ -163,11 +163,10 @@ class DataControllerTest {
 
             LocalDate dataInicial = LocalDate.of(1000,1,1);
             LocalDate dataFinal = LocalDate.now().plusMonths(1);
-            List<Integer> tagIds = List.of(1,2,3,4);
 
-            Mockito.when(mappingService.getKpisByDates(dataInicial, dataFinal, tagIds)).thenReturn(dto);
+            Mockito.when(mappingService.getKpisByDates(dataInicial, dataFinal, null)).thenReturn(dto);
 
-            ResponseEntity<MappingKpiDto> response = controller.getKpis(null, null, tagIds);
+            ResponseEntity<MappingKpiDto> response = controller.getKpis(null, null, null);
             MappingKpiDto body = response.getBody();
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -176,7 +175,7 @@ class DataControllerTest {
             assertEquals(dto.getQtyNotServed(), body.getQtyNotServed());
             assertEquals(dto.getQtyNoPeople(), body.getQtyNoPeople());
 
-            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(dataInicial, dataFinal, tagIds);
+            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(dataInicial, dataFinal, null);
         }
 
         @Test
@@ -203,11 +202,10 @@ class DataControllerTest {
 
             LocalDate dataInicial = LocalDate.now().minusMonths(1);
             LocalDate dataFinal = LocalDate.now();
-            List<Integer> tagIds = List.of(1,2,3,4);
 
-            Mockito.when(mappingService.getKpisByDates(dataInicial, dataFinal, tagIds)).thenReturn(dto);
+            Mockito.when(mappingService.getKpisByDates(dataInicial, dataFinal, null)).thenReturn(dto);
 
-            ResponseEntity<MappingKpiDto> response = controller.getKpis(dataInicial, dataFinal, tagIds);
+            ResponseEntity<MappingKpiDto> response = controller.getKpis(dataInicial, dataFinal, null);
             MappingKpiDto body = response.getBody();
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -216,7 +214,7 @@ class DataControllerTest {
             assertEquals(dto.getQtyNotServed(), body.getQtyNotServed());
             assertEquals(dto.getQtyNoPeople(), body.getQtyNoPeople());
 
-            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(dataInicial, dataFinal, tagIds);
+            Mockito.verify(mappingService, Mockito.times(1)).getKpisByDates(dataInicial, dataFinal, null);
         }
     }
 

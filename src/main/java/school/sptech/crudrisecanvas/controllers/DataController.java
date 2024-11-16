@@ -71,9 +71,10 @@ public class DataController {
     )
     public ResponseEntity<Double[][]> getHeatmapPoints(
             @RequestParam double radiusToGroup,
-            @RequestParam LocalDateTime olderThan
+            @RequestParam LocalDateTime olderThan,
+            @RequestParam(required = false) List<Integer> tagIds
     ) {
-        Double[][] heatmapPoints = mappingService.getHeatmapPoints(radiusToGroup, olderThan);
+        Double[][] heatmapPoints = mappingService.getHeatmapPoints(radiusToGroup, olderThan, tagIds);
         if (heatmapPoints.length == 0) {
             return ResponseEntity.noContent().build();
         } else {

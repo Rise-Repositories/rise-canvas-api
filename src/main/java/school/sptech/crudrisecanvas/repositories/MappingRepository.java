@@ -64,8 +64,8 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
                             LEFT JOIN Action a ON ma.action_id = a.id AND m2.id = m.id) LIMIT 1;""", nativeQuery = true)
     MappingKpiDto getKpisByDates(LocalDate startDate, LocalDate endDate);
 
-    @Query(value = "call graph(:startDate, :endDate)", nativeQuery = true )
-    List<MappingGraphDto> getChartData(LocalDate startDate, LocalDate endDate);
+    @Query(value = "call graph(:startDate, :endDate, :tagIds)", nativeQuery = true )
+    List<MappingGraphDto> getChartData(LocalDate startDate, LocalDate endDate, String tagIds);
 
     @Query(value = """
         select * from mapping m

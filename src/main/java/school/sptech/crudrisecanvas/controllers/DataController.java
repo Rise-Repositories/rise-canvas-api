@@ -91,7 +91,8 @@ public class DataController {
     )
     public ResponseEntity<MappingKpiDto> getKpis(
             @RequestParam(required = false) LocalDate startDate,
-            @RequestParam(required = false) LocalDate endDate
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) List<Integer> tagIds
     ) {
         if (startDate == null) {
             startDate = LocalDate.of(1000, 1,1);
@@ -103,7 +104,7 @@ public class DataController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(mappingService.getKpisByDates(startDate, endDate));
+        return ResponseEntity.ok(mappingService.getKpisByDates(startDate, endDate, tagIds));
     }
 
     @GetMapping("/mapping-count")
@@ -128,12 +129,13 @@ public class DataController {
     )
     public ResponseEntity<List<MappingGraphDto>> getMappingGraph(
             @RequestParam(required = false) LocalDate startDate,
-            @RequestParam(required = false) LocalDate endDate
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) List<Integer> tagIds
     ) {
         if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(mappingService.getMappingGraph(startDate, endDate));
+        return ResponseEntity.ok(mappingService.getMappingGraph(startDate, endDate, tagIds));
     }
 
     @GetMapping(value = "/mapping/archive/txt", produces = "text/plain")
@@ -179,10 +181,11 @@ public class DataController {
     public ResponseEntity<Void> exportCsv(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) List<Integer> tagIds,
             HttpServletResponse response) {
 
         try {
-            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate);
+            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate, tagIds);
 
             if (dataList.isEmpty()) {
                 return ResponseEntity.noContent().build();
@@ -246,10 +249,11 @@ public class DataController {
     public ResponseEntity<Void> exportJson(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) List<Integer> tagIds,
             HttpServletResponse response) {
 
         try {
-            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate);
+            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate, tagIds);
 
             if (dataList.isEmpty()) {
                 return ResponseEntity.noContent().build();
@@ -280,9 +284,10 @@ public class DataController {
     public ResponseEntity<Void> exportXml(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) List<Integer> tagIds,
             HttpServletResponse response) {
         try {
-            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate);
+            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate, tagIds);
 
             if (dataList.isEmpty()) {
                 return ResponseEntity.noContent().build();
@@ -315,10 +320,11 @@ public class DataController {
     public ResponseEntity<InputStreamResource> exportParquet(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) List<Integer> tagIds,
             HttpServletResponse response
     ) {
         try {
-            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate);
+            List<MappingGraphDto> dataList = mappingService.getMappingGraph(startDate, endDate, tagIds);
 
             if (dataList.isEmpty()) {
                 return ResponseEntity.noContent().build();

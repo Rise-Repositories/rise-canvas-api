@@ -2,8 +2,10 @@ package school.sptech.crudrisecanvas.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -161,12 +163,21 @@ public class MappingService {
         return HeatmapGenerator.getHeatmapPointsNotHelped(mappings, radiusToGroup, olderThan);
     }
 
-    public MappingKpiDto getKpisByDates(LocalDate startDate, LocalDate endDate) {
-        return mappingRepository.getKpisByDates(startDate, endDate);
+    public MappingKpiDto getKpisByDates(LocalDate startDate, LocalDate endDate, List<Integer> tagIds) {
+        if (tagIds == null || tagIds.size() == 0) {
+            tagIds = List.of(1, 2, 3, 4);
+        }
+        return mappingRepository.getKpisByDates(startDate, endDate, tagIds);
     }
     
-    public List<MappingGraphDto> getMappingGraph(LocalDate startDate, LocalDate endDate) {
-        return mappingRepository.getChartData(startDate, endDate);
+    public List<MappingGraphDto> getMappingGraph(LocalDate startDate, LocalDate endDate, List<Integer> tagIds) {
+        if (tagIds == null || tagIds.size() == 0) {
+            tagIds = List.of(1, 2, 3, 4);
+        }
+        String tagIdsQuery = tagIds.stream()
+                .map(id -> Integer.toString(id))
+                .collect(Collectors.joining("|"));
+        return mappingRepository.getChartData(startDate, endDate, tagIdsQuery);
     }
     
 }

@@ -22,4 +22,8 @@ public class TagsService {
         List<Tags> tags = tagsRepository.findAllById(ids);
         return tags;
     }
+
+    public List<Integer> getAllIds(){
+        return tagsRepository.getAllIds();
+    }
 }

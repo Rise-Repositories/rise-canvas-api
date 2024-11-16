@@ -157,27 +157,35 @@ public class MappingService {
         return mappingRepository.getMappingAlerts(beforeDate);
     }
 
-    public Double[][] getHeatmapPoints(double radiusToGroup, LocalDateTime olderThan) {
-        List<MappingHeatmapDto> mappings = mappingRepository.getMappingsHeatmap();
+    public Double[][] getHeatmapPoints(double radiusToGroup, LocalDateTime olderThan, List<Integer> tagIds) {
+        tagIds = validateTagIds(tagIds);
+
+        List<MappingHeatmapDto> mappings = mappingRepository.getMappingsHeatmap(tagIds);
 
         return HeatmapGenerator.getHeatmapPointsNotHelped(mappings, radiusToGroup, olderThan);
     }
 
     public MappingKpiDto getKpisByDates(LocalDate startDate, LocalDate endDate, List<Integer> tagIds) {
-        if (tagIds == null || tagIds.size() == 0) {
-            tagIds = List.of(1, 2, 3, 4);
-        }
+        tagIds = validateTagIds(tagIds);
+
         return mappingRepository.getKpisByDates(startDate, endDate, tagIds);
     }
     
     public List<MappingGraphDto> getMappingGraph(LocalDate startDate, LocalDate endDate, List<Integer> tagIds) {
-        if (tagIds == null || tagIds.size() == 0) {
-            tagIds = List.of(1, 2, 3, 4);
-        }
+        tagIds = validateTagIds(tagIds);
+
         String tagIdsQuery = tagIds.stream()
                 .map(id -> Integer.toString(id))
                 .collect(Collectors.joining("|"));
         return mappingRepository.getChartData(startDate, endDate, tagIdsQuery);
+    }
+
+    private List<Integer> validateTagIds(List<Integer> tagIds) {
+        if (tagIds == null || tagIds.size() == 0) {
+            tagIds = tagsService.getAllIds();
+        }
+
+        return tagIds;
     }
     
 }

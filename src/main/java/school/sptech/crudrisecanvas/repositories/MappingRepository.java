@@ -38,6 +38,9 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
             	FROM mapping m LEFT JOIN Mapping_Action ma on m.id = ma.mapping_id
                 LEFT JOIN Action a ON ma.action_id = a.id
                 WHERE ma.id IS NULL
+                AND EXISTS(
+                    SELECT * FROM mapping_tags mt WHERE m.id = mt.mapping_id AND mt.tags_id IN ?1
+                )
                 UNION
             SELECT m.id AS MappingId, m.latitude AS Latitude, m.longitude AS Longitude, m.qty_adults AS QtyAdults, m.qty_children AS QtyChildren, MAX(ma.no_donation) AS NoDonation, MAX(a.datetime_start) AS DatetimeStart
             	FROM mapping m LEFT JOIN Mapping_Action ma on m.id = ma.mapping_id
@@ -46,8 +49,11 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
             		SELECT MAX(a.datetime_start) FROM mapping m2
                     LEFT JOIN Mapping_Action ma on m2.id = ma.mapping_id
             		LEFT JOIN Action a ON ma.action_id = a.id AND m2.id = m.id)
+                AND EXISTS(
+                    SELECT * FROM mapping_tags mt WHERE m.id = mt.mapping_id AND mt.tags_id IN ?1
+                )
                 GROUP BY m.id;""", nativeQuery = true)
-    List<MappingHeatmapDto> getMappingsHeatmap();
+    List<MappingHeatmapDto> getMappingsHeatmap(List<Integer> tagIds);
 
     @Query(value = """
             SELECT

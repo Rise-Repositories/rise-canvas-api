@@ -91,7 +91,8 @@ public class DataController {
     )
     public ResponseEntity<MappingKpiDto> getKpis(
             @RequestParam(required = false) LocalDate startDate,
-            @RequestParam(required = false) LocalDate endDate
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) List<Integer> tagIds
     ) {
         if (startDate == null) {
             startDate = LocalDate.of(1000, 1,1);
@@ -103,7 +104,7 @@ public class DataController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(mappingService.getKpisByDates(startDate, endDate));
+        return ResponseEntity.ok(mappingService.getKpisByDates(startDate, endDate, tagIds));
     }
 
     @GetMapping("/mapping-count")

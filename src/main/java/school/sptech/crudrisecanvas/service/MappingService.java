@@ -163,8 +163,11 @@ public class MappingService {
         return HeatmapGenerator.getHeatmapPointsNotHelped(mappings, radiusToGroup, olderThan);
     }
 
-    public MappingKpiDto getKpisByDates(LocalDate startDate, LocalDate endDate) {
-        return mappingRepository.getKpisByDates(startDate, endDate);
+    public MappingKpiDto getKpisByDates(LocalDate startDate, LocalDate endDate, List<Integer> tagIds) {
+        if (tagIds == null || tagIds.size() == 0) {
+            tagIds = List.of(1, 2, 3, 4);
+        }
+        return mappingRepository.getKpisByDates(startDate, endDate, tagIds);
     }
     
     public List<MappingGraphDto> getMappingGraph(LocalDate startDate, LocalDate endDate, List<Integer> tagIds) {

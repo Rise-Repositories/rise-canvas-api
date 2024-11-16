@@ -236,7 +236,13 @@ public class UserService {
         return userRepository.save(userToUpdate);
     }
 
-    public void deleteUser(int id) {
+    public void deleteUser(int id, String token) {
+        User userLogged = this.getAccount(token);
+
+        if(userLogged.getId() != id){
+            throw new ForbiddenException("Você não tem permissão para fazer esta ação");
+        }
+
         User user = this.getUserById(id);
         this.userRepository.delete(user);
     }
@@ -272,7 +278,7 @@ public class UserService {
         if (s3Id != null) {
 
             GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket("s3-02231066")
+                .bucket("s3-rise-iacb")
                 .key(s3Id)
                 .build();
 
@@ -292,7 +298,7 @@ public class UserService {
 
         if (s3Id != null) {
             DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-                    .bucket("s3-02231066")
+                    .bucket("s3-rise-iacb")
                     .key(s3Id)
                     .build();
 

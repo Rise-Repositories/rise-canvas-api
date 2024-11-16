@@ -140,7 +140,7 @@ public class ActionService {
 
         user.getVoluntary()
                 .stream()
-                .filter(v -> v.getRole() != VoluntaryRoles.VOLUNTARY && v.getOng().getId() == ongId)
+                .filter(v -> v.getOng().getId() == ongId)
                 .findFirst()
                 .orElseThrow(() -> new ForbiddenException("Você não tem permissão para criar essa ação"));
 

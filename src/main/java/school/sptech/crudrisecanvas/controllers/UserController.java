@@ -208,8 +208,11 @@ public class UserController {
             @ApiResponse(responseCode = "204", description = "Sem conteúdo - Usuário excluído com sucesso"),
             @ApiResponse(responseCode = "404", description = "Não encontrado - Usuário não encontrado")
     })
-    public ResponseEntity<Void> deleteUser(@PathVariable int id) {
-        usuarioService.deleteUser(id);
+    public ResponseEntity<Void> deleteUser(
+            @PathVariable int id,
+            @RequestHeader HashMap<String,String> headers
+    ) {
+        usuarioService.deleteUser(id, headers.get("authorization").substring(7));
 
         return ResponseEntity.status(204).build();
     }

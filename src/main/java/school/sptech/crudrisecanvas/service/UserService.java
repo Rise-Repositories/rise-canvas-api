@@ -6,6 +6,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,6 +49,9 @@ public class UserService {
     private final JwtTokenManager gerenciadorTokenJwt;
     private final AuthenticationManager authenticationManager;
     private final AddressService addressService;
+
+    @Value("${front.host}")
+    private String frontHost;
 
     public User register(User newUser) {
         if(userRepository.existsByCpf(newUser.getCpf())){
@@ -102,8 +106,8 @@ public class UserService {
                 "Recuperação de senha",
                 String.format("""
                     <h1>Olá, deseja alterar sua senha?</h1>
-                    <a href="http://localhost:3000/change-password/%s">Alterar</a>
-                """, user.getId())
+                    <a href="%s:3000/change-password/%s">Alterar</a>
+                """, frontHost, user.getId())
             )
         );
     }

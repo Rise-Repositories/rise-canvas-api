@@ -11,7 +11,11 @@ import school.sptech.crudrisecanvas.utils.adpters.MailValue;
 public class ScheduleService {
     private static final Queue<MailValue> queue = new Queue<MailValue>(20);
 
-    private final EmailConfig emailConfig = new EmailConfig();
+    private final EmailConfig emailConfig;
+
+    public ScheduleService(EmailConfig emailConfig) {
+        this.emailConfig = emailConfig;
+    }
 
     @Scheduled(cron = "0 * * * * *")
     public void AsyncMailSender() {

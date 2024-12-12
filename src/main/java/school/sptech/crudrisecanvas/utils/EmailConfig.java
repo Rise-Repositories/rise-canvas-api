@@ -12,29 +12,39 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EmailConfig {
-    /*
-        TODO: 
-        provavelmente passar isso para um service, que ele vai deixar disponivel os servicos de email
-        acho bom a gente discutir algumas coisas antes de implementar isso
-    */
+
+    private String email;
+    private String password;
 
     private Properties prop = new Properties();
 
-    public EmailConfig() {
+    @Autowired
+    public EmailConfig(
+            @Value("${recover.email}") String email,
+            @Value("${recover.password}") String password,
+            @Value("${recover.host}") String host,
+            @Value("${recover.port}") String port
+    ) {
         prop.put("mail.smtp.auth", true);
         prop.put("mail.smtp.starttls.enable", "true");
-        prop.put("mail.smtp.host", "smtp.office365.com");
-        prop.put("mail.smtp.port", "587");
-        prop.put("mail.smtp.ssl.trust", "smtp.office365.com");
+        prop.put("mail.smtp.host", host);
+        prop.put("mail.smtp.port", port);
+        prop.put("mail.smtp.ssl.trust", host);
+        this.email = email;
+        this.password = password;
     }
 
     public Session getSession() {
         return Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("andreylrodrigues@hotmail.com", "andrey050405");
+                return new PasswordAuthentication(email, password);
             }
         });
     }
@@ -42,7 +52,7 @@ public class EmailConfig {
     public void sendEmail(String to, String subject, String body) {
         try {
             Message emailMessage = new MimeMessage(getSession());
-            emailMessage.setFrom(new InternetAddress("andreylrodrigues@hotmail.com"));
+            emailMessage.setFrom(new InternetAddress(email));
             emailMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             emailMessage.setSubject(subject);
 

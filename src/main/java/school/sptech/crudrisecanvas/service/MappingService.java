@@ -4,16 +4,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import school.sptech.crudrisecanvas.dtos.mapping.*;
 import school.sptech.crudrisecanvas.entities.*;
 import school.sptech.crudrisecanvas.utils.HeatmapGenerator;
-import school.sptech.crudrisecanvas.dtos.mapping.MappingAlertDto;
-import school.sptech.crudrisecanvas.dtos.mapping.MappingGraphDto;
-import school.sptech.crudrisecanvas.dtos.mapping.MappingHeatmapDto;
-import school.sptech.crudrisecanvas.dtos.mapping.MappingKpiDto;
 import school.sptech.crudrisecanvas.exception.BadRequestException;
 import school.sptech.crudrisecanvas.exception.NotFoundException;
 import school.sptech.crudrisecanvas.repositories.MappingRepository;
@@ -151,22 +149,46 @@ public class MappingService {
         return mapping;
     }
 
-    public List<MappingAlertDto> getMappingAlerts(LocalDate beforeDate) {
-        return mappingRepository.getMappingAlerts(beforeDate);
+    public List<MappingAlertResponseDto> getMappingAlerts(LocalDate beforeDate) {
+        List<MappingAlertDto> interfaceAlerts = mappingRepository.getMappingAlerts(beforeDate);
+
+        List<MappingAlertResponseDto> responseAlerts = MappingMapper.toDto(interfaceAlerts);
+
+        return responseAlerts.stream().map(ra -> {
+            ra.setTags(tagsService.getAllTagsForMappingId(ra.getMappingId()));
+            return ra;
+        }).toList();
     }
 
-    public Double[][] getHeatmapPoints(double radiusToGroup, LocalDateTime olderThan) {
-        List<MappingHeatmapDto> mappings = mappingRepository.getMappingsHeatmap();
+    public Double[][] getHeatmapPoints(double radiusToGroup, LocalDateTime olderThan, List<Integer> tagIds) {
+        tagIds = validateTagIds(tagIds);
+
+        List<MappingHeatmapDto> mappings = mappingRepository.getMappingsHeatmap(tagIds);
 
         return HeatmapGenerator.getHeatmapPointsNotHelped(mappings, radiusToGroup, olderThan);
     }
 
-    public MappingKpiDto getKpisByDates(LocalDate startDate, LocalDate endDate) {
-        return mappingRepository.getKpisByDates(startDate, endDate);
+    public MappingKpiDto getKpisByDates(LocalDate startDate, LocalDate endDate, List<Integer> tagIds) {
+        tagIds = validateTagIds(tagIds);
+
+        return mappingRepository.getKpisByDates(startDate, endDate, tagIds);
     }
     
-    public List<MappingGraphDto> getMappingGraph(LocalDate startDate, LocalDate endDate) {
-        return mappingRepository.getChartData(startDate, endDate);
+    public List<MappingGraphDto> getMappingGraph(LocalDate startDate, LocalDate endDate, List<Integer> tagIds) {
+        tagIds = validateTagIds(tagIds);
+
+        String tagIdsQuery = tagIds.stream()
+                .map(id -> Integer.toString(id))
+                .collect(Collectors.joining("|"));
+        return mappingRepository.getChartData(startDate, endDate, tagIdsQuery);
+    }
+
+    private List<Integer> validateTagIds(List<Integer> tagIds) {
+        if (tagIds == null || tagIds.size() == 0) {
+            tagIds = tagsService.getAllIds();
+        }
+
+        return tagIds;
     }
     
 }

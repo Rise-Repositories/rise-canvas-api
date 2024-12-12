@@ -54,6 +54,7 @@ public class SecurityConfiguration {
             new AntPathRequestMatcher("/error/**"),
             new AntPathRequestMatcher("/user/auth/**"),
             new AntPathRequestMatcher("/ong/auth/**"),
+            new AntPathRequestMatcher("/health")
 //            new AntPathRequestMatcher("/**"),
     };
 

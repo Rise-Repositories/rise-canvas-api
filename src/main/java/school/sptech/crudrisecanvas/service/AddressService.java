@@ -27,7 +27,7 @@ public class AddressService {
         }
 
         RestClient client = RestClient.builder()
-                .baseUrl("https://%s/viacep/ws/".formatted(CEPUtil.getFrontIp()))
+                .baseUrl("http://%s/viacep/ws/".formatted(CEPUtil.getFrontIp()))
                 .messageConverters(httpMessageConverters -> httpMessageConverters.add(new MappingJackson2HttpMessageConverter()))
                 .build();
 

@@ -20,7 +20,7 @@ public class CEPValidator implements ConstraintValidator<CEP, String> {
 
     private boolean validarViaCep(String valorCep) {
         RestClient client = RestClient.builder()
-                .baseUrl("https://%s/viacep/ws/".formatted(CEPUtil.getFrontIp()))
+                .baseUrl("http://%s/viacep/ws/".formatted(CEPUtil.getFrontIp()))
                 .messageConverters(httpMessageConverters -> httpMessageConverters.add(new MappingJackson2HttpMessageConverter()))
                 .build();
 

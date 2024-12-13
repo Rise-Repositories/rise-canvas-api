@@ -28,7 +28,7 @@ public interface MappingRepository extends JpaRepository<Mapping, Integer>{
                             LEFT JOIN action a ON ma.action_id = a.id
                             WHERE a.datetime_start = (
                         		SELECT MAX(a.datetime_start) FROM mapping m2
-                                LEFT JOIN mapping_Action ma on m2.id = ma.mapping_id
+                                LEFT JOIN mapping_action ma on m2.id = ma.mapping_id
                         		LEFT JOIN action a ON ma.action_id = a.id AND m2.id = m.id AND a.datetime_start < ?1)
                             GROUP BY m.id;""", nativeQuery = true)
     List<MappingAlertDto> getMappingAlerts(LocalDate beforeDate);

@@ -9,6 +9,7 @@ import school.sptech.crudrisecanvas.dtos.address.AddressViacepDto;
 import school.sptech.crudrisecanvas.entities.Address;
 import school.sptech.crudrisecanvas.exception.BadRequestException;
 import school.sptech.crudrisecanvas.repositories.AddressRepository;
+import school.sptech.crudrisecanvas.utils.annotations.CEPUtil;
 
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class AddressService {
         }
 
         RestClient client = RestClient.builder()
-                .baseUrl("https://viacep.com.br/ws/")
+                .baseUrl("http://%s/viacep/ws/".formatted(CEPUtil.getFrontIp()))
                 .messageConverters(httpMessageConverters -> httpMessageConverters.add(new MappingJackson2HttpMessageConverter()))
                 .build();
 
